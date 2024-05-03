@@ -5,58 +5,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".ui.fragment.RegisterFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editTextEmail"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
-        app:endIconMode="clear_text"
-        android:hint="@string/enter_login"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:boxBackgroundColor="@null"
-        tools:ignore="MissingConstraints">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="@string/register"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:navigationIcon="@drawable/baseline_arrow_back_24">
+    </androidx.appcompat.widget.Toolbar>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextEmail_inputText"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:inputType="textEmailAddress"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideline"
+            app:endIconMode="clear_text"
+            android:hint="@string/enter_login"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:boxBackgroundColor="@null"
+            tools:ignore="MissingConstraints">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
-        app:endIconMode="clear_text"
-        android:hint="@string/enter_password"
-        android:layout_marginBottom="16dp"
-        app:boxBackgroundColor="@null"
-        tools:ignore="MissingConstraints">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextEmail_inputText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:inputType="textEmailAddress"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextPassword_inputText"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:inputType="textEmailAddress"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideline"
+            app:endIconMode="clear_text"
+            android:hint="@string/enter_password"
+            android:layout_marginBottom="16dp"
+            app:boxBackgroundColor="@null"
+            tools:ignore="MissingConstraints">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/register"
-        android:textColor="?attr/colorOnPrimary"
-        android:background="@drawable/button_round_corners"
-        />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPassword_inputText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:inputType="textEmailAddress"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary" />
+    </LinearLayout>
+
+
 
 </LinearLayout>

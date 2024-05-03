@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".ui.fragment.LoginFragment">
-    
+
     <ImageView
         android:id="@+id/imageView"
         android:src="@drawable/ic_launcher_foreground"
@@ -61,16 +61,18 @@
             android:inputType="textEmailAddress"/>
 
     </com.google.android.material.textfield.TextInputLayout>
-    
+
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/log_in_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/log_in"
         android:textColor="?attr/colorOnPrimary"
-        android:background="@drawable/button_round_corners"
+        android:backgroundTint="?attr/colorPrimary"
         />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/register_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
