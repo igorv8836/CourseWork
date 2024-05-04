@@ -17,6 +17,8 @@ import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentLoginBinding;
 import com.example.coursework.databinding.FragmentRegisterBinding;
 
+import java.util.Objects;
+
 public class RegisterFragment extends Fragment {
     FragmentRegisterBinding binding;
     NavController navController;
@@ -40,7 +42,7 @@ public class RegisterFragment extends Fragment {
 
         if (activity != null) {
             activity.setSupportActionBar(toolbar);
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            Objects.requireNonNull(activity.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
             activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
