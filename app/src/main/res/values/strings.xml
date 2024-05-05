@@ -17,4 +17,9 @@
     <string name="enter_password">Введите пароль</string>
     <string name="log_in">Войти</string>
     <string name="register">Зарегистрироваться</string>
+    <string name="products">Изделия</string>
+    <string name="cooking">Производство</string>
+    <string name="sales">Продажи</string>
+    <string name="full_report">Полный отчет</string>
+    <string name="settings">Настройки</string>
 </resources>

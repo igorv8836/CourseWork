@@ -33,11 +33,11 @@ public class LoginFragment extends Fragment {
         navController = Navigation.findNavController(view);
 
         binding.registerButton.setOnClickListener(v -> {
-            navController.navigate(R.id.action_to_registerFragment);
+            navController.navigate(R.id.registerFragment);
         });
 
         binding.logInButton.setOnClickListener(v -> {
-            navController.navigate(R.id.action_to_homeFragment);
+            navController.navigate(R.id.mainFragment);
         });
 
 

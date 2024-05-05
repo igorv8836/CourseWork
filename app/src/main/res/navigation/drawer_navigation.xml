@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/nav_products"
+    android:id="@+id/drawer_navigation">
+
+
+    <fragment
+        android:id="@+id/nav_products"
+        android:name="com.example.coursework.ui.fragment.side_main_fragment.ProductsFragment"
+        android:label="Изделия"
+        tools:layout="@layout/fragment_products" />
+    <fragment
+        android:id="@+id/nav_cooking"
+        android:name="com.example.coursework.ui.fragment.side_main_fragment.CookingFragment"
+        android:label="Производство"
+        tools:layout="@layout/fragment_cooking" />
+    <fragment
+        android:id="@+id/nav_sales"
+        android:name="com.example.coursework.ui.fragment.side_main_fragment.SalesFragment"
+        android:label="Продажи"
+        tools:layout="@layout/fragment_sales" />
+    <fragment
+        android:id="@+id/nav_report"
+        android:name="com.example.coursework.ui.fragment.side_main_fragment.ReportFragment"
+        android:label="Отчеты"
+        tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.coursework.ui.fragment.side_main_fragment.SettingsFragment"
+        android:label="Настройки"
+        tools:layout="@layout/fragment_settings" />
+
+
+    <fragment
+        android:id="@+id/nav_editing_bakery_products"
+        android:name="com.example.coursework.ui.fragment.productsFragments.EditingBakeryProductsFragment"
+        android:label="Редактирование изделия"
+        tools:layout="@layout/fragment_editing_bakery_products" />
+
+
+</navigation>

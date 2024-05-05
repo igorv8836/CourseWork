@@ -17,8 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.coursework.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-
-    private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
     @Override
@@ -31,14 +29,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        NavController navController = Navigation.findNavController(binding.navHostFragment);
-        mAppBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
 }
