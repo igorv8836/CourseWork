@@ -5,6 +5,7 @@
         android:id="@+id/action_check"
         android:title="Сохранить"
         android:icon="@drawable/check_icon"
+        android:visible="false"
         android:orderInCategory="100"
         app:showAsAction="always" />
 </menu>

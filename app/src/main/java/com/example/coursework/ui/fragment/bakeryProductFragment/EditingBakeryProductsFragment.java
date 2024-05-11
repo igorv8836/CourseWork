@@ -1,4 +1,4 @@
-package com.example.coursework.ui.fragment.productsFragments;
+package com.example.coursework.ui.fragment.bakeryProductFragment;
 
 import android.Manifest;
 import android.content.Context;
@@ -11,28 +11,26 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentEditingBakeryProductsBinding;
-import com.example.coursework.ui.fragment.MainFragment;
 
 
 public class EditingBakeryProductsFragment extends Fragment {
     FragmentEditingBakeryProductsBinding binding;
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     ActivityResultLauncher<String> requestPermissionLauncher;
+    NavController navController;
 
 
     @Override
@@ -63,6 +61,11 @@ public class EditingBakeryProductsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentEditingBakeryProductsBinding.inflate(inflater, container, false);
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
+
+        binding.chooseIngredients.setOnClickListener(t -> {
+            navController.navigate(R.id.nav_choosing_ingredients);
+        });
 
         return binding.getRoot();
     }

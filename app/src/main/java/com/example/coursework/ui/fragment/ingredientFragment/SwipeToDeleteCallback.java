@@ -1,4 +1,4 @@
-package com.example.coursework.ui.fragment.productsFragments;
+package com.example.coursework.ui.fragment.ingredientFragment;
 
 import android.content.Context;
 import android.graphics.Canvas;

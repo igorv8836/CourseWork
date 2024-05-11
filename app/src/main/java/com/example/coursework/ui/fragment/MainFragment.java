@@ -5,6 +5,7 @@ import static androidx.core.app.ActivityCompat.invalidateOptionsMenu;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import com.google.android.material.navigation.NavigationView;
 public class MainFragment extends Fragment {
 
     private FragmentMainBinding binding;
+    Toolbar toolbar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class MainFragment extends Fragment {
 
 
 
-        Toolbar toolbar = binding.toolbar;
+        toolbar = binding.toolbar;
         toolbar.setTitle("Основное меню");
 
         DrawerLayout drawerLayout = binding.drawerLayout;
@@ -65,7 +67,5 @@ public class MainFragment extends Fragment {
 
         NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        invalidateOptionsMenu(requireActivity());
     }
 }

@@ -12,8 +12,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.coursework.databinding.FragmentProductsBinding;
 import com.example.coursework.ui.adapter.ProductsPagerAdapter;
-import com.example.coursework.ui.fragment.productsFragments.BakeryProductsFragment;
-import com.example.coursework.ui.fragment.productsFragments.IngredientsFragment;
+import com.example.coursework.ui.fragment.bakeryProductFragment.BakeryProductsFragment;
+import com.example.coursework.ui.fragment.ingredientFragment.IngredientsFragment;
 import com.example.coursework.ui.viewmodel.ProductsViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;

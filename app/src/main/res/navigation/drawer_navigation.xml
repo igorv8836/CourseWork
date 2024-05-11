@@ -35,9 +35,15 @@
 
     <fragment
         android:id="@+id/nav_editing_bakery_products"
-        android:name="com.example.coursework.ui.fragment.productsFragments.EditingBakeryProductsFragment"
+        android:name="com.example.coursework.ui.fragment.bakeryProductFragment.EditingBakeryProductsFragment"
         android:label="Редактирование изделия"
         tools:layout="@layout/fragment_editing_bakery_products" />
+
+    <fragment
+        android:id="@+id/nav_choosing_ingredients"
+        android:name="com.example.coursework.ui.fragment.bakeryProductFragment.ChoosingIngredientsFragment"
+        android:label="Выбор ингредиентов"
+        tools:layout="@layout/fragment_choosing_ingredients" />
 
 
 </navigation>

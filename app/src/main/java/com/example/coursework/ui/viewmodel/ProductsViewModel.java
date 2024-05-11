@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.coursework.ui.entities.BakeryProduct;
+import com.example.coursework.ui.entities.ChosenIngredient;
 import com.example.coursework.ui.entities.Ingredient;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class ProductsViewModel extends ViewModel {
     public LiveData<List<BakeryProduct>> bakeryProducts = _bakeryProducts;
     private final MutableLiveData<List<Ingredient>> _ingredients = new MutableLiveData<>(new ArrayList<>());
     public LiveData<List<Ingredient>> ingredients = _ingredients;
+    private final MutableLiveData<List<ChosenIngredient>> _chosenIngredients = new MutableLiveData<>(new ArrayList<>());
+    public LiveData<List<ChosenIngredient>> chosenIngredients = _chosenIngredients;
     private final MutableLiveData<Pair<Integer, Ingredient>> _removedIngredient = new MutableLiveData<>();
     public LiveData<Pair<Integer, Ingredient>> removedIngredient = _removedIngredient;
     private final MutableLiveData<Boolean> showCheck = new MutableLiveData<>(false);
@@ -33,7 +36,7 @@ public class ProductsViewModel extends ViewModel {
 
     public ProductsViewModel() {
         setBakeryProducts();
-        setIngridients();
+        setIngredients();
     }
 
 
@@ -53,15 +56,15 @@ public class ProductsViewModel extends ViewModel {
         _bakeryProducts.setValue(bakeryProducts);
     }
 
-    public void setIngridients() {
+    public void setIngredients() {
         List<Ingredient> ingredients = new ArrayList<>();
-        ingredients.add(new Ingredient(1, "Мука", "г", 100.0));
-        ingredients.add(new Ingredient(2, "Сахар", "г", 100.0));
-        ingredients.add(new Ingredient(3, "Масло", "г", 100.0));
-        ingredients.add(new Ingredient(4, "Яйцо", "шт", 2.0));
-        ingredients.add(new Ingredient(5, "Соль", "г", 5.0));
-        ingredients.add(new Ingredient(6, "Вода", "мл", 100.0));
+        List<ChosenIngredient> data = new ArrayList<>();
+        for (int i = 0; i < 5; i++){
+            ingredients.add(new Ingredient(1, "Мука", "г", 100.0));
+            data.add(new ChosenIngredient(1, "Мука", "u", 100.0, Double.valueOf(String.valueOf(i % 2))));
+        }
         _ingredients.setValue(ingredients);
+        _chosenIngredients.setValue(data);
     }
 
     public void cancelDeleting() {
@@ -73,6 +76,14 @@ public class ProductsViewModel extends ViewModel {
                 ingredients.add(pos, data);
             else
                 ingredients.add(data);
+        }
+        _ingredients.setValue(ingredients);
+    }
+
+    public void createIngredient(String name, String measurement, double price){
+        List<Ingredient> ingredients = _ingredients.getValue();
+        if (ingredients != null) {
+            ingredients.add(new Ingredient(0, name, measurement, price));
         }
         _ingredients.setValue(ingredients);
     }
