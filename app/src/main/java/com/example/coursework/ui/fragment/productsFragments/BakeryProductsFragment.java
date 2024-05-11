@@ -58,7 +58,7 @@ public class BakeryProductsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
 
-        adapter = new BakeryProductAdapter(this.getContext(), viewModel.bakeryProducts.getValue(), navController);
+        adapter = new BakeryProductAdapter(viewModel.bakeryProducts.getValue(), navController);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
 

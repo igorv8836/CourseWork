@@ -2,16 +2,16 @@ package com.example.coursework.ui.entities;
 
 public class Ingredient {
 
-    public Ingredient(int id, String name, Double price, Double weight){
+    public Ingredient(int id, String name, String measurementText, Double count){
         this.id = id;
         this.name = name;
-        this.price = price;
-        this.weight = weight;
+        this.measurementText = measurementText;
+        this.count = count;
     }
     private int id;
     private String name;
-    private Double price;
-    private Double weight;
+    private String measurementText;
+    private Double count;
 
     public String getName() {
         return name;
@@ -21,20 +21,20 @@ public class Ingredient {
         this.name = name;
     }
 
-    public Double getPrice() {
-        return price;
+    public String getMeasurementText() {
+        return measurementText;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setMeasurementText(String measurementText) {
+        this.measurementText = measurementText;
     }
 
-    public Double getWeight() {
-        return weight;
+    public Double getCount() {
+        return count;
     }
 
-    public void setWeight(Double weight) {
-        this.weight = weight;
+    public void setCount(Double count) {
+        this.count = count;
     }
 
     public int getId() {

@@ -1,18 +1,26 @@
 package com.example.coursework.ui.viewmodel;
 
+import android.util.Pair;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.coursework.ui.entities.BakeryProduct;
+import com.example.coursework.ui.entities.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductsViewModel extends ViewModel {
-    private MutableLiveData<List<BakeryProduct>> _bakeryProducts = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<BakeryProduct>> _bakeryProducts = new MutableLiveData<>(new ArrayList<>());
     public LiveData<List<BakeryProduct>> bakeryProducts = _bakeryProducts;
-    private MutableLiveData<Boolean> showCheck = new MutableLiveData<>(false);
+    private final MutableLiveData<List<Ingredient>> _ingredients = new MutableLiveData<>(new ArrayList<>());
+    public LiveData<List<Ingredient>> ingredients = _ingredients;
+    private final MutableLiveData<Pair<Integer, Ingredient>> _removedIngredient = new MutableLiveData<>();
+    public LiveData<Pair<Integer, Ingredient>> removedIngredient = _removedIngredient;
+    private final MutableLiveData<Boolean> showCheck = new MutableLiveData<>(false);
 
     public LiveData<Boolean> getShowCheck() {
         return showCheck;
@@ -25,9 +33,8 @@ public class ProductsViewModel extends ViewModel {
 
     public ProductsViewModel() {
         setBakeryProducts();
+        setIngridients();
     }
-
-
 
 
     public void setBakeryProducts() {
@@ -44,5 +51,37 @@ public class ProductsViewModel extends ViewModel {
             ));
         }
         _bakeryProducts.setValue(bakeryProducts);
+    }
+
+    public void setIngridients() {
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredients.add(new Ingredient(1, "Мука", "г", 100.0));
+        ingredients.add(new Ingredient(2, "Сахар", "г", 100.0));
+        ingredients.add(new Ingredient(3, "Масло", "г", 100.0));
+        ingredients.add(new Ingredient(4, "Яйцо", "шт", 2.0));
+        ingredients.add(new Ingredient(5, "Соль", "г", 5.0));
+        ingredients.add(new Ingredient(6, "Вода", "мл", 100.0));
+        _ingredients.setValue(ingredients);
+    }
+
+    public void cancelDeleting() {
+        List<Ingredient> ingredients = _ingredients.getValue();
+        int pos = Objects.requireNonNull(_removedIngredient.getValue()).first;
+        Ingredient data = _removedIngredient.getValue().second;
+        if (_removedIngredient.getValue() != null && ingredients != null) {
+            if (pos < ingredients.size())
+                ingredients.add(pos, data);
+            else
+                ingredients.add(data);
+        }
+        _ingredients.setValue(ingredients);
+    }
+
+    public void removeIngredient(int position) {
+        List<Ingredient> ingredients = _ingredients.getValue();
+        if (ingredients != null) {
+            _removedIngredient.setValue(new Pair<>(position, ingredients.remove(position)));
+        }
+        _ingredients.setValue(ingredients);
     }
 }

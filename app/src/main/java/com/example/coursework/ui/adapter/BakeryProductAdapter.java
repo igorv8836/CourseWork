@@ -23,12 +23,10 @@ import java.util.List;
 
 public class BakeryProductAdapter extends RecyclerView.Adapter<BakeryProductAdapter.BakeryProductViewHolder>{
     private ArrayList<BakeryProduct> bakeryProducts;
-    private Context context;
     private NavController navController;
 
-    public BakeryProductAdapter(Context context, List<BakeryProduct> bakeryProducts, NavController navController) {
+    public BakeryProductAdapter(List<BakeryProduct> bakeryProducts, NavController navController) {
         this.bakeryProducts = new ArrayList<>(bakeryProducts);
-        this.context = context;
         this.navController = navController;
     }
 
