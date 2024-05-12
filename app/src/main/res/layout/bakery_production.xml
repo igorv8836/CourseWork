@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        tools:src="@drawable/ic_launcher_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/RoundedImageView"
+        android:contentDescription="image" />
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Пицца"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/price_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Стоимость ингредиентов: "
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/image"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/price_description"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:text="100 руб."
+        />
+
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="16sp"
+        tools:text="16 шт"
+        />
+
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/delete_button"
+        android:textSize="16sp"
+        android:visibility="gone"
+        tools:text="В производстве"
+        />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        app:indicatorColor="@color/green"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/delete_button"
+        app:layout_constraintTop_toBottomOf="@id/image"
+
+        />
+
+    <TextView
+        android:id="@+id/start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
+        tools:text="12:10 12.05"/>
+
+    <TextView
+        android:id="@+id/end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/delete_button"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
+        android:layout_marginEnd="4dp"
+        tools:text="13:10 12.05"/>
+
+
+    <ImageButton
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image"
+        android:src="@drawable/delete_icon"
+        android:backgroundTint="@android:color/holo_red_light"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
