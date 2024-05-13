@@ -1,6 +1,5 @@
-package com.example.coursework.ui.fragment.CookingFragment;
+package com.example.coursework.ui.fragment.SalesFragment;
 
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import androidx.core.util.Pair;
@@ -12,82 +11,79 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TimePicker;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import com.example.coursework.R;
-import com.example.coursework.databinding.FragmentEditingProductionBinding;
-import com.example.coursework.ui.viewmodel.CookingViewModel;
+import com.example.coursework.databinding.FragmentAddingSaleBinding;
+import com.example.coursework.ui.fragment.CookingFragment.DatePickerListener;
+import com.example.coursework.ui.fragment.CookingFragment.TimePickerListener;
+import com.example.coursework.ui.viewmodel.SalesViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
-public class EditingProductionFragment extends Fragment {
-    FragmentEditingProductionBinding binding;
-    CookingViewModel viewModel;
+public class AddingSaleFragment extends Fragment {
+    FragmentAddingSaleBinding binding;
+    SalesViewModel viewModel;
     NavController navController;
-
-    Pair<Long, Long> startDateTime;
-    Pair<Long, Long> endDateTime;
-
+    Pair<Long, Long> saleDateTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startDateTime = new Pair<>(0L, 0L);
-        endDateTime = new Pair<>(0L, 0L);
-
+        saleDateTime = new Pair<>(0L, 0L);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentEditingProductionBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(CookingViewModel.class);
+        binding = FragmentAddingSaleBinding.inflate(inflater, container, false);
+        viewModel = new ViewModelProvider(this).get(SalesViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
 
+
         binding.editTextTimeInputText.setOnClickListener(v -> selectTime((hour, minute) -> {
-            startDateTime = new Pair<>(startDateTime.first, (hour * 60L + minute) * 60 * 1000L);
+            saleDateTime = new Pair<>(saleDateTime.first, (hour * 60L + minute) * 60 * 1000L);
             String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
             binding.editTextTimeInputText.setText(formattedTime);
         }));
 
         binding.editTextDateInputText.setOnClickListener(v -> selectDate(date -> {
-            startDateTime = new Pair<>(date, startDateTime.second);
+            saleDateTime = new Pair<>(date, saleDateTime.second);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(date);
             String formattedDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(calendar.getTime());
             binding.editTextDateInputText.setText(formattedDate);
         }));
 
-        binding.editTextEndTimeInputText.setOnClickListener(v -> selectTime((hour, minute) -> {
-            endDateTime = new Pair<>(endDateTime.first, (hour * 60L + minute) * 60 * 1000L);
-            String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
-            binding.editTextEndTimeInputText.setText(formattedTime);
-        }));
-
-        binding.editTextEndDateInputText.setOnClickListener(v -> selectDate(date -> {
-            endDateTime = new Pair<>(date, endDateTime.second);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(date);
-            String formattedDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(calendar.getTime());
-            binding.editTextEndDateInputText.setText(formattedDate);
-        }));
-
 
         binding.saveButton.setOnClickListener(v -> {
 //            String name = binding.choosingProductSpinner.getPrompt().toString();
-            String date = binding.editTextDateInputText.getText().toString();
-            String time = binding.editTextTimeInputText.getText().toString();
-            int count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
-
-            viewModel.addProduction(1, count, startDateTime.first + startDateTime.second, endDateTime.first + endDateTime.second);
+//            String date = binding.editTextDateInputText.getText().toString();
+//            String time = binding.editTextTimeInputText.getText().toString();
+//            int count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
+//
+//            viewModel.addProduction(1, count, saleDateTime.first + saleDateTime.second, endDateTime.first + endDateTime.second);
             navController.popBackStack();
         });
+
+        List<String> products = new ArrayList<>();
+        products.add("Хлеб");
+        products.add("Торт");
+        products.add("Печенье");
+        products.add("Круассан");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, products);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        binding.choosingProductSpinner.setAdapter(adapter);
 
         return binding.getRoot();
     }

@@ -19,7 +19,7 @@ import com.example.coursework.ui.fragment.ingredientFragment.IngredientDiffUtilC
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngridientViewHolder>{
+public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>{
     private final ArrayList<Ingredient> ingredients;
     private final View.OnClickListener listener;
 
@@ -30,15 +30,15 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     @NonNull
     @Override
-    public IngridientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.ingredient_item, parent, false);
-        return new IngridientViewHolder(view);
+        return new IngredientViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull IngridientViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
         Ingredient ingredient = ingredients.get(position);
         holder.name.setText(ingredient.getName());
         holder.measurement.setText(ingredient.getMeasurementText());
@@ -59,13 +59,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         return ingredients.size();
     }
 
-    class IngridientViewHolder extends RecyclerView.ViewHolder {
+    class IngredientViewHolder extends RecyclerView.ViewHolder {
         IngredientItemBinding binding;
         ImageView imageView;
         TextView name;
         TextView measurement;
         TextView price;
-        public IngridientViewHolder(View itemView) {
+        public IngredientViewHolder(View itemView) {
             super(itemView);
             binding = IngredientItemBinding.bind(itemView);
             name = binding.name;

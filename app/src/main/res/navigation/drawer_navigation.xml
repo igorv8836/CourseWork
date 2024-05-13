@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/nav_cooking"
+    app:startDestination="@id/nav_sales"
     android:id="@+id/drawer_navigation">
 
 
@@ -18,12 +18,12 @@
         tools:layout="@layout/fragment_cooking" />
     <fragment
         android:id="@+id/nav_sales"
-        android:name="com.example.coursework.ui.fragment.side_main_fragment.SalesFragment"
+        android:name="com.example.coursework.ui.fragment.SalesFragment.SalesFragment"
         android:label="Продажи"
         tools:layout="@layout/fragment_sales" />
     <fragment
         android:id="@+id/nav_report"
-        android:name="com.example.coursework.ui.fragment.side_main_fragment.ReportFragment"
+        android:name="com.example.coursework.ui.fragment.ReportFragment.ReportFragment"
         android:label="Отчеты"
         tools:layout="@layout/fragment_report" />
     <fragment
@@ -47,9 +47,15 @@
 
     <fragment
         android:id="@+id/nav_editing_production"
-        android:name="com.example.coursework.ui.fragment.CookingFragment.EditingProductionFragment"
+        android:name="com.example.coursework.ui.fragment.CookingFragment.AddingProductionFragment"
         android:label="Добавление производства"
-        tools:layout="@layout/fragment_editing_production" />
+        tools:layout="@layout/fragment_adding_production" />
+
+    <fragment
+        android:id="@+id/nav_adding_sale"
+        android:name="com.example.coursework.ui.fragment.SalesFragment.AddingSaleFragment"
+        android:label="Добавление продажи"
+        tools:layout="@layout/fragment_adding_sale" />
 
 
 </navigation>
