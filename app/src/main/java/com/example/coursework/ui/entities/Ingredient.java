@@ -1,5 +1,7 @@
 package com.example.coursework.ui.entities;
 
+import com.example.coursework.data.database.entities.IngredientEntity;
+
 public class Ingredient {
 
     public Ingredient(int id, String name, String measurementText, Double price){
@@ -43,5 +45,13 @@ public class Ingredient {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public IngredientEntity toEntity(){
+        return new IngredientEntity(getId(), getName(), getMeasurementText(), getPrice());
+    }
+
+    public static Ingredient fromEntity(IngredientEntity entity){
+        return new Ingredient(entity.getId(), entity.getName(), entity.getMeasurementText(), entity.getPrice());
     }
 }

@@ -72,9 +72,7 @@ public class IngredientsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new IngredientAdapter(viewModel.ingredients.getValue(), t -> {
-
-        });
+        adapter = new IngredientAdapter();
         binding.ingredientsRecyclerView.setAdapter(adapter);
         binding.ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 

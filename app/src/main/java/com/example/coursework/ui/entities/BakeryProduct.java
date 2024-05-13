@@ -1,5 +1,10 @@
 package com.example.coursework.ui.entities;
 
+import com.example.coursework.data.database.entities.IngredientEntity;
+import com.example.coursework.data.database.entities.ProductEntity;
+import com.example.coursework.data.database.entities.ProductWithIngredients;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class BakeryProduct {
@@ -65,5 +70,38 @@ public class BakeryProduct {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public ProductWithIngredients toProductWithIngredients() {
+        List<IngredientEntity> ingredients = new ArrayList<>();
+        for (Ingredient ingredient : getIngredients()) {
+            ingredients.add(
+                    new IngredientEntity(
+                            ingredient.getId(),
+                            ingredient.getName(),
+                            ingredient.getMeasurementText(),
+                            ingredient.getPrice()
+                    )
+            );
+        }
+        return new ProductWithIngredients(
+                new ProductEntity(id, name, description, price, imageUri),
+                ingredients
+        );
+    }
+
+    public static BakeryProduct fromProductWithIngredients(ProductWithIngredients entity) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        for (IngredientEntity ingredient : entity.getIngredients()) {
+            ingredients.add(Ingredient.fromEntity(ingredient));
+        }
+        return new BakeryProduct(
+                entity.getProduct().getId(),
+                entity.getProduct().getName(),
+                entity.getProduct().getDescription(),
+                entity.getProduct().getPrice(),
+                ingredients,
+                entity.getProduct().getImageUri()
+        );
     }
 }

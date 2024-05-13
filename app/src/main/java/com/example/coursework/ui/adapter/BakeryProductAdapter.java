@@ -25,8 +25,8 @@ public class BakeryProductAdapter extends RecyclerView.Adapter<BakeryProductAdap
     private ArrayList<BakeryProduct> bakeryProducts;
     private NavController navController;
 
-    public BakeryProductAdapter(List<BakeryProduct> bakeryProducts, NavController navController) {
-        this.bakeryProducts = new ArrayList<>(bakeryProducts);
+    public BakeryProductAdapter(NavController navController) {
+        this.bakeryProducts = new ArrayList<>();
         this.navController = navController;
     }
 

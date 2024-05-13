@@ -21,11 +21,9 @@ import java.util.List;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>{
     private final ArrayList<Ingredient> ingredients;
-    private final View.OnClickListener listener;
 
-    public IngredientAdapter(List<Ingredient> ingredients, View.OnClickListener listener) {
-        this.ingredients = new ArrayList<>(ingredients);
-        this.listener = listener;
+    public IngredientAdapter() {
+        this.ingredients = new ArrayList<>();
     }
 
     @NonNull

@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentEditingBakeryProductsBinding;
+import com.example.coursework.ui.viewmodel.ProductsViewModel;
 
 
 public class EditingBakeryProductsFragment extends Fragment {
@@ -31,11 +33,17 @@ public class EditingBakeryProductsFragment extends Fragment {
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     ActivityResultLauncher<String> requestPermissionLauncher;
     NavController navController;
+    ProductsViewModel viewModel;
+    Integer productId;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            productId = getArguments().getInt("id");
+        }
 
         pickMedia =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -62,9 +70,13 @@ public class EditingBakeryProductsFragment extends Fragment {
 
         binding = FragmentEditingBakeryProductsBinding.inflate(inflater, container, false);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
+        viewModel = new ViewModelProvider(this).get(ProductsViewModel.class);
 
         binding.chooseIngredients.setOnClickListener(t -> {
-            navController.navigate(R.id.nav_choosing_ingredients);
+            Bundle bundle = new Bundle();
+            if (productId != null)
+                bundle.putInt("id", productId);
+            navController.navigate(R.id.nav_choosing_ingredients, bundle);
         });
 
         return binding.getRoot();
