@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <SwitchPreferenceCompat
+        android:key="notifications"
+        android:title="Включить уведомления"
+        android:summary="Включить или отключить уведомления"
+        android:defaultValue="true" />
+
+
+    <ListPreference
+        android:key="sync_frequency"
+        android:title="Первый экран приложения"
+        android:summary="Выберите экран, который будет открываться при входе"
+        android:entries="@array/pref_sync_frequency_titles"
+        android:entryValues="@array/pref_sync_frequency_values"
+        android:dialogTitle="Выбор частоты синхронизации"
+        android:defaultValue="30" />
+
+</PreferenceScreen>

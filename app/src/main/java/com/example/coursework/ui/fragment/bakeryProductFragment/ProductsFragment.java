@@ -1,4 +1,4 @@
-package com.example.coursework.ui.fragment.side_main_fragment;
+package com.example.coursework.ui.fragment.bakeryProductFragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
