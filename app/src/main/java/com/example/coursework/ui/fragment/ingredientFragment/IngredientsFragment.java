@@ -1,5 +1,6 @@
 package com.example.coursework.ui.fragment.ingredientFragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ public class IngredientsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(ProductsViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ProductsViewModel.class);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class IngredientsFragment extends Fragment {
         binding.ingredientsRecyclerView.addItemDecoration(divider);
 
         binding.fab.setOnClickListener(t -> {
-            showCreatingDialog();
+            showCreatingDialog(true, null);
         });
 
         return binding.getRoot();
@@ -72,7 +73,9 @@ public class IngredientsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new IngredientAdapter();
+        adapter = new IngredientAdapter(id -> {
+            showCreatingDialog(false, id);
+        });
         binding.ingredientsRecyclerView.setAdapter(adapter);
         binding.ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -91,14 +94,27 @@ public class IngredientsFragment extends Fragment {
         snackbar.show();
     }
 
-    private void showCreatingDialog() {
+    @SuppressLint("SetTextI18n")
+    private void showCreatingDialog(boolean isCreating, Integer id) {
         LayoutInflater inflater = this.getLayoutInflater();
         CreatingDialogBinding dialogBinding = CreatingDialogBinding.bind(inflater.inflate(R.layout.creating_dialog, null));
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setView(dialogBinding.getRoot());
 
-        builder.setPositiveButton("Создать", (dialog, which) -> {
+        if (!isCreating && id != null) {
+            viewModel.setIngredient(id).observe(getViewLifecycleOwner(), ingredient -> {
+                if (ingredient != null) {
+                    dialogBinding.getRoot().setTag(ingredient.getId());
+                    dialogBinding.editName.setText(ingredient.getName());
+                    dialogBinding.editMeasurement.setText(ingredient.getMeasurementText());
+                    dialogBinding.editPrice.setText(ingredient.getPrice().toString());
+                }
+            });
+        }
+
+        builder.setPositiveButton("Сохранить", (dialog, which) -> {
+            Integer ingredientId = (Integer) dialogBinding.getRoot().getTag();
             String name = Objects.requireNonNull(dialogBinding.editName.getText()).toString();
             String measurement = Objects.requireNonNull(dialogBinding.editMeasurement.getText()).toString();
             double price;
@@ -107,10 +123,16 @@ public class IngredientsFragment extends Fragment {
             } else {
                 price = Double.parseDouble(dialogBinding.editPrice.getText().toString());
             }
-            viewModel.createIngredient(name, measurement, price);
+            if (isCreating)
+                viewModel.createIngredient(name, measurement, price);
+            else
+                viewModel.updateIngredient(ingredientId, name, measurement, price);
         });
         builder.setNegativeButton("Отменить", (dialog, which) -> dialog.dismiss());
-        builder.setTitle("Создание ингредиента");
+        if (isCreating)
+            builder.setTitle("Создание ингредиента");
+        else
+            builder.setTitle("Редактирование ингредиента");
 
         AlertDialog dialog = builder.create();
         dialog.show();

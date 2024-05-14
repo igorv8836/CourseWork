@@ -38,7 +38,7 @@ public class SalesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSalesBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(SalesViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(SalesViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
 
 

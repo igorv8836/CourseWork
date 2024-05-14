@@ -65,6 +65,12 @@ public class ProductsViewModel extends ViewModel {
         productRepository.insert(Objects.requireNonNull(removedIngredient.getValue()).second);
     }
 
+    public LiveData<Ingredient> setIngredient(int id) {
+        return productRepository.getIngredientById(id);
+    }
+
+
+
     public void createIngredient(String name, String measurement, double price){
         productRepository.insert(new Ingredient(0, name, measurement, price));
     }
@@ -73,5 +79,11 @@ public class ProductsViewModel extends ViewModel {
         int id = ingredients.getValue().get(position).getId();
         removedIngredient.setValue(new Pair<>(position, ingredients.getValue().get(position)));
         productRepository.removeIngredient(id);
+    }
+
+    public void updateIngredient(int id, String name, String measurement, double price) {
+        productRepository.updateIngredient(
+                new Ingredient(id, name, measurement, price)
+        );
     }
 }

@@ -40,7 +40,7 @@ public class CookingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCookingBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(CookingViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CookingViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
         adapter = new BakeryProductionAdapter(new ArrayList<>(), id -> {
 

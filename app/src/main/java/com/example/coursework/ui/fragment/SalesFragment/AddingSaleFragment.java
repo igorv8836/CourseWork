@@ -45,7 +45,7 @@ public class AddingSaleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAddingSaleBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(SalesViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(SalesViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
 
 

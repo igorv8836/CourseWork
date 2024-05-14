@@ -70,7 +70,7 @@ public class EditingBakeryProductsFragment extends Fragment {
 
         binding = FragmentEditingBakeryProductsBinding.inflate(inflater, container, false);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
-        viewModel = new ViewModelProvider(this).get(ProductsViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ProductsViewModel.class);
 
         binding.chooseIngredients.setOnClickListener(t -> {
             Bundle bundle = new Bundle();

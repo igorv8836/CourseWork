@@ -42,7 +42,7 @@ public class ReportFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentReportBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(ReportViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ReportViewModel.class);
 
         binding.productionRecyclerView.setAdapter(productionAdapter);
         binding.salesRecyclerView.setAdapter(salesAdapter);

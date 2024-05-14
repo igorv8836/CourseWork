@@ -37,7 +37,7 @@ public class BakeryProductsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentBakeryProductsBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(ProductsViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ProductsViewModel.class);
 
         return binding.getRoot();
     }

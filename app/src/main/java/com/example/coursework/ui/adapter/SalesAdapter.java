@@ -6,20 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursework.R;
-import com.example.coursework.databinding.IngredientItemBinding;
 import com.example.coursework.databinding.ProductSaleBinding;
-import com.example.coursework.ui.entities.Ingredient;
 import com.example.coursework.ui.entities.ProductSale;
-import com.example.coursework.ui.fragment.CookingFragment.OnClickListener;
-import com.example.coursework.ui.fragment.ingredientFragment.IngredientDiffUtilCallback;
+import com.example.coursework.ui.addClasses.OnClickListener;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.SimpleDateFormat;

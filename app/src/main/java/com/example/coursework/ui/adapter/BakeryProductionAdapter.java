@@ -1,8 +1,6 @@
 package com.example.coursework.ui.adapter;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.coursework.R;
-import com.example.coursework.databinding.BakeryProductBinding;
 import com.example.coursework.databinding.BakeryProductionBinding;
-import com.example.coursework.ui.entities.BakeryProduct;
 import com.example.coursework.ui.entities.BakeryProduction;
-import com.example.coursework.ui.fragment.CookingFragment.OnClickListener;
+import com.example.coursework.ui.addClasses.OnClickListener;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.text.SimpleDateFormat;

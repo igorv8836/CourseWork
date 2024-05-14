@@ -31,6 +31,18 @@ public class ProductRepository {
         return Transformations.map(allIngredients, this::transformIngredients);
     }
 
+    public LiveData<Ingredient> getIngredientById(int id) {
+        LiveData<IngredientEntity> data = productDao.getIngredient(id);
+        return Transformations.map(data, Ingredient::fromEntity);
+    }
+
+    public void updateIngredient(Ingredient ingredient) {
+        IngredientEntity ingredientEntity = ingredient.toEntity();
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            productDao.updateIngredient(ingredientEntity);
+        });
+    }
+
     public void insert(Ingredient ingredient) {
         IngredientEntity ingredientEntity = ingredient.toEntity();
         AppDatabase.databaseWriteExecutor.execute(() -> {

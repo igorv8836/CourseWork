@@ -31,7 +31,7 @@ public class ChoosingIngredientsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentChoosingIngredientsBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(ProductsViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ProductsViewModel.class);
 
         if (getArguments() != null) {
             if (getArguments().containsKey("id"))

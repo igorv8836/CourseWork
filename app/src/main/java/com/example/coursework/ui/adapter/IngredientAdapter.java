@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.coursework.R;
 import com.example.coursework.databinding.IngredientItemBinding;
 import com.example.coursework.ui.entities.Ingredient;
+import com.example.coursework.ui.addClasses.OnClickListener;
 import com.example.coursework.ui.fragment.ingredientFragment.IngredientDiffUtilCallback;
 
 import java.util.ArrayList;
@@ -21,9 +22,11 @@ import java.util.List;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>{
     private final ArrayList<Ingredient> ingredients;
+    OnClickListener listener;
 
-    public IngredientAdapter() {
+    public IngredientAdapter(OnClickListener listener) {
         this.ingredients = new ArrayList<>();
+        this.listener = listener;
     }
 
     @NonNull
@@ -41,6 +44,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         holder.name.setText(ingredient.getName());
         holder.measurement.setText(ingredient.getMeasurementText());
         holder.price.setText(ingredient.getPrice().toString() + " р/" + ingredient.getMeasurementText());
+
+        holder.mainLayout.setOnClickListener(v -> {
+            listener.onClick(ingredient.getId());
+        });
     }
 
     public void updateList(List<Ingredient> newList) {
@@ -60,12 +67,14 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     class IngredientViewHolder extends RecyclerView.ViewHolder {
         IngredientItemBinding binding;
         ImageView imageView;
+        View mainLayout;
         TextView name;
         TextView measurement;
         TextView price;
         public IngredientViewHolder(View itemView) {
             super(itemView);
             binding = IngredientItemBinding.bind(itemView);
+            mainLayout = binding.mainLayout;
             name = binding.name;
             measurement = binding.measurement;
             price = binding.price;

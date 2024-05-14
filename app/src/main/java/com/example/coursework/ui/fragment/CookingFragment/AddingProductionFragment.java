@@ -49,7 +49,7 @@ public class AddingProductionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAddingProductionBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(CookingViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CookingViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
 
         binding.editTextTimeInputText.setOnClickListener(v -> selectTime((hour, minute) -> {
