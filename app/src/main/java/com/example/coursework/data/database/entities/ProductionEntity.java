@@ -8,7 +8,7 @@ import com.example.coursework.ui.entities.BakeryProduct;
 @Entity(tableName = "production")
 public class ProductionEntity {
     @PrimaryKey(autoGenerate = true)
-    Integer id;
+    int id;
     ProductEntity product;
     Integer productId;
     Integer count;

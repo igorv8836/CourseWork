@@ -1,5 +1,7 @@
 package com.example.coursework.ui.entities;
 
+import com.example.coursework.data.database.entities.SaleEntity;
+
 public class ProductSale {
     private int id;
     private BakeryProduct product;
@@ -70,5 +72,23 @@ public class ProductSale {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public static ProductSale fromSaleEntity(SaleEntity saleEntity) {
+        return new ProductSale(
+                saleEntity.getId(),
+                BakeryProduct.fromProductEntity(saleEntity.getProduct()),
+                saleEntity.getSalePrice(),
+                saleEntity.getSaleDate(),
+                saleEntity.getCount());
+    }
+
+    public SaleEntity toSaleEntity() {
+        return new SaleEntity(
+                id,
+                product.toProductEntity(),
+                salePrice,
+                saleDate,
+                count);
     }
 }

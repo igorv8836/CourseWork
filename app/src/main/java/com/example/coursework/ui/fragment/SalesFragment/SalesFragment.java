@@ -41,6 +41,8 @@ public class SalesFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(SalesViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
 
+        viewModel.getSales();
+
 
         adapter = new SalesAdapter(new ArrayList<>(), id -> {
             viewModel.deleteSale(id);

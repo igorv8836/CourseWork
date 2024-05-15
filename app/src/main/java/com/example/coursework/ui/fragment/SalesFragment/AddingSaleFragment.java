@@ -65,25 +65,27 @@ public class AddingSaleFragment extends Fragment {
 
 
         binding.saveButton.setOnClickListener(v -> {
-//            String name = binding.choosingProductSpinner.getPrompt().toString();
-//            String date = binding.editTextDateInputText.getText().toString();
-//            String time = binding.editTextTimeInputText.getText().toString();
-//            int count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
-//
-//            viewModel.addProduction(1, count, saleDateTime.first + saleDateTime.second, endDateTime.first + endDateTime.second);
+            int selectedProductIndex = binding.choosingProductSpinner.getSelectedItemPosition();
+            int count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
+            double price = Double.parseDouble(binding.editTextPriceInputText.getText().toString());
+
+            viewModel.addProduction(
+                    selectedProductIndex,
+                    count,
+                    saleDateTime.first + saleDateTime.second,
+                    price);
             navController.popBackStack();
         });
 
-        List<String> products = new ArrayList<>();
-        products.add("Хлеб");
-        products.add("Торт");
-        products.add("Печенье");
-        products.add("Круассан");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, products);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        binding.choosingProductSpinner.setAdapter(adapter);
+        viewModel.products.observe(getViewLifecycleOwner(), products -> {
+            List<String> productNames = new ArrayList<>();
+            for (int i = 0; i < products.size(); i++){
+                productNames.add(products.get(i).getName());
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, productNames);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            binding.choosingProductSpinner.setAdapter(adapter);
+        });
 
         return binding.getRoot();
     }

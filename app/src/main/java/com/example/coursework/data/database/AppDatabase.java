@@ -9,20 +9,18 @@ import com.example.coursework.data.database.entities.ProductEntity;
 import com.example.coursework.data.database.entities.ProductionEntity;
 import com.example.coursework.data.database.entities.SaleEntity;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 @Database(
         version = 1,
         entities = {
                 IngredientEntity.class,
                 ProductEntity.class,
                 ProductionEntity.class,
-//                SaleEntity.class
+                SaleEntity.class
         }
 )
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
         public abstract ProductDao getProductDao();
         public abstract ProductionDao getProductionDao();
+        public abstract SaleDao getSaleDao();
 }
