@@ -40,9 +40,11 @@ public class EditingBakeryProductsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity()).get(ProductsViewModel.class);
 
         if (getArguments() != null) {
             productId = getArguments().getInt("id");
+            viewModel.getProduct(productId);
         }
 
         pickMedia =
@@ -70,13 +72,42 @@ public class EditingBakeryProductsFragment extends Fragment {
 
         binding = FragmentEditingBakeryProductsBinding.inflate(inflater, container, false);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
-        viewModel = new ViewModelProvider(requireActivity()).get(ProductsViewModel.class);
 
         binding.chooseIngredients.setOnClickListener(t -> {
             Bundle bundle = new Bundle();
             if (productId != null)
                 bundle.putInt("id", productId);
             navController.navigate(R.id.nav_choosing_ingredients, bundle);
+        });
+
+        if (productId != null) {
+            viewModel.bakeryProduct.observe(getViewLifecycleOwner(), product -> {
+                binding.editTextNameInputText.setText(product.getName());
+                binding.editTextDescriptionInputText.setText(product.getDescription());
+                binding.editTextPriceInputText.setText(String.valueOf(product.getPrice()));
+                binding.editTextUriInputText.setText(product.getImageUri());
+                Glide.with(binding.getRoot()).load(product.getImageUri()).centerCrop().into(binding.image);
+            });
+        }
+
+        binding.saveButton.setOnClickListener(t -> {
+            String name = binding.editTextNameInputText.getText().toString();
+            String description = binding.editTextDescriptionInputText.getText().toString();
+            double price = Double.parseDouble(binding.editTextPriceInputText.getText().toString());
+            String imageUri = binding.editTextUriInputText.getText().toString();
+            if (productId == null) {
+                viewModel.createProduct(name, description, price, imageUri);
+            } else {
+                viewModel.updateProduct(productId, name, description, price, imageUri);
+            }
+            navController.popBackStack();
+        });
+
+        binding.deleteButton.setOnClickListener(t -> {
+            if (productId != null) {
+                viewModel.deleteProduct(productId);
+                navController.popBackStack();
+            }
         });
 
         return binding.getRoot();

@@ -60,4 +60,10 @@ public class BakeryProductsFragment extends Fragment {
         });
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.clearChosenIngredients();
+    }
 }

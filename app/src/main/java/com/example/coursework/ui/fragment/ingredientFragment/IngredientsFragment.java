@@ -74,6 +74,7 @@ public class IngredientsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = new IngredientAdapter(id -> {
+            viewModel.getIngredient(id);
             showCreatingDialog(false, id);
         });
         binding.ingredientsRecyclerView.setAdapter(adapter);
@@ -103,7 +104,7 @@ public class IngredientsFragment extends Fragment {
         builder.setView(dialogBinding.getRoot());
 
         if (!isCreating && id != null) {
-            viewModel.setIngredient(id).observe(getViewLifecycleOwner(), ingredient -> {
+            viewModel.ingredient.observe(getViewLifecycleOwner(), ingredient -> {
                 if (ingredient != null) {
                     dialogBinding.getRoot().setTag(ingredient.getId());
                     dialogBinding.editName.setText(ingredient.getName());

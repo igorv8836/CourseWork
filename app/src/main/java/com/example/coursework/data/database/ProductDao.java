@@ -10,70 +10,43 @@ import androidx.room.Update;
 
 import com.example.coursework.data.database.entities.IngredientEntity;
 import com.example.coursework.data.database.entities.ProductEntity;
-import com.example.coursework.data.database.entities.ProductIngredientCrossRef;
-import com.example.coursework.data.database.entities.ProductWithIngredients;
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 
 @Dao
 public interface ProductDao {
     @Insert
-    long insertProduct(ProductEntity product);
+    Completable insertIngredient(IngredientEntity ingredient);
 
     @Update
-    void updateProduct(ProductEntity product);
-
-    @Delete
-    void deleteProduct(ProductEntity product);
-
-    @Insert
-    long insertIngredient(IngredientEntity ingredient);
-
-    @Update
-    void updateIngredient(IngredientEntity ingredient);
+    Completable updateIngredient(IngredientEntity ingredient);
 
     @Query("DELETE FROM ingredients WHERE ingredientId = :id")
-    void deleteIngredient(int id);
+    Completable deleteIngredient(int id);
 
     @Query("SELECT * FROM ingredients WHERE ingredientId = :id")
-    LiveData<IngredientEntity> getIngredient(int id);
+    Observable<IngredientEntity> getIngredient(int id);
 
     @Query("SELECT * FROM ingredients")
-    LiveData<List<IngredientEntity>> getAllIngredients();
+    Observable<List<IngredientEntity>> getAllIngredients();
+
+    //----------------------------------------------------------------------------------------------
 
     @Insert
-    void insertProductIngredientCrossRef(ProductIngredientCrossRef ref);
+    Completable insertProduct(ProductEntity product);
 
-    @Delete
-    void deleteProductIngredientCrossRef(ProductIngredientCrossRef ref);
+    @Update
+    Completable updateProduct(ProductEntity product);
 
-    @Transaction
-    default void insertProductWithIngredients(ProductEntity product, List<IngredientEntity> ingredients) {
-        Long id = insertProduct(product);
-        for (IngredientEntity ingredient : ingredients) {
-            ingredient.setId(Integer.parseInt(id.toString()));
-            insertIngredient(ingredient);
-        }
-    }
+    @Query("DELETE FROM products WHERE productId = :id")
+    Completable deleteProduct(int id);
 
-    @Transaction
-    @Query("SELECT * FROM products WHERE productId = :productId")
-    LiveData<ProductWithIngredients> getProductWithIngredientsById(int productId);
+    @Query("SELECT * FROM products WHERE productId = :id")
+    Observable<ProductEntity> getProduct(int id);
 
-    @Transaction
     @Query("SELECT * FROM products")
-    LiveData<List<ProductWithIngredients>> getProductWithIngredients();
-
-    @Transaction
-    default void updateProductWithIngredients(ProductEntity product, List<IngredientEntity> ingredients) {
-        updateProduct(product);
-        for (IngredientEntity ingredient : ingredients) {
-            updateIngredient(ingredient);
-        }
-    }
-
-    @Transaction
-    default void deleteProductWithIngredients(ProductEntity product, List<IngredientEntity> ingredients) {
-        deleteProduct(product);
-    }
+    Observable<List<ProductEntity>> getAllProducts();
 }

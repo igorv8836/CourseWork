@@ -41,9 +41,10 @@ public class CookingFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentCookingBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(CookingViewModel.class);
+        viewModel.getProductions();
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
         adapter = new BakeryProductionAdapter(new ArrayList<>(), id -> {
-
+            viewModel.deleteProduction(id);
         });
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -56,6 +57,10 @@ public class CookingFragment extends Fragment {
 
         binding.fab.setOnClickListener(t -> {
             navController.navigate(R.id.nav_editing_production);
+        });
+
+        viewModel.bakeryProductions.observe(getViewLifecycleOwner(), bakeryProductions -> {
+            adapter.setData(bakeryProductions);
         });
 
         return binding.getRoot();

@@ -2,7 +2,6 @@ package com.example.coursework.ui.entities;
 
 import com.example.coursework.data.database.entities.IngredientEntity;
 import com.example.coursework.data.database.entities.ProductEntity;
-import com.example.coursework.data.database.entities.ProductWithIngredients;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +11,10 @@ public class BakeryProduct {
     private String name;
     private String description;
     private double price;
-    private List<Ingredient> ingredients;
+    private List<ChosenIngredient> ingredients;
     private String imageUri;
 
-    public BakeryProduct(int id, String name, String description, double price, List<Ingredient> ingredients, String imageUri) {
+    public BakeryProduct(int id, String name, String description, double price, List<ChosenIngredient> ingredients, String imageUri) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -48,11 +47,11 @@ public class BakeryProduct {
         this.price = price;
     }
 
-    public List<Ingredient> getIngredients() {
+    public List<ChosenIngredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    public void setIngredients(List<ChosenIngredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -72,36 +71,32 @@ public class BakeryProduct {
         this.id = id;
     }
 
-    public ProductWithIngredients toProductWithIngredients() {
+    public ProductEntity toProductEntity() {
         List<IngredientEntity> ingredients = new ArrayList<>();
-        for (Ingredient ingredient : getIngredients()) {
-            ingredients.add(
-                    new IngredientEntity(
-                            ingredient.getId(),
-                            ingredient.getName(),
-                            ingredient.getMeasurementText(),
-                            ingredient.getPrice()
-                    )
-            );
+        for (ChosenIngredient ingredient : getIngredients()) {
+            ingredients.add(ingredient.toEntity());
         }
-        return new ProductWithIngredients(
-                new ProductEntity(id, name, description, price, imageUri),
-                ingredients
-        );
+        return new ProductEntity(
+                getId(),
+                getName(),
+                getDescription(),
+                getPrice(),
+                getImageUri(),
+                ingredients);
     }
 
-    public static BakeryProduct fromProductWithIngredients(ProductWithIngredients entity) {
-        List<Ingredient> ingredients = new ArrayList<>();
+    public static BakeryProduct fromProductEntity(ProductEntity entity) {
+        List<ChosenIngredient> ingredients = new ArrayList<>();
         for (IngredientEntity ingredient : entity.getIngredients()) {
-            ingredients.add(Ingredient.fromEntity(ingredient));
+            ingredients.add(ChosenIngredient.fromEntity(ingredient));
         }
         return new BakeryProduct(
-                entity.getProduct().getId(),
-                entity.getProduct().getName(),
-                entity.getProduct().getDescription(),
-                entity.getProduct().getPrice(),
+                entity.getId(),
+                entity.getName(),
+                entity.getDescription(),
+                entity.getPrice(),
                 ingredients,
-                entity.getProduct().getImageUri()
+                entity.getImageUri()
         );
     }
 }

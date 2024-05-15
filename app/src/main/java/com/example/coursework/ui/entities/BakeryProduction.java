@@ -1,5 +1,7 @@
 package com.example.coursework.ui.entities;
 
+import com.example.coursework.data.database.entities.ProductionEntity;
+
 public class BakeryProduction {
     Integer id;
     BakeryProduct product;
@@ -61,5 +63,25 @@ public class BakeryProduction {
 
     public void setEndTime(Long endTime) {
         this.endTime = endTime;
+    }
+
+    public static BakeryProduction fromProductionEntity(ProductionEntity productionEntity){
+        return new BakeryProduction(
+                productionEntity.getId(),
+                BakeryProduct.fromProductEntity(productionEntity.getProduct()),
+                productionEntity.getCount(),
+                productionEntity.getStartTime(),
+                productionEntity.getEndTime()
+        );
+    }
+
+    public ProductionEntity toProductionEntity(){
+        return new ProductionEntity(
+                id,
+                product.toProductEntity(),
+                count,
+                startTime,
+                endTime
+        );
     }
 }

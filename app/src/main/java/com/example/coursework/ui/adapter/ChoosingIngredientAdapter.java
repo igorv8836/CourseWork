@@ -48,6 +48,8 @@ public class ChoosingIngredientAdapter extends RecyclerView.Adapter<ChoosingIngr
         holder.measurement.setText(ingredient.getMeasurementText());
         holder.price.setText(ingredient.getPrice().toString() + " р/" + ingredient.getMeasurementText());
         holder.countTextInputLayout.setVisibility(View.VISIBLE);
+        if (ingredient.isChosen())
+            holder.count.setText(ingredient.getCount().toString());
 
         if (ingredient.isChosen()) {
             holder.count.setText(ingredient.getCount().toString());
@@ -63,11 +65,21 @@ public class ChoosingIngredientAdapter extends RecyclerView.Adapter<ChoosingIngr
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    holder.mainLayout.setBackgroundColor(Color.LTGRAY);
+                try {
+                    Double cnt;
+                    if (s.toString().equals(""))
+                        cnt = 0.0;
+                    else
+                        cnt = Double.valueOf(s.toString());
                     ingredients.get(position).setCount(Double.parseDouble(s.toString()));
-                } else
+                    if (cnt != 0) {
+                        holder.mainLayout.setBackgroundColor(Color.LTGRAY);
+                    } else
+                        holder.mainLayout.setBackgroundColor(Color.TRANSPARENT);
+                } catch (Exception e) {
+                    ingredients.get(position).setCount(0.0);
                     holder.mainLayout.setBackgroundColor(Color.TRANSPARENT);
+                }
             }
 
             @Override

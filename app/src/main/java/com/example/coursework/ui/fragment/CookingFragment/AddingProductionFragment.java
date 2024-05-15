@@ -82,25 +82,22 @@ public class AddingProductionFragment extends Fragment {
 
 
         binding.saveButton.setOnClickListener(v -> {
-//            String name = binding.choosingProductSpinner.getPrompt().toString();
-            String date = binding.editTextDateInputText.getText().toString();
-            String time = binding.editTextTimeInputText.getText().toString();
+            int selectedProductIndex = binding.choosingProductSpinner.getSelectedItemPosition();
             int count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
 
-            viewModel.addProduction(1, count, startDateTime.first + startDateTime.second, endDateTime.first + endDateTime.second);
+            viewModel.addProduction(selectedProductIndex, count, startDateTime.first + startDateTime.second, endDateTime.first + endDateTime.second);
             navController.popBackStack();
         });
 
-        List<String> products = new ArrayList<>();
-        products.add("Хлеб");
-        products.add("Торт");
-        products.add("Печенье");
-        products.add("Круассан");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, products);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        binding.choosingProductSpinner.setAdapter(adapter);
+        viewModel.products.observe(getViewLifecycleOwner(), products -> {
+            List<String> productNames = new ArrayList<>();
+            for (int i = 0; i < products.size(); i++){
+                productNames.add(products.get(i).getName());
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, productNames);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            binding.choosingProductSpinner.setAdapter(adapter);
+        });
 
         binding.choosingProductSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

@@ -1,5 +1,7 @@
 package com.example.coursework.ui.entities;
 
+import com.example.coursework.data.database.entities.IngredientEntity;
+
 public class ChosenIngredient extends Ingredient {
     Double count;
 
@@ -28,5 +30,14 @@ public class ChosenIngredient extends Ingredient {
 
     public boolean isChosen(){
         return count != 0.0;
+    }
+
+    @Override
+    public IngredientEntity toEntity(){
+        return new IngredientEntity(getId(), getName(), getMeasurementText(), getPrice(), getCount());
+    }
+
+    public static ChosenIngredient fromEntity(IngredientEntity entity){
+        return new ChosenIngredient(entity.getId(), entity.getName(), entity.getMeasurementText(), entity.getPrice(), entity.getCount());
     }
 }
