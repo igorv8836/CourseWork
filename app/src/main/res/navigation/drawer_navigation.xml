@@ -29,8 +29,13 @@
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.example.coursework.ui.fragment.SettingsFragment.SettingsFragment"
-        android:label="Настройки"
-        tools:layout="@layout/fragment_settings" />
+        android:label="Настройки" />
+
+    <fragment
+        android:id="@+id/nav_admin_menu"
+        android:name="com.example.coursework.ui.fragment.adminFragment.AdminFragment"
+        android:label="Администрирование"
+        tools:layout="@layout/fragment_admin" />
 
 
     <fragment

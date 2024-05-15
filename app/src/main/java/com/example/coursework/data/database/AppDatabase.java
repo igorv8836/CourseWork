@@ -8,6 +8,7 @@ import com.example.coursework.data.database.entities.IngredientEntity;
 import com.example.coursework.data.database.entities.ProductEntity;
 import com.example.coursework.data.database.entities.ProductionEntity;
 import com.example.coursework.data.database.entities.SaleEntity;
+import com.example.coursework.data.database.entities.UserEntity;
 
 @Database(
         version = 1,
@@ -15,7 +16,8 @@ import com.example.coursework.data.database.entities.SaleEntity;
                 IngredientEntity.class,
                 ProductEntity.class,
                 ProductionEntity.class,
-                SaleEntity.class
+                SaleEntity.class,
+                UserEntity.class
         }
 )
 @TypeConverters({Converters.class})
@@ -23,4 +25,5 @@ public abstract class AppDatabase extends RoomDatabase {
         public abstract ProductDao getProductDao();
         public abstract ProductionDao getProductionDao();
         public abstract SaleDao getSaleDao();
+        public abstract UserDao getUserDao();
 }
