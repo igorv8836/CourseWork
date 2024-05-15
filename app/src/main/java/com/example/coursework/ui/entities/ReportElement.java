@@ -15,6 +15,14 @@ public class ReportElement {
         this.isProduction = isProduction;
     }
 
+    public ReportElement(String name, int count) {
+        this.name = name;
+        this.revenue = 0;
+        this.profit = 0;
+        this.count = count;
+        this.isProduction = true;
+    }
+
     public String getName() {
         return name;
     }

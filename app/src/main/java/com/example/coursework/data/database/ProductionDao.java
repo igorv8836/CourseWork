@@ -29,4 +29,7 @@ public interface ProductionDao {
 
     @Query("SELECT * FROM production")
     Observable<List<ProductionEntity>> getAllProductions();
+
+    @Query("SELECT * FROM production WHERE endTime >= :startDate AND endTime <= :endDate")
+    Observable<List<ProductionEntity>> getProductionsByDate(long startDate, long endDate);
 }

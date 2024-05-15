@@ -25,9 +25,9 @@
 
     <string-array name="time_periods">
         <item>За сегодня</item>
-        <item>За неделю</item>
-        <item>За месяц</item>
-        <item>За год</item>
+        <item>За текущую неделю</item>
+        <item>За текущий месяц</item>
+        <item>За текущий год</item>
         <item>За все время</item>
     </string-array>
 

@@ -4,15 +4,28 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.coursework.ui.entities.BakeryProduct;
-import com.example.coursework.ui.entities.Ingredient;
+import com.example.coursework.domain.repositories.ProductionRepository;
+import com.example.coursework.domain.repositories.SalesRepository;
+import com.example.coursework.ui.entities.BakeryProduction;
 import com.example.coursework.ui.entities.ProductSale;
 import com.example.coursework.ui.entities.ReportElement;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ReportViewModel extends ViewModel {
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final SalesRepository salesRepository = new SalesRepository();
+    private final ProductionRepository productionRepository = new ProductionRepository();
     private final MutableLiveData<List<ReportElement>> _sales = new MutableLiveData<>(new ArrayList<>());
     public LiveData<List<ReportElement>> sales = _sales;
     private final MutableLiveData<List<ReportElement>> _productions = new MutableLiveData<>(new ArrayList<>());
@@ -25,27 +38,118 @@ public class ReportViewModel extends ViewModel {
     public LiveData<Double> profit = _profit;
     private final MutableLiveData<Double> _expenses = new MutableLiveData<>(0.0);
     public LiveData<Double> expenses = _expenses;
+    // начальное время для периодов [сегодня, неделя, месяц, год, все время]
+    private final MutableLiveData<List<Long>> periodTimes = new MutableLiveData<>();
 
 
     public ReportViewModel() {
-        List<ReportElement> sales = new ArrayList<>();
-        for (int i = 0; i < 10; i++){
-            sales.add(new ReportElement("Хлеб", 100, 50, 10, false));
-        }
-        _sales.setValue(sales);
+        updateDates();
 
-        List<ReportElement> productions = new ArrayList<>();
-        for (int i = 0; i < 10; i++){
-            productions.add(new ReportElement("Хлеб", 100, 50, 10, true));
-        }
-        _productions.setValue(productions);
-
-        _revenue.setValue(1000.0);
-        _profit.setValue(500.0);
-        _expenses.setValue(500.0);
     }
 
-    public void updateData(int position){
+    public void getReport(int period) {
+        getProductions(period);
+        getSales(period);
+    }
 
+    public void updateDates() {
+        disposables.add(
+                Completable.fromAction(() -> {
+                            List<Long> times = new ArrayList<>();
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(new Date(System.currentTimeMillis()));
+
+                            calendar.set(Calendar.HOUR_OF_DAY, 0);
+                            calendar.set(Calendar.MINUTE, 0);
+                            calendar.set(Calendar.SECOND, 0);
+                            calendar.set(Calendar.MILLISECOND, 0);
+                            times.add(calendar.getTimeInMillis());
+
+                            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+                            times.add(calendar.getTimeInMillis());
+
+                            calendar.set(Calendar.DAY_OF_MONTH, 1);
+                            times.add(calendar.getTimeInMillis());
+
+                            calendar.set(Calendar.DAY_OF_YEAR, 1);
+                            times.add(calendar.getTimeInMillis());
+
+                            calendar.setTime(new Date(0));
+                            times.add(calendar.getTimeInMillis());
+
+                            periodTimes.postValue(times);
+                        }).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe());
+    }
+
+    private void getProductions(int period) {
+        disposables.add(productionRepository.getProductionsByDate(periodTimes.getValue().get(period), System.currentTimeMillis())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(productions -> {
+                    HashMap<Integer, ReportElement> data = new HashMap<>();
+                    for (BakeryProduction production : productions) {
+                        if (data.containsKey(production.getId())) {
+                            ReportElement element = data.get(production.getId());
+                            if (element != null) {
+                                element.setCount(element.getCount() + production.getCount());
+                            }
+                        } else {
+                            data.put(
+                                    production.getId(),
+                                    new ReportElement(
+                                            production.getProduct().getName(),
+                                            production.getCount()
+                                    )
+                            );
+                        }
+                    }
+                    _productions.postValue(new ArrayList<>(data.values()));
+                }));
+    }
+
+    private void getSales(int period) {
+        disposables.add(salesRepository.getSalesByDate(periodTimes.getValue().get(period), System.currentTimeMillis())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(sales -> {
+                    HashMap<Integer, ReportElement> data = new HashMap<>();
+                    for (ProductSale sale : sales) {
+                        if (data.containsKey(sale.getId())) {
+                            ReportElement element = data.get(sale.getId());
+                            if (element != null) {
+                                element.setCount(element.getCount() + sale.getCount());
+                                element.setRevenue(element.getRevenue() + sale.getRevenue());
+                                element.setProfit(element.getProfit() + sale.getProfit());
+                            }
+                        } else {
+                            data.put(
+                                    sale.getId(),
+                                    new ReportElement(
+                                            sale.getProduct().getName(),
+                                            sale.getRevenue(),
+                                            sale.getProfit(),
+                                            sale.getCount(),
+                                            false
+                                    )
+                            );
+                        }
+                    }
+                    setStatisticsData(new ArrayList<>(data.values()));
+                    _sales.postValue(new ArrayList<>(data.values()));
+                }));
+    }
+
+    private void setStatisticsData(List<ReportElement> data){
+        double profit = 0;
+        double revenue = 0;
+        for (ReportElement element : data) {
+            profit += element.getProfit();
+            revenue += element.getRevenue();
+        }
+        _profit.postValue(profit);
+        _revenue.postValue(revenue);
+        _expenses.postValue(revenue - profit);
     }
 }

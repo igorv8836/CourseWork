@@ -47,4 +47,8 @@ public class ProductionRepository {
         return data;
     }
 
+    public Observable<List<BakeryProduction>> getProductionsByDate(long startDate, long endDate) {
+        return dao.getProductionsByDate(startDate, endDate).map(this::transformProductions);
+    }
+
 }

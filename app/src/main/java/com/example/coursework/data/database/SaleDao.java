@@ -28,4 +28,10 @@ public interface SaleDao {
 
     @Query("SELECT * FROM sales")
     Observable<List<SaleEntity>> getSales();
+
+    @Query("SELECT SUM(salePrice * count) FROM sales WHERE saleDate >= :startDate AND saleDate <= :endDate")
+    Observable<Double> getRevenue(long startDate, long endDate);
+
+    @Query("SELECT * FROM sales WHERE saleDate >= :startDate AND saleDate <= :endDate")
+    Observable<List<SaleEntity>> getSalesByDate(long startDate, long endDate);
 }

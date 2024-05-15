@@ -63,7 +63,7 @@ public class ReportFragment extends Fragment {
         binding.timePeriodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                viewModel.updateData(position);
+                viewModel.getReport(position);
             }
 
             @Override

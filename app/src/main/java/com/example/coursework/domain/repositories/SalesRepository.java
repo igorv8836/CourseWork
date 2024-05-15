@@ -49,4 +49,12 @@ public class SalesRepository {
         return data;
     }
 
+    public Observable<List<ProductSale>> getSalesByDate(long startDate, long endDate) {
+        return dao.getSalesByDate(startDate, endDate).map(this::transformSales);
+    }
+
+    public Observable<Double> getRevenue(long startDate, long endDate) {
+        return dao.getRevenue(startDate, endDate);
+    }
+
 }
