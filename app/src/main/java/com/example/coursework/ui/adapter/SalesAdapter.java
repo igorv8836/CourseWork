@@ -26,6 +26,7 @@ import java.util.Locale;
 public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.SalesViewHolder>{
     private ArrayList<ProductSale> data;
     private final OnClickListener listener;
+    private boolean showDeleteButton = true;
 
     public SalesAdapter(List<ProductSale> data, OnClickListener listener) {
         this.data = new ArrayList<>(data);
@@ -56,6 +57,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.SalesViewHol
         holder.date.setText(sdf.format(new Date(element.getSaleDate())));
         holder.ingredientsPrice.setText("Себестоимость: " + element.getIngredientsPrice() + " руб");
         holder.profit.setText("Прибыль: " + element.getProfit() + " руб");
+        holder.deleteButton.setVisibility(showDeleteButton ? View.VISIBLE : View.GONE);
 
         holder.mainInfo.setOnClickListener(t -> {
             if (holder.additionalInfo.getVisibility() == View.GONE) {
@@ -88,6 +90,11 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.SalesViewHol
     @SuppressLint("NotifyDataSetChanged")
     public void updateList(List<ProductSale> newList) {
         data = new ArrayList<>(newList);
+        notifyDataSetChanged();
+    }
+
+    public void setShowDeleteButton(boolean showDeleteButton) {
+        this.showDeleteButton = showDeleteButton;
         notifyDataSetChanged();
     }
 

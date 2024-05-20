@@ -81,6 +81,10 @@ public class MainFragment extends Fragment {
                 if (menuItem != null) {
                     menuItem.setVisible(true);
                 }
+            } else {
+                if (menuItem != null) {
+                    menuItem.setVisible(false);
+                }
             }
 
             AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(menuItems)

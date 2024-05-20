@@ -59,10 +59,25 @@ public class SalesFragment extends Fragment {
 
         viewModel.sales.observe(getViewLifecycleOwner(), sales -> {
             adapter.updateList(sales);
+
+            if (sales.isEmpty()) {
+                binding.emptyIndicator.emptyIndicator.setVisibility(View.VISIBLE);
+            } else {
+                binding.emptyIndicator.emptyIndicator.setVisibility(View.GONE);
+            }
         });
 
         binding.fab.setOnClickListener(v -> {
             navController.navigate(R.id.nav_adding_sale);
+        });
+
+        viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), show -> {
+            adapter.setShowDeleteButton(show);
+            if (show) {
+                binding.fab.setVisibility(View.VISIBLE);
+            } else {
+                binding.fab.setVisibility(View.GONE);
+            }
         });
 
 

@@ -53,6 +53,20 @@ public class BakeryProductsFragment extends Fragment {
 
         viewModel.bakeryProducts.observe(getViewLifecycleOwner(), bakeryProducts -> {
             adapter.setBakeryProducts(bakeryProducts);
+
+            if (bakeryProducts.isEmpty()) {
+                binding.emptyIndicator.emptyIndicator.setVisibility(View.VISIBLE);
+            } else {
+                binding.emptyIndicator.emptyIndicator.setVisibility(View.GONE);
+            }
+        });
+
+        viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), showAdminFunctions -> {
+            if (showAdminFunctions) {
+                binding.fab.setVisibility(View.VISIBLE);
+            } else {
+                binding.fab.setVisibility(View.GONE);
+            }
         });
 
         binding.fab.setOnClickListener(t -> {

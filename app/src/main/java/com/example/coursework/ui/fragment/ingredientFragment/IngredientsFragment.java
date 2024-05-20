@@ -40,9 +40,6 @@ public class IngredientsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentIngredientsBinding.inflate(inflater, container, false);
 
-        ItemTouchHelper itemTouchHelper = getItemTouchHelper();
-        itemTouchHelper.attachToRecyclerView(binding.ingredientsRecyclerView);
-
         DividerItemDecoration divider = new DividerItemDecoration(
                 requireContext(),
                 DividerItemDecoration.VERTICAL
@@ -51,6 +48,16 @@ public class IngredientsFragment extends Fragment {
 
         binding.fab.setOnClickListener(t -> {
             showCreatingDialog(true, null);
+        });
+
+        viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), show -> {
+            if (show) {
+                binding.fab.setVisibility(View.VISIBLE);
+                ItemTouchHelper itemTouchHelper = getItemTouchHelper();
+                itemTouchHelper.attachToRecyclerView(binding.ingredientsRecyclerView);
+            } else {
+                binding.fab.setVisibility(View.GONE);
+            }
         });
 
         return binding.getRoot();
@@ -75,12 +82,21 @@ public class IngredientsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         adapter = new IngredientAdapter(id -> {
             viewModel.getIngredient(id);
-            showCreatingDialog(false, id);
+            if (Boolean.TRUE.equals(viewModel.showAdminFunctions.getValue()))
+                showCreatingDialog(false, id);
         });
         binding.ingredientsRecyclerView.setAdapter(adapter);
         binding.ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        viewModel.ingredients.observe(getViewLifecycleOwner(), adapter::updateList);
+        viewModel.ingredients.observe(getViewLifecycleOwner(), data -> {
+            adapter.updateList(data);
+            if (data.isEmpty()) {
+                binding.emptyIndicator.emptyIndicator.setVisibility(View.VISIBLE);
+            } else {
+                binding.emptyIndicator.emptyIndicator.setVisibility(View.GONE);
+            }
+
+        });
     }
 
     private void showSnackbar(View view, String text) {

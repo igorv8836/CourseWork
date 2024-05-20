@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.coursework.domain.repositories.ProductRepository;
+import com.example.coursework.domain.repositories.UserRepository;
+import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.entities.BakeryProduct;
 import com.example.coursework.ui.entities.ChosenIngredient;
 import com.example.coursework.ui.entities.Ingredient;
@@ -24,6 +26,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class ProductsViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
     ProductRepository productRepository = new ProductRepository();
+    UserRepository userRepository = new UserRepository();
     public MutableLiveData<List<BakeryProduct>> bakeryProducts = new MutableLiveData<>();
     public MutableLiveData<BakeryProduct> bakeryProduct = new MutableLiveData<>();
     public MutableLiveData<List<Ingredient>> ingredients = new MutableLiveData<>();
@@ -32,10 +35,24 @@ public class ProductsViewModel extends ViewModel {
     public LiveData<List<ChosenIngredient>> chosenIngredients = _chosenIngredients;
     private MutableLiveData<Pair<Integer, Ingredient>> removedIngredient = new MutableLiveData<>();
 
+    private final MutableLiveData<Boolean> _showAdminFunctions = new MutableLiveData<>();
+    public LiveData<Boolean> showAdminFunctions = _showAdminFunctions;
+
     public ProductsViewModel() {
         getIngredients();
         getBakeryProducts();
+        getUserRole();
     }
+
+
+    public void getUserRole() {
+        disposables.add(userRepository.getLoggedUserRole().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> {
+            _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue());
+        }));
+    }
+
+
+    //----------------------------------------------------------------------------------------------
 
     public void getIngredients() {
         disposables.add(productRepository.getAllIngredients().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> ingredients.postValue(item)));
@@ -112,7 +129,7 @@ public class ProductsViewModel extends ViewModel {
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe());
     }
 
-    private List<ChosenIngredient> getShortListIngredients(){
+    private List<ChosenIngredient> getShortListIngredients() {
         List<ChosenIngredient> ingredients = chosenIngredients.getValue();
         if (ingredients == null) {
             ingredients = new ArrayList<>();

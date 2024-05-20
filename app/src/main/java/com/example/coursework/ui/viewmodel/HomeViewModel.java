@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.coursework.domain.repositories.UserRepository;
+import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.entities.User;
 
 import io.reactivex.Observable;
@@ -50,7 +51,7 @@ public class HomeViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(role -> {
-                    _isCreator.postValue(role.getValue() == 0);
+                    _isCreator.postValue(role.getValue() == UserType.CREATOR.getValue());
                 })
         );
     }

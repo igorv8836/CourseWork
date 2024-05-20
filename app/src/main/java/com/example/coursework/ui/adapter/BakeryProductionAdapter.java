@@ -27,6 +27,7 @@ import java.util.Locale;
 public class BakeryProductionAdapter extends RecyclerView.Adapter<BakeryProductionAdapter.BakeryProductionViewHolder>{
     private ArrayList<BakeryProduction> data;
     private OnClickListener listener;
+    private boolean isDeleteButtonVisible = true;
 
     public BakeryProductionAdapter(List<BakeryProduction> data, OnClickListener listener) {
         this.data = new ArrayList<>(data);
@@ -49,6 +50,7 @@ public class BakeryProductionAdapter extends RecyclerView.Adapter<BakeryProducti
         holder.name.setText(element.getProduct().getName());
         holder.price.setText(element.getProduct().getPrice() + " руб.");
         holder.count.setText(element.getCount() + " шт.");
+        holder.button.setVisibility(isDeleteButtonVisible ? View.VISIBLE : View.GONE);
 
         long currentTime = System.currentTimeMillis();
 
@@ -84,6 +86,11 @@ public class BakeryProductionAdapter extends RecyclerView.Adapter<BakeryProducti
 
     public void setData(List<BakeryProduction> data) {
         this.data = new ArrayList<>(data);
+        notifyDataSetChanged();
+    }
+
+    public void setDeleteButtonVisible(boolean visible) {
+        isDeleteButtonVisible = visible;
         notifyDataSetChanged();
     }
 

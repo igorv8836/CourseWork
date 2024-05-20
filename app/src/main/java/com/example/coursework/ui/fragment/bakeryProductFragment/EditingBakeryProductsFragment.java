@@ -110,6 +110,16 @@ public class EditingBakeryProductsFragment extends Fragment {
             }
         });
 
+        viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), t -> {
+            int visibility = t ? View.VISIBLE : View.GONE;
+            binding.saveButton.setVisibility(visibility);
+            binding.deleteButton.setVisibility(visibility);
+            binding.editTextUriInputText.setFocusable(t);
+            binding.editTextPriceInputText.setFocusable(t);
+            binding.editTextDescriptionInputText.setFocusable(t);
+            binding.editTextNameInputText.setFocusable(t);
+        });
+
         return binding.getRoot();
     }
 

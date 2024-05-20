@@ -64,6 +64,15 @@ public class ChoosingIngredientsFragment extends Fragment {
                 adapter.setData(new ArrayList<>(t));
         });
 
+        viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), t -> {
+            adapter.setUnableToChoose(t);
+            if (t) {
+                binding.saveButton.setVisibility(View.VISIBLE);
+            } else {
+                binding.saveButton.setVisibility(View.GONE);
+            }
+        });
+
         binding.recyclerView.setAdapter(adapter);
 
         return binding.getRoot();

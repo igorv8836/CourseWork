@@ -27,6 +27,7 @@ import java.util.List;
 
 public class ChoosingIngredientAdapter extends RecyclerView.Adapter<ChoosingIngredientAdapter.IngridientViewHolder> {
     private ArrayList<ChosenIngredient> ingredients;
+    private boolean isUnableToChoose = true;
 
     public ChoosingIngredientAdapter(List<ChosenIngredient> ingredients) {
         this.ingredients = new ArrayList<>(ingredients);
@@ -48,6 +49,7 @@ public class ChoosingIngredientAdapter extends RecyclerView.Adapter<ChoosingIngr
         holder.measurement.setText(ingredient.getMeasurementText());
         holder.price.setText(ingredient.getPrice().toString() + " р/" + ingredient.getMeasurementText());
         holder.countTextInputLayout.setVisibility(View.VISIBLE);
+        holder.count.setFocusable(isUnableToChoose);
         if (ingredient.isChosen())
             holder.count.setText(ingredient.getCount().toString());
 
@@ -100,6 +102,12 @@ public class ChoosingIngredientAdapter extends RecyclerView.Adapter<ChoosingIngr
     @SuppressLint("NotifyDataSetChanged")
     public void setData(ArrayList<ChosenIngredient> ingredients) {
         this.ingredients = ingredients;
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setUnableToChoose(boolean unableToChoose) {
+        isUnableToChoose = unableToChoose;
         notifyDataSetChanged();
     }
 

@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentLoginBinding;
@@ -49,6 +50,12 @@ public class LoginFragment extends Fragment {
         viewModel.loggedUser.observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
                 navController.navigate(R.id.mainFragment);
+            }
+        });
+
+        viewModel.helpText.observe(getViewLifecycleOwner(), text -> {
+            if (text != null) {
+                Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
             }
         });
 

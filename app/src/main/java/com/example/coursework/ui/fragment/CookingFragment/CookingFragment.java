@@ -61,7 +61,24 @@ public class CookingFragment extends Fragment {
 
         viewModel.bakeryProductions.observe(getViewLifecycleOwner(), bakeryProductions -> {
             adapter.setData(bakeryProductions);
+
+            if (bakeryProductions.isEmpty()) {
+                binding.emptyIndicator.emptyIndicator.setVisibility(View.VISIBLE);
+            } else {
+                binding.emptyIndicator.emptyIndicator.setVisibility(View.GONE);
+            }
         });
+
+        viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), showAdminFunctions -> {
+            adapter.setDeleteButtonVisible(showAdminFunctions);
+            if (showAdminFunctions) {
+                binding.fab.setVisibility(View.VISIBLE);
+            } else {
+                binding.fab.setVisibility(View.GONE);
+            }
+        });
+
+
 
         return binding.getRoot();
     }

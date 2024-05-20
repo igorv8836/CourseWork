@@ -62,8 +62,13 @@ public class AuthViewModel extends ViewModel {
                                 repository.loginUser(email, password)
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe()
+                                        .subscribe(
+                                                () -> {},
+                                                throwable -> setHelpText("Ошибка при входе")
+                                        )
                         );
+                    } else {
+                        setHelpText("Неверный логин или пароль");
                     }
                 })
         );
