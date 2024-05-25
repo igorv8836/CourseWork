@@ -17,7 +17,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class HomeViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final UserRepository repository = new UserRepository();
-
     private final MutableLiveData<User> _user = new MutableLiveData<>();
     public LiveData<User> user = _user;
     private final MutableLiveData<Boolean> _isCreator = new MutableLiveData<>();

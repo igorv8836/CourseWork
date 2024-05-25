@@ -93,7 +93,10 @@ public class EditingBakeryProductsFragment extends Fragment {
         binding.saveButton.setOnClickListener(t -> {
             String name = binding.editTextNameInputText.getText().toString();
             String description = binding.editTextDescriptionInputText.getText().toString();
-            double price = Double.parseDouble(binding.editTextPriceInputText.getText().toString());
+            double price = 0.0;
+            try{
+                price = Double.parseDouble(binding.editTextPriceInputText.getText().toString());
+            } catch (Exception e){}
             String imageUri = binding.editTextUriInputText.getText().toString();
             if (productId == null) {
                 viewModel.createProduct(name, description, price, imageUri);

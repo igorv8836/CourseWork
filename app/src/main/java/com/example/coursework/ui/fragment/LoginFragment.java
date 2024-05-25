@@ -53,10 +53,11 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        viewModel.helpText.observe(getViewLifecycleOwner(), text -> {
-            if (text != null) {
-                Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
-            }
+        viewModel.helpText.observe(getViewLifecycleOwner(), t -> {
+            if (t == null) return;
+            String text = t.getContentIfNotHandled();
+            if (text != null)
+                Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show();
         });
 
 

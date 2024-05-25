@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentCookingBinding;
@@ -76,6 +77,13 @@ public class CookingFragment extends Fragment {
             } else {
                 binding.fab.setVisibility(View.GONE);
             }
+        });
+
+        viewModel.helpText.observe(getViewLifecycleOwner(), t -> {
+            if (t == null) return;
+            String text = t.getContentIfNotHandled();
+            if (text != null)
+                Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show();
         });
 
 

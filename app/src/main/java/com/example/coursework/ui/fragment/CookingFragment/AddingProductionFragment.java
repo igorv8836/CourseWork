@@ -40,8 +40,9 @@ public class AddingProductionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startDateTime = new Pair<>(0L, 0L);
-        endDateTime = new Pair<>(0L, 0L);
+        Pair<Long, Long> currentDateTime = getCurrentDateTime();
+        startDateTime = currentDateTime;
+        endDateTime = currentDateTime;
 
     }
 
@@ -52,6 +53,14 @@ public class AddingProductionFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CookingViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
 
+        Calendar calendar = Calendar.getInstance();
+        String nowDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(calendar.getTime());
+        String nowTime = String.format(Locale.getDefault(), "%02d:%02d", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE));
+        binding.editTextEndDateInputText.setText(nowDate);
+        binding.editTextDateInputText.setText(nowDate);
+        binding.editTextTimeInputText.setText(nowTime);
+        binding.editTextEndTimeInputText.setText(nowTime);
+
         binding.editTextTimeInputText.setOnClickListener(v -> selectTime((hour, minute) -> {
             startDateTime = new Pair<>(startDateTime.first, (hour * 60L + minute) * 60 * 1000L);
             String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
@@ -60,7 +69,6 @@ public class AddingProductionFragment extends Fragment {
 
         binding.editTextDateInputText.setOnClickListener(v -> selectDate(date -> {
             startDateTime = new Pair<>(date, startDateTime.second);
-            Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(date);
             String formattedDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(calendar.getTime());
             binding.editTextDateInputText.setText(formattedDate);
@@ -74,7 +82,6 @@ public class AddingProductionFragment extends Fragment {
 
         binding.editTextEndDateInputText.setOnClickListener(v -> selectDate(date -> {
             endDateTime = new Pair<>(date, endDateTime.second);
-            Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(date);
             String formattedDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(calendar.getTime());
             binding.editTextEndDateInputText.setText(formattedDate);
@@ -83,7 +90,10 @@ public class AddingProductionFragment extends Fragment {
 
         binding.saveButton.setOnClickListener(v -> {
             int selectedProductIndex = binding.choosingProductSpinner.getSelectedItemPosition();
-            int count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
+            int count = 0;
+            try {
+                count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
+            } catch (Exception e){}
 
             viewModel.addProduction(selectedProductIndex, count, startDateTime.first + startDateTime.second, endDateTime.first + endDateTime.second);
             navController.popBackStack();
@@ -134,11 +144,32 @@ public class AddingProductionFragment extends Fragment {
     }
 
     private void selectDate(DatePickerListener listener){
+        Calendar currentDate = Calendar.getInstance();
+        long today = currentDate.getTimeInMillis();
+
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Выберите дату")
+                .setSelection(today)
                 .build();
 
         datePicker.addOnPositiveButtonClickListener(listener::onDateSelected);
+
         datePicker.show(getParentFragmentManager(), "datePicker");
+    }
+
+    private Pair<Long, Long> getCurrentDateTime() {
+        Calendar calendar = Calendar.getInstance();
+
+        long dateInMillis = calendar.getTimeInMillis();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        long startOfDayInMillis = calendar.getTimeInMillis();
+
+        long timeInMillis = dateInMillis - startOfDayInMillis;
+
+        return new Pair<>(startOfDayInMillis, timeInMillis);
     }
 }

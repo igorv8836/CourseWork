@@ -11,7 +11,6 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.example.coursework.R;
@@ -38,7 +37,7 @@ public class AddingSaleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        saleDateTime = new Pair<>(0L, 0L);
+        saleDateTime = getCurrentDateTime();
     }
 
     @Override
@@ -49,6 +48,12 @@ public class AddingSaleFragment extends Fragment {
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
 
 
+        Calendar calendar = Calendar.getInstance();
+        String nowDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(calendar.getTime());
+        String nowTime = String.format(Locale.getDefault(), "%02d:%02d", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE));
+        binding.editTextDateInputText.setText(nowDate);
+        binding.editTextTimeInputText.setText(nowTime);
+
         binding.editTextTimeInputText.setOnClickListener(v -> selectTime((hour, minute) -> {
             saleDateTime = new Pair<>(saleDateTime.first, (hour * 60L + minute) * 60 * 1000L);
             String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
@@ -57,7 +62,6 @@ public class AddingSaleFragment extends Fragment {
 
         binding.editTextDateInputText.setOnClickListener(v -> selectDate(date -> {
             saleDateTime = new Pair<>(date, saleDateTime.second);
-            Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(date);
             String formattedDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(calendar.getTime());
             binding.editTextDateInputText.setText(formattedDate);
@@ -66,10 +70,14 @@ public class AddingSaleFragment extends Fragment {
 
         binding.saveButton.setOnClickListener(v -> {
             int selectedProductIndex = binding.choosingProductSpinner.getSelectedItemPosition();
-            int count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
-            double price = Double.parseDouble(binding.editTextPriceInputText.getText().toString());
+            int count = 0;
+            double price = 0.0;
+            try{
+                count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
+                price = Double.parseDouble(binding.editTextPriceInputText.getText().toString());
+            } catch (Exception ignored){}
 
-            viewModel.addProduction(
+            viewModel.addSale(
                     selectedProductIndex,
                     count,
                     saleDateTime.first + saleDateTime.second,
@@ -111,11 +119,29 @@ public class AddingSaleFragment extends Fragment {
     }
 
     private void selectDate(DatePickerListener listener){
+        Calendar currentDate = Calendar.getInstance();
+        long today = currentDate.getTimeInMillis();
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Выберите дату")
+                .setTitleText("Выберите дату").setSelection(today)
                 .build();
 
         datePicker.addOnPositiveButtonClickListener(listener::onDateSelected);
         datePicker.show(getParentFragmentManager(), "datePicker");
+    }
+
+    private Pair<Long, Long> getCurrentDateTime() {
+        Calendar calendar = Calendar.getInstance();
+
+        long dateInMillis = calendar.getTimeInMillis();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        long startOfDayInMillis = calendar.getTimeInMillis();
+
+        long timeInMillis = dateInMillis - startOfDayInMillis;
+
+        return new Pair<>(startOfDayInMillis, timeInMillis);
     }
 }

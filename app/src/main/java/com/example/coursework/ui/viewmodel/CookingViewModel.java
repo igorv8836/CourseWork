@@ -8,6 +8,7 @@ import com.example.coursework.domain.repositories.ProductRepository;
 import com.example.coursework.domain.repositories.ProductionRepository;
 import com.example.coursework.domain.repositories.UserRepository;
 import com.example.coursework.domain.utils.UserType;
+import com.example.coursework.ui.addClasses.Event;
 import com.example.coursework.ui.entities.BakeryProduct;
 import com.example.coursework.ui.entities.BakeryProduction;
 import com.example.coursework.ui.entities.Ingredient;
@@ -32,6 +33,8 @@ public class CookingViewModel extends ViewModel {
     public LiveData<List<BakeryProduction>> bakeryProductions = _bakeryProductions;
     private final MutableLiveData<BakeryProduction> _bakeryProduction = new MutableLiveData<>();
     public LiveData<BakeryProduction> bakeryProduction = _bakeryProduction;
+    private final MutableLiveData<Event<String>> _helpText = new MutableLiveData<>();
+    public MutableLiveData<Event<String>> helpText = _helpText;
 
     private final MutableLiveData<Boolean> _showAdminFunctions = new MutableLiveData<>();
     public LiveData<Boolean> showAdminFunctions = _showAdminFunctions;
@@ -39,6 +42,11 @@ public class CookingViewModel extends ViewModel {
     public CookingViewModel() {
         getProducts();
         getUserRole();
+    }
+
+    private void setHelpText(String text) {
+        _helpText.postValue(null);
+        _helpText.postValue(new Event<>(text));
     }
 
     public void getUserRole() {
@@ -75,6 +83,14 @@ public class CookingViewModel extends ViewModel {
     }
 
     public void addProduction(int productPosition, int count, long startTime, long endTime) {
+        if (count == 0 || startTime > endTime){
+            setHelpText("Количество равно нулю или время старта больше времени окончания");
+            return;
+        }
+        if (productPosition == -1){
+            setHelpText("Изделие не выбрано");
+            return;
+        }
         disposables.add(Completable.fromAction(() -> {
             BakeryProduct product = null;
             if (products.getValue() != null)
@@ -121,6 +137,10 @@ public class CookingViewModel extends ViewModel {
     }
 
     public void updateProduction(int id, int productId, int count, long startTime, long endTime) {
+        if (count == 0 || startTime > endTime){
+            setHelpText("Количество равно нулю или время старта больше времени окончания");
+            return;
+        }
         disposables.add(Completable.fromAction(() -> {
                     BakeryProduct product = findProductById(productId);
                     BakeryProduction production = new BakeryProduction(

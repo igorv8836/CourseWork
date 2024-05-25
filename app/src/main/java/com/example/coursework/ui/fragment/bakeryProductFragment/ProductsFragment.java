@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -58,6 +59,14 @@ public class ProductsFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> tab.setText(tabElements.get(position))
         ).attach();
+
+        viewModel.helpText.observe(getViewLifecycleOwner(), t -> {
+            if (t == null) return;
+            String text = t.getContentIfNotHandled();
+            if (text != null)
+                Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show();
+        });
+
 
         return binding.getRoot();
     }

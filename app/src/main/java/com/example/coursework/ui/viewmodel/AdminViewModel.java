@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.coursework.domain.repositories.UserRepository;
 import com.example.coursework.domain.utils.UserType;
+import com.example.coursework.ui.addClasses.Event;
 import com.example.coursework.ui.entities.User;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class AdminViewModel extends ViewModel {
     public MutableLiveData<User> loggedUser = _loggedUser;
     private final MutableLiveData<List<User>> _users = new MutableLiveData<>();
     public MutableLiveData<List<User>> users = _users;
-    private final MutableLiveData<String> _helpText = new MutableLiveData<>();
-    public MutableLiveData<String> helpText = _helpText;
+    private final MutableLiveData<Event<String>> _helpText = new MutableLiveData<>();
+    public MutableLiveData<Event<String>> helpText = _helpText;
 
     public AdminViewModel() {
         getLoggedUser();
@@ -32,7 +33,7 @@ public class AdminViewModel extends ViewModel {
 
     private void setHelpText(String text) {
         _helpText.postValue(null);
-        _helpText.postValue(text);
+        _helpText.postValue(new Event<>(text));
     }
 
     public void getLoggedUser() {
@@ -70,6 +71,10 @@ public class AdminViewModel extends ViewModel {
     }
 
     public void changeUser(User user) {
+        if (user.getEmail().isEmpty() || user.getUsername().isEmpty() || user.getPassword().isEmpty()){
+            setHelpText("Параметр не может быть пустым");
+            return;
+        }
         disposables.add(repository.getUserByEmail(user.getEmail())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

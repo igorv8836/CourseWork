@@ -138,7 +138,11 @@ public class IngredientsFragment extends Fragment {
             if (dialogBinding.editPrice.getText().toString().isEmpty()){
                 price = 0.0;
             } else {
-                price = Double.parseDouble(dialogBinding.editPrice.getText().toString());
+                try {
+                    price = Double.parseDouble(dialogBinding.editPrice.getText().toString());
+                } catch (Exception e){
+                    price = 0.0;
+                }
             }
             if (isCreating)
                 viewModel.createIngredient(name, measurement, price);

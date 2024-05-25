@@ -2,6 +2,8 @@ package com.example.coursework.ui.fragment;
 
 import static androidx.core.app.ActivityCompat.invalidateOptionsMenu;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +25,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentMainBinding;
@@ -92,6 +95,27 @@ public class MainFragment extends Fragment {
             NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
         });
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+        String type = sharedPreferences.getString("sync_frequency", "0");
+        switch (type){
+            case "0":
+                navController.navigate(R.id.nav_products);
+                break;
+            case "1":
+                navController.navigate(R.id.nav_cooking);
+                break;
+            case "2":
+                navController.navigate(R.id.nav_sales);
+                break;
+            case "3":
+                navController.navigate(R.id.nav_report);
+                break;
+            case "4":
+                navController.navigate(R.id.nav_settings);
+                break;
+        }
 
         View headerView = navigationView.getHeaderView(0);
         TextView titleTextView = headerView.findViewById(R.id.name);

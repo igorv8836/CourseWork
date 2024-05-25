@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.coursework.domain.repositories.UserRepository;
 import com.example.coursework.domain.utils.UserType;
+import com.example.coursework.ui.addClasses.Event;
 import com.example.coursework.ui.entities.User;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -18,8 +19,8 @@ public class AuthViewModel extends ViewModel {
 
     private final MutableLiveData<User> _loggedUser = new MutableLiveData<>();
     public MutableLiveData<User> loggedUser = _loggedUser;
-    private final MutableLiveData<String> _helpText = new MutableLiveData<>();
-    public MutableLiveData<String> helpText = _helpText;
+    private final MutableLiveData<Event<String>> _helpText = new MutableLiveData<>();
+    public MutableLiveData<Event<String>> helpText = _helpText;
 
     public AuthViewModel() {
         getLoggedUser();
@@ -27,10 +28,14 @@ public class AuthViewModel extends ViewModel {
 
     private void setHelpText(String text) {
         _helpText.postValue(null);
-        _helpText.postValue(text);
+        _helpText.postValue(new Event<>(text));
     }
 
     public void createAccount(String name, String email, String password) {
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty()){
+            setHelpText("Параметр не может быть пустым");
+            return;
+        }
         disposables.add(repository.getUserCountByEmail(email)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -53,6 +58,10 @@ public class AuthViewModel extends ViewModel {
     }
 
     public void login(String email, String password) {
+        if (email.isEmpty() || password.isEmpty()){
+            setHelpText("Параметр не может быть пустым");
+            return;
+        }
         disposables.add(repository.getUserByUsernameAndPassword(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentLoginBinding;
@@ -66,10 +67,11 @@ public class RegisterFragment extends Fragment {
             viewModel.createAccount(name, email, password);
         });
 
-        viewModel.helpText.observe(getViewLifecycleOwner(), helpText -> {
-            if (helpText != null) {
-                Snackbar.make(view, helpText, Snackbar.LENGTH_SHORT).show();
-            }
+        viewModel.helpText.observe(getViewLifecycleOwner(), t -> {
+            if (t == null) return;
+            String text = t.getContentIfNotHandled();
+            if (text != null)
+                Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show();
         });
     }
 }

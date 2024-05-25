@@ -8,9 +8,8 @@ import com.example.coursework.domain.repositories.ProductRepository;
 import com.example.coursework.domain.repositories.SalesRepository;
 import com.example.coursework.domain.repositories.UserRepository;
 import com.example.coursework.domain.utils.UserType;
+import com.example.coursework.ui.addClasses.Event;
 import com.example.coursework.ui.entities.BakeryProduct;
-import com.example.coursework.ui.entities.BakeryProduction;
-import com.example.coursework.ui.entities.Ingredient;
 import com.example.coursework.ui.entities.ProductSale;
 
 import java.util.ArrayList;
@@ -34,9 +33,17 @@ public class SalesViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _showAdminFunctions = new MutableLiveData<>();
     public LiveData<Boolean> showAdminFunctions = _showAdminFunctions;
 
+    private final MutableLiveData<Event<String>> _helpText = new MutableLiveData<>();
+    public MutableLiveData<Event<String>> helpText = _helpText;
+
     public SalesViewModel() {
         getProducts();
         getUserRole();
+    }
+
+    private void setHelpText(String text) {
+        _helpText.postValue(null);
+        _helpText.postValue(new Event<>(text));
     }
 
     public void getUserRole() {
@@ -63,7 +70,11 @@ public class SalesViewModel extends ViewModel {
         );
     }
 
-    public void addProduction(int productPosition, int count, long time, double price) {
+    public void addSale(int productPosition, int count, long time, double price) {
+        if (count == 0 || productPosition == -1){
+            setHelpText("Количество равно нулю или изделие не выбрано");
+            return;
+        }
         disposables.add(Completable.fromAction(() -> {
                     BakeryProduct product = null;
                     if (products.getValue() != null)
