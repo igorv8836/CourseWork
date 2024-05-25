@@ -36,13 +36,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline"
         app:endIconMode="clear_text"
-        android:hint="Введите почту"
+        android:hint="Введите логин"
         android:layout_marginBottom="16dp"
         app:boxBackgroundColor="@null"
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editEmail"
+            android:id="@+id/editLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"

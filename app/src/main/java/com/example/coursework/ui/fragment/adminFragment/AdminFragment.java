@@ -61,12 +61,12 @@ public class AdminFragment extends Fragment {
         builder.setView(dialogBinding.getRoot());
 
         dialogBinding.editName.setText(user.getUsername());
-        dialogBinding.editEmail.setText(user.getEmail());
+        dialogBinding.editLogin.setText(user.getEmail());
         dialogBinding.editPassword.setText(user.getPassword());
 
         builder.setPositiveButton("Сохранить", (dialog, which) -> {
             String name = dialogBinding.editName.getText().toString();
-            String email = dialogBinding.editEmail.getText().toString();
+            String email = dialogBinding.editLogin.getText().toString();
             String password = dialogBinding.editPassword.getText().toString();
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
