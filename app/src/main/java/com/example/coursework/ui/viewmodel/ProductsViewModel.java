@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.coursework.data.repositories.ProductRepositoryImpl;
+import com.example.coursework.data.repositories.UserRepositoryImpl;
 import com.example.coursework.domain.repositories.ProductRepository;
 import com.example.coursework.domain.repositories.UserRepository;
 import com.example.coursework.domain.utils.UserType;
@@ -26,8 +28,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ProductsViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
-    ProductRepository productRepository = new ProductRepository();
-    UserRepository userRepository = new UserRepository();
+    ProductRepository productRepository = new ProductRepositoryImpl();
+    UserRepository userRepository = new UserRepositoryImpl();
     public MutableLiveData<List<BakeryProduct>> bakeryProducts = new MutableLiveData<>();
     public MutableLiveData<BakeryProduct> bakeryProduct = new MutableLiveData<>();
     public MutableLiveData<List<Ingredient>> ingredients = new MutableLiveData<>();

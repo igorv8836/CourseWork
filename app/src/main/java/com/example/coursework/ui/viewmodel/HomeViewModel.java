@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.coursework.data.repositories.UserRepositoryImpl;
 import com.example.coursework.domain.repositories.UserRepository;
 import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.entities.User;
@@ -16,7 +17,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
-    private final UserRepository repository = new UserRepository();
+    private final UserRepository repository = new UserRepositoryImpl();
     private final MutableLiveData<User> _user = new MutableLiveData<>();
     public LiveData<User> user = _user;
     private final MutableLiveData<Boolean> _isCreator = new MutableLiveData<>();

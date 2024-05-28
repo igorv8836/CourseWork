@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:504769358704:android:a2418e125f7d9656e0fdb5",
+        "mobilesdk_app_id": "1:504769358704:android:bfdda014c27fea67e0fdb5",
         "android_client_info": {
-          "package_name": "com.example.IgorCourseWork"
+          "package_name": "com.example.coursework"
         }
       },
       "oauth_client": [],

@@ -12,43 +12,11 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 
-public class ProductionRepository {
-    private final ProductionDao dao;
-
-    public ProductionRepository() {
-        dao = App.getDb().getProductionDao();
-    }
-
-    public Observable<List<BakeryProduction>> getProductions() {
-        return dao.getAllProductions().map(this::transformProductions);
-    }
-
-    public Observable<BakeryProduction> getProduction(int id) {
-        return dao.getProduction(id).map(BakeryProduction::fromProductionEntity);
-    }
-
-    public Completable addProduction(BakeryProduction production) {
-        return dao.insertProduction(production.toProductionEntity());
-    }
-
-    public Completable updateProduction(BakeryProduction production) {
-        return dao.updateProduction(production.toProductionEntity());
-    }
-
-    public Completable deleteProduction(int id) {
-        return dao.deleteProduction(id);
-    }
-
-    private List<BakeryProduction> transformProductions(List<ProductionEntity> productionEntities) {
-        List<BakeryProduction> data = new ArrayList<>();
-        for (ProductionEntity productionEntity : productionEntities) {
-            data.add(BakeryProduction.fromProductionEntity(productionEntity));
-        }
-        return data;
-    }
-
-    public Observable<List<BakeryProduction>> getProductionsByDate(long startDate, long endDate) {
-        return dao.getProductionsByDate(startDate, endDate).map(this::transformProductions);
-    }
-
+public interface ProductionRepository {
+    Observable<List<BakeryProduction>> getProductions();
+    Observable<BakeryProduction> getProduction(int id);
+    Completable addProduction(BakeryProduction production);
+    Completable updateProduction(BakeryProduction production);
+    Completable deleteProduction(int id);
+    Observable<List<BakeryProduction>> getProductionsByDate(long startDate, long endDate);
 }
