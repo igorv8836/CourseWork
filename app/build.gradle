@@ -1,6 +1,7 @@
 plugins {
     id "com.google.devtools.ksp"
     alias(libs.plugins.androidApplication)
+    id 'com.google.gms.google-services'
 
 }
 
@@ -58,12 +59,17 @@ dependencies {
     implementation libs.rxjava
     implementation libs.rxandroid
 
-    implementation "androidx.room:room-runtime:$room_version"
+    implementation libs.room.runtime
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     ksp "androidx.room:room-compiler:$room_version"
 
-    implementation "androidx.room:room-rxjava2:$room_version"
-    implementation "androidx.room:room-rxjava3:$room_version"
-    implementation 'com.google.code.gson:gson:2.10'
+    implementation libs.room.rxjava2
+    implementation libs.androidx.room.rxjava3
+    implementation libs.gson
+
+    implementation platform(libs.firebase.bom)
+    //noinspection UseTomlInstead
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation("com.google.firebase:firebase-auth")
 }

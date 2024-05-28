@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "504769358704",
+    "project_id": "coursework-88e24",
+    "storage_bucket": "coursework-88e24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504769358704:android:a2418e125f7d9656e0fdb5",
+        "android_client_info": {
+          "package_name": "com.example.IgorCourseWork"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsyPzmEbR_44i1TeuIJVzFbM8fL7EpH5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
