@@ -62,7 +62,6 @@ public class AdminFragment extends Fragment {
 
         dialogBinding.editName.setText(user.getUsername());
         dialogBinding.editLogin.setText(user.getEmail());
-        dialogBinding.editPassword.setText(user.getPassword());
 
         builder.setPositiveButton("Сохранить", (dialog, which) -> {
             String name = dialogBinding.editName.getText().toString();
@@ -77,7 +76,6 @@ public class AdminFragment extends Fragment {
 
             user.setUsername(name);
             user.setEmail(email);
-            user.setPassword(password);
 
             viewModel.changeUser(user);
 

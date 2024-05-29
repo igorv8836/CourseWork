@@ -79,4 +79,15 @@
         android:text="@string/register"
         />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/recover_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:textColor="?attr/colorOnSecondary"
+        android:textStyle="italic"
+        android:textSize="12sp"
+        android:text="@string/recover_password_text"
+        />
+
 </LinearLayout>

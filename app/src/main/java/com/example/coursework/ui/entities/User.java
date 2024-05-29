@@ -5,27 +5,25 @@ import com.example.coursework.domain.utils.UserType;
 
 
 public class User {
-    private int id;
+    private String id;
     private String username;
-    private String password;
     private String email;
     private UserType role;
     private boolean isLogged;
 
-    public User(int id, String username, String password, String email, UserType role, boolean isLogged) {
+    public User(String id, String username, String email, UserType role, boolean isLogged) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.email = email;
         this.role = role;
         this.isLogged = isLogged;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -35,14 +33,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getEmail() {
@@ -70,14 +60,13 @@ public class User {
     }
 
     public UserEntity toUserEntity() {
-        return new UserEntity(id, username, password, email, role.getValue(), isLogged);
+        return new UserEntity(id, username, email, role.getValue(), isLogged);
     }
 
     public static User fromUserEntity(UserEntity userEntity) {
         return new User(
                 userEntity.getId(),
                 userEntity.getUsername(),
-                userEntity.getPassword(),
                 userEntity.getEmail(),
                 UserType.fromInt(userEntity.getRole()),
                 userEntity.isLogged()

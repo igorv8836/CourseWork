@@ -72,10 +72,6 @@ public class AdminViewModel extends ViewModel {
     }
 
     public void changeUser(User user) {
-        if (user.getEmail().isEmpty() || user.getUsername().isEmpty() || user.getPassword().isEmpty()){
-            setHelpText("Параметр не может быть пустым");
-            return;
-        }
         disposables.add(repository.getUserByEmail(user.getEmail())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

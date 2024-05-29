@@ -2,6 +2,7 @@ package com.example.coursework.data.repositories;
 
 import com.example.coursework.data.firebase.AuthFirebase;
 import com.example.coursework.domain.repositories.AuthRepository;
+import com.example.coursework.ui.entities.User;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -14,13 +15,13 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public Single<Boolean> login(String email, String password) {
+    public Single<User> login(String email, String password) {
         return authFirebase.login(email, password);
     }
 
     @Override
-    public Single<Boolean> register(String email, String password) {
-        return authFirebase.register(email, password);
+    public Single<Boolean> register(String name, String email, String password) {
+        return authFirebase.register(name, email, password);
     }
 
     @Override
@@ -31,5 +32,15 @@ public class AuthRepositoryImpl implements AuthRepository {
     @Override
     public Completable changePassword(String email, String oldPassword, String newPassword) {
         return authFirebase.changePassword(email, oldPassword, newPassword);
+    }
+
+    @Override
+    public Single<User> getUser() {
+        return authFirebase.getUser();
+    }
+
+    @Override
+    public Completable logout() {
+        return authFirebase.logout();
     }
 }

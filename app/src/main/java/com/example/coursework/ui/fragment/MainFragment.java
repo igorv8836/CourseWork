@@ -46,7 +46,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentMainBinding.inflate(inflater, container, false);
 
@@ -56,7 +56,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
 
         toolbar = binding.toolbar;
@@ -70,36 +69,17 @@ public class MainFragment extends Fragment {
         NavController navController = navHostFragment.getNavController();
         NavController mainNavController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
 
-        viewModel.isCreator.observe(getViewLifecycleOwner(), isCreator -> {
-            Menu menu = navigationView.getMenu();
-            MenuItem menuItem = menu.findItem(R.id.nav_admin_menu);
-            Set<Integer> menuItems = new HashSet<>();
-            menuItems.add(R.id.nav_products);
-            menuItems.add(R.id.nav_cooking);
-            menuItems.add(R.id.nav_sales);
-            menuItems.add(R.id.nav_report);
-            menuItems.add(R.id.nav_settings);
-            if (isCreator) {
-                menuItems.add(R.id.nav_admin_menu);
-                if (menuItem != null) {
-                    menuItem.setVisible(true);
-                }
-            } else {
-                if (menuItem != null) {
-                    menuItem.setVisible(false);
-                }
-            }
+        Set<Integer> menuItems = getMenuItems(navigationView);
 
-            AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(menuItems)
-                    .setOpenableLayout(drawerLayout).build();
-            NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
-            NavigationUI.setupWithNavController(navigationView, navController);
-        });
+        AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(menuItems)
+                .setOpenableLayout(drawerLayout).build();
+        NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
         String type = sharedPreferences.getString("sync_frequency", "0");
-        switch (type){
+        switch (type) {
             case "0":
                 navController.navigate(R.id.nav_products);
                 break;
@@ -122,17 +102,47 @@ public class MainFragment extends Fragment {
         TextView subtitleTextView = headerView.findViewById(R.id.email);
         Button logoutButton = headerView.findViewById(R.id.logout);
 
-        viewModel.user.observe(getViewLifecycleOwner(), user -> {
-            if (user != null) {
-                titleTextView.setText(user.getUsername());
-                subtitleTextView.setText(user.getEmail());
+        viewModel.user.observe(
+
+                getViewLifecycleOwner(), user ->
+                {
+                    if (user != null) {
+                        titleTextView.setText(user.getUsername());
+                        subtitleTextView.setText(user.getEmail());
+                    }
+                });
+
+        logoutButton.setOnClickListener(v -> viewModel.logout());
+
+        viewModel.toLoginScreen.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                viewModel.resetToLoginScreen();
+                mainNavController.navigate(R.id.loginFragment);
             }
         });
 
-        logoutButton.setOnClickListener(v -> {
-            viewModel.logout();
-            mainNavController.navigate(R.id.loginFragment);
-        });
+    }
 
+    @NonNull
+    private static Set<Integer> getMenuItems(NavigationView navigationView) {
+        Menu menu = navigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.nav_admin_menu);
+        Set<Integer> menuItems = new HashSet<>();
+        menuItems.add(R.id.nav_products);
+        menuItems.add(R.id.nav_cooking);
+        menuItems.add(R.id.nav_sales);
+        menuItems.add(R.id.nav_report);
+        menuItems.add(R.id.nav_settings);
+        if (true) {
+            menuItems.add(R.id.nav_admin_menu);
+            if (menuItem != null) {
+                menuItem.setVisible(true);
+            }
+        } else {
+            if (menuItem != null) {
+                menuItem.setVisible(false);
+            }
+        }
+        return menuItems;
     }
 }

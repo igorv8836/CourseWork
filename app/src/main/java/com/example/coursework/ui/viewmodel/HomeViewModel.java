@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.coursework.data.repositories.AuthRepositoryImpl;
 import com.example.coursework.data.repositories.UserRepositoryImpl;
+import com.example.coursework.domain.repositories.AuthRepository;
 import com.example.coursework.domain.repositories.UserRepository;
 import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.entities.User;
@@ -17,42 +19,25 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
-    private final UserRepository repository = new UserRepositoryImpl();
+    private final AuthRepository repository = new AuthRepositoryImpl();
     private final MutableLiveData<User> _user = new MutableLiveData<>();
     public LiveData<User> user = _user;
-    private final MutableLiveData<Boolean> _isCreator = new MutableLiveData<>();
-    public LiveData<Boolean> isCreator = _isCreator;
+    private final MutableLiveData<Boolean> _toLoginScreen = new MutableLiveData<>();
+    public LiveData<Boolean> toLoginScreen = _toLoginScreen;
 
     public HomeViewModel() {
         getUser();
-        checkUserRole();
+    }
+
+    public void resetToLoginScreen() {
+        _toLoginScreen.postValue(false);
     }
 
     public void getUser() {
-        disposables.add(repository.checkLoggedUser()
+        disposables.add(repository.getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user -> {
-                    if (user == 0) {
-                        _user.postValue(null);
-                        return;
-                    }
-                    Disposable a = repository.getLoggedUser()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(_user::postValue);
-                    disposables.add(a);
-                })
-        );
-    }
-
-    public void checkUserRole() {
-        disposables.add(repository.getLoggedUserRole()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(role -> {
-                    _isCreator.postValue(role.getValue() == UserType.CREATOR.getValue());
-                })
+                .subscribe(_user::postValue)
         );
     }
 
@@ -63,11 +48,12 @@ public class HomeViewModel extends ViewModel {
     }
 
     public void logout() {
-        disposables.add(repository.logoutUser()
+        disposables.add(repository.logout()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     _user.postValue(null);
+                    _toLoginScreen.postValue(true);
                 })
         );
     }

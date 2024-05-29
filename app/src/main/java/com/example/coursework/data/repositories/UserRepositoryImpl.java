@@ -34,7 +34,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Single<Integer> getUserByUsernameAndPassword(String username, String password) {
-        return userDao.getUserByUsernameAndPassword(username, password);
+        return userDao.getUserByUsernameAndPassword(username);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Completable loginUser(String username, String password) {
-        return userDao.loginUser(username, password);
+        return userDao.loginUser(username);
     }
 
     @Override

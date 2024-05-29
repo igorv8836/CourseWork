@@ -3,7 +3,9 @@ package com.example.coursework.ui.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.coursework.data.repositories.AuthRepositoryImpl;
 import com.example.coursework.data.repositories.UserRepositoryImpl;
+import com.example.coursework.domain.repositories.AuthRepository;
 import com.example.coursework.domain.repositories.UserRepository;
 import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.addClasses.Event;
@@ -16,10 +18,12 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AuthViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
-    private final UserRepository repository = new UserRepositoryImpl();
+    private final AuthRepository repository = new AuthRepositoryImpl();
 
-    private final MutableLiveData<User> _loggedUser = new MutableLiveData<>();
-    public MutableLiveData<User> loggedUser = _loggedUser;
+    private final MutableLiveData<Boolean> _nextScreen = new MutableLiveData<>();
+    public MutableLiveData<Boolean> nextScreen = _nextScreen;
+    private final MutableLiveData<Boolean> _isActive = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isActive = _isActive;
     private final MutableLiveData<Event<String>> _helpText = new MutableLiveData<>();
     public MutableLiveData<Event<String>> helpText = _helpText;
 
@@ -33,72 +37,70 @@ public class AuthViewModel extends ViewModel {
     }
 
     public void createAccount(String name, String email, String password) {
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty()){
-            setHelpText("Параметр не может быть пустым");
-            return;
-        }
-        disposables.add(repository.getUserCountByEmail(email)
+        _isActive.postValue(false);
+        disposables.add(repository.register(name, email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user -> {
-                    if (user == 0) {
-                        disposables.add(repository.insertUser(
-                                new User(0, name, email, password, UserType.CREATOR, true)
-                                ).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe()
-                        );
-                    }
-                    else
-                        setHelpText("Такой пользователь уже существует!");
-                },
+                .subscribe(res -> {
+                            _isActive.postValue(true);
+                            if (res) {
+                                _nextScreen.postValue(true);
+                            }
+
+                        },
                         throwable -> {
-                            setHelpText("Ошибка при создании пользователя");
+                            _isActive.postValue(true);
+                            setHelpText(throwable.getMessage());
                         }
-        ));
+                ));
     }
 
     public void login(String email, String password) {
-        if (email.isEmpty() || password.isEmpty()){
-            setHelpText("Параметр не может быть пустым");
-            return;
-        }
-        disposables.add(repository.getUserByUsernameAndPassword(email, password)
+        _isActive.postValue(false);
+        disposables.add(repository.login(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user -> {
-                    if (user != 0) {
-                        disposables.add(
-                                repository.loginUser(email, password)
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(
-                                                () -> {},
-                                                throwable -> setHelpText("Ошибка при входе")
-                                        )
-                        );
-                    } else {
-                        setHelpText("Неверный логин или пароль");
-                    }
-                })
+                .subscribe(res -> {
+                            _isActive.postValue(true);
+                            if (res != null) {
+                                _nextScreen.postValue(true);
+                            }
+                        },
+                        throwable -> {
+                            _isActive.postValue(true);
+                            setHelpText(throwable.getMessage());
+                        })
         );
     }
 
     public void getLoggedUser() {
-        disposables.add(repository.checkLoggedUser()
+        disposables.add(repository.getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
-                    if (user == 0) {
-                        _loggedUser.postValue(null);
-                        return;
-                    }
-                    Disposable a = repository.getLoggedUser()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(_loggedUser::postValue);
-                    disposables.add(a);
+                    if (user != null)
+                        _nextScreen.postValue(true);
+                }, throwable -> {
                 })
+        );
+    }
+
+    public void recoverPassword(String email) {
+        _isActive.postValue(false);
+        disposables.add(
+                repository.recoverPassword(email)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {
+                                    _isActive.postValue(true);
+                                    setHelpText("Письмо отправлено на почту");
+                                },
+                                throwable -> {
+                                    _isActive.postValue(true);
+                                    setHelpText(throwable.getMessage());
+                                }
+                        )
         );
     }
 
