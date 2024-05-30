@@ -22,6 +22,10 @@ public class SaleEntity {
         this.count = count;
     }
 
+    public SaleEntity(){
+
+    }
+
     public double getRevenue() {
         return salePrice * count;
     }

@@ -84,7 +84,9 @@ public class ProductsViewModel extends ViewModel {
     public void removeIngredient(int position) {
         int id = ingredients.getValue().get(position).getId();
         removedIngredient.setValue(new Pair<>(position, ingredients.getValue().get(position)));
-        disposables.add(productRepository.removeIngredient(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe());
+        disposables.add(productRepository.removeIngredient(id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {}, throwable -> setHelpText(throwable.getMessage())));
 
     }
 
