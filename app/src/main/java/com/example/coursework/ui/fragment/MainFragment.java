@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -101,9 +102,14 @@ public class MainFragment extends Fragment {
         TextView titleTextView = headerView.findViewById(R.id.name);
         TextView subtitleTextView = headerView.findViewById(R.id.email);
         Button logoutButton = headerView.findViewById(R.id.logout);
+        ImageView settingsButton = headerView.findViewById(R.id.settings);
+
+        settingsButton.setOnClickListener(t -> {
+            navController.navigate(R.id.nav_account);
+            drawerLayout.closeDrawer(navigationView);
+        });
 
         viewModel.user.observe(
-
                 getViewLifecycleOwner(), user ->
                 {
                     if (user != null) {
@@ -111,7 +117,6 @@ public class MainFragment extends Fragment {
                         subtitleTextView.setText(user.getEmail());
                     }
                 });
-
         logoutButton.setOnClickListener(v -> viewModel.logout());
 
         viewModel.toLoginScreen.observe(getViewLifecycleOwner(), aBoolean -> {
@@ -120,6 +125,8 @@ public class MainFragment extends Fragment {
                 mainNavController.navigate(R.id.loginFragment);
             }
         });
+
+
 
     }
 

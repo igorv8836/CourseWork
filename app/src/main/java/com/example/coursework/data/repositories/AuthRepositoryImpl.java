@@ -35,6 +35,11 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
+    public Completable changeName(String name) {
+        return authFirebase.changeName(name);
+    }
+
+    @Override
     public Single<User> getUser() {
         return authFirebase.getUser();
     }

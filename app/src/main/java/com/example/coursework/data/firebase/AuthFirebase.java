@@ -155,4 +155,17 @@ public class AuthFirebase {
             emitter.onComplete();
         });
     }
+
+    public Completable changeName(String name) {
+        return Completable.create(emitter -> {
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+            Objects.requireNonNull(mAuth.getCurrentUser()).updateProfile(profileUpdates).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onComplete();
+                } else {
+                    emitter.onError(Objects.requireNonNull(task.getException()));
+                }
+            });
+        });
+    }
 }

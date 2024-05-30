@@ -11,6 +11,9 @@ public interface AuthRepository {
     Single<Boolean> register(String name, String email, String password);
     Completable recoverPassword(String email);
     Completable changePassword(String email, String oldPassword, String newPassword);
+
+    Completable changeName(String name);
+
     Single<User> getUser();
     Completable logout();
 }
