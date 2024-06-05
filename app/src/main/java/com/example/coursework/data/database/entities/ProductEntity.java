@@ -30,6 +30,10 @@ public class ProductEntity {
         this.ingredients = ingredients;
     }
 
+    public ProductEntity(){
+
+    }
+
     public int getId() {
         return id;
     }

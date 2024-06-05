@@ -15,17 +15,24 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 
 @Dao
 public interface ProductDao {
     @Insert
-    Completable insertIngredient(IngredientEntity ingredient);
+    Single<Long> insertIngredient(IngredientEntity ingredient);
+
+    @Insert
+    Completable insertIngredients(List<IngredientEntity> ingredients);
 
     @Update
     Completable updateIngredient(IngredientEntity ingredient);
 
     @Query("DELETE FROM ingredients WHERE ingredientId = :id")
     Completable deleteIngredient(int id);
+
+    @Query("DELETE FROM ingredients")
+    Completable deleteAllIngredients();
 
     @Query("SELECT * FROM ingredients WHERE ingredientId = :id")
     Observable<IngredientEntity> getIngredient(int id);
@@ -38,11 +45,17 @@ public interface ProductDao {
     @Insert
     Completable insertProduct(ProductEntity product);
 
+    @Insert
+    Completable insertProducts(List<ProductEntity> products);
+
     @Update
     Completable updateProduct(ProductEntity product);
 
     @Query("DELETE FROM products WHERE productId = :id")
     Completable deleteProduct(int id);
+
+    @Query("DELETE FROM products")
+    Completable deleteAllProducts();
 
     @Query("SELECT * FROM products WHERE productId = :id")
     Observable<ProductEntity> getProduct(int id);

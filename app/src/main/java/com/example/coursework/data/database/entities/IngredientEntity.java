@@ -25,6 +25,10 @@ public class IngredientEntity {
         this.count = 0.0;
     }
 
+    public IngredientEntity(){
+
+    }
+
 
     public IngredientEntity(int id, String name, String measurementText, Double price, Double count) {
         this.id = id;

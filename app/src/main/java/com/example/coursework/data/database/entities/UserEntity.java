@@ -1,43 +1,53 @@
 package com.example.coursework.data.database.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "users")
 public class UserEntity {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    private @NonNull String id;
     private String username;
-    private String password;
     private String email;
     private int role;
     private boolean isLogged;
 
     @Ignore
-    public UserEntity(String username, String password, String email, int role, boolean isLogged) {
+    public UserEntity(String username, String email, int role, boolean isLogged) {
         this.username = username;
-        this.password = password;
         this.email = email;
         this.role = role;
         this.isLogged = isLogged;
     }
 
+    public UserEntity(String username, String email, int role) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+        this.isLogged = false;
+        id = "";
+    }
 
-    public UserEntity(int id, String username, String password, String email, int role, boolean isLogged) {
+    public UserEntity(){
+
+    }
+
+
+    public UserEntity(String id, String username, String email, int role, boolean isLogged) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.email = email;
         this.role = role;
         this.isLogged = isLogged;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -47,14 +57,6 @@ public class UserEntity {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getEmail() {

@@ -24,8 +24,8 @@ public interface UserDao {
     @Query("SELECT * FROM users WHERE email = :email")
     Single<UserEntity> getUserByEmail(String email);
 
-    @Query("SELECT COUNT(*) FROM users WHERE username = :username AND password = :password")
-    Single<Integer> getUserByUsernameAndPassword(String username, String password);
+    @Query("SELECT COUNT(*) FROM users WHERE username = :username")
+    Single<Integer> getUserByUsernameAndPassword(String username);
 
     @Query("SELECT * FROM users WHERE isLogged = 1")
     Observable<UserEntity> getLoggedUser();
@@ -36,8 +36,8 @@ public interface UserDao {
     @Query("UPDATE users SET isLogged = 0")
     Completable logoutUser();
 
-    @Query("UPDATE users SET isLogged = 1 WHERE username = :username AND password = :password")
-    Completable loginUser(String username, String password);
+    @Query("UPDATE users SET isLogged = 1 WHERE username = :username")
+    Completable loginUser(String username);
 
     @Insert
     Completable insertUser(UserEntity user);

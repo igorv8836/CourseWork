@@ -3,104 +3,126 @@ package com.example.coursework.ui.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.coursework.domain.repositories.UserRepository;
-import com.example.coursework.domain.utils.UserType;
+import com.example.coursework.data.repositories.AuthRepositoryImpl;
+import com.example.coursework.domain.repositories.AuthRepository;
 import com.example.coursework.ui.addClasses.Event;
 import com.example.coursework.ui.entities.User;
 
+import java.util.Objects;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AuthViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
-    private final UserRepository repository = new UserRepository();
+    private final AuthRepository repository = new AuthRepositoryImpl();
 
-    private final MutableLiveData<User> _loggedUser = new MutableLiveData<>();
-    public MutableLiveData<User> loggedUser = _loggedUser;
-    private final MutableLiveData<Event<String>> _helpText = new MutableLiveData<>();
-    public MutableLiveData<Event<String>> helpText = _helpText;
+    public MutableLiveData<Boolean> nextScreen = new MutableLiveData<>();
+    public MutableLiveData<User> user = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isActive = new MutableLiveData<>();
+    public MutableLiveData<Event<String>> helpText = new MutableLiveData<>();
 
     public AuthViewModel() {
         getLoggedUser();
     }
 
     private void setHelpText(String text) {
-        _helpText.postValue(null);
-        _helpText.postValue(new Event<>(text));
+        helpText.postValue(new Event<>(text));
+    }
+
+    private void handleResult(Boolean result) {
+        isActive.postValue(true);
+        if (result) {
+            nextScreen.postValue(true);
+        }
+    }
+
+    private void handleError(Throwable throwable) {
+        isActive.postValue(true);
+        setHelpText(throwable.getMessage());
     }
 
     public void createAccount(String name, String email, String password) {
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty()){
-            setHelpText("Параметр не может быть пустым");
-            return;
-        }
-        disposables.add(repository.getUserCountByEmail(email)
+        isActive.postValue(false);
+        disposables.add(repository.register(name, email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user -> {
-                    if (user == 0) {
-                        disposables.add(repository.insertUser(
-                                new User(0, name, email, password, UserType.CREATOR, true)
-                                ).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe()
-                        );
-                    }
-                    else
-                        setHelpText("Такой пользователь уже существует!");
-                },
-                        throwable -> {
-                            setHelpText("Ошибка при создании пользователя");
-                        }
-        ));
+                .subscribe(this::handleResult, this::handleError)
+        );
     }
 
     public void login(String email, String password) {
-        if (email.isEmpty() || password.isEmpty()){
-            setHelpText("Параметр не может быть пустым");
-            return;
-        }
-        disposables.add(repository.getUserByUsernameAndPassword(email, password)
+        isActive.postValue(false);
+        disposables.add(repository.login(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user -> {
-                    if (user != 0) {
-                        disposables.add(
-                                repository.loginUser(email, password)
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(
-                                                () -> {},
-                                                throwable -> setHelpText("Ошибка при входе")
-                                        )
-                        );
-                    } else {
-                        setHelpText("Неверный логин или пароль");
+                .subscribe(res -> {
+                    isActive.postValue(true);
+                    if (res != null) {
+                        nextScreen.postValue(true);
                     }
-                })
+                }, this::handleError)
         );
     }
 
     public void getLoggedUser() {
-        disposables.add(repository.checkLoggedUser()
+        disposables.add(repository.getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
-                    if (user == 0) {
-                        _loggedUser.postValue(null);
-                        return;
+                    if (user != null) {
+                        nextScreen.postValue(true);
+                        this.user.postValue(user);
                     }
-                    Disposable a = repository.getLoggedUser()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(_loggedUser::postValue);
-                    disposables.add(a);
-                })
+                }, throwable -> {})
         );
     }
 
+    public void recoverPassword(String email) {
+        isActive.postValue(false);
+        disposables.add(repository.recoverPassword(email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    isActive.postValue(true);
+                    setHelpText("Письмо отправлено на почту");
+                }, this::handleError)
+        );
+    }
+
+    public void saveUser(String lastPassword, String newPassword, String name) {
+        if (!lastPassword.isEmpty() && !newPassword.isEmpty()) {
+            updatePassword(lastPassword, newPassword);
+        }
+        if (!Objects.equals(Objects.requireNonNull(user.getValue()).getUsername(), name)) {
+            updateName(name);
+        }
+    }
+
+    private void updatePassword(String lastPassword, String newPassword) {
+        isActive.postValue(false);
+        disposables.add(repository.changePassword(user.getValue().getEmail(), lastPassword, newPassword)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    isActive.postValue(true);
+                    setHelpText("Данные успешно изменены");
+                }, this::handleError)
+        );
+    }
+
+    private void updateName(String name) {
+        isActive.postValue(false);
+        disposables.add(repository.changeName(name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    isActive.postValue(true);
+                    setHelpText("Данные успешно изменены");
+                }, this::handleError)
+        );
+    }
 
     @Override
     protected void onCleared() {

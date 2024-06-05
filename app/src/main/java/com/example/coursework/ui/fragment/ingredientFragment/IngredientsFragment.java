@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,11 +53,20 @@ public class IngredientsFragment extends Fragment {
 
         viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), show -> {
             if (show) {
-                binding.fab.setVisibility(View.VISIBLE);
                 ItemTouchHelper itemTouchHelper = getItemTouchHelper();
                 itemTouchHelper.attachToRecyclerView(binding.ingredientsRecyclerView);
+                binding.fab.setVisibility(View.VISIBLE);
             } else {
                 binding.fab.setVisibility(View.GONE);
+            }
+        });
+
+        viewModel.helpText.observe(getViewLifecycleOwner(), event -> {
+            if (event != null) {
+                String text = event.getContentIfNotHandled();
+                if (text != null) {
+                    Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

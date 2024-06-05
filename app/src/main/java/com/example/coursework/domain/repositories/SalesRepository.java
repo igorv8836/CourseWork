@@ -14,47 +14,12 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 
-public class SalesRepository {
-    private final SaleDao dao;
-
-    public SalesRepository() {
-        dao = App.getDb().getSaleDao();
-    }
-
-    public Observable<List<ProductSale>> getSales() {
-        return dao.getSales().map(this::transformSales);
-    }
-
-    public Observable<ProductSale> getSale(int id) {
-        return dao.getSale(id).map(ProductSale::fromSaleEntity);
-    }
-
-    public Completable addSale(ProductSale sale) {
-        return dao.insertSale(sale.toSaleEntity());
-    }
-
-    public Completable updateSale(ProductSale sale) {
-        return dao.updateSale(sale.toSaleEntity());
-    }
-
-    public Completable deleteSale(int id) {
-        return dao.deleteSale(id);
-    }
-
-    private List<ProductSale> transformSales(List<SaleEntity> saleEntities) {
-        List<ProductSale> data = new ArrayList<>();
-        for (SaleEntity saleEntity : saleEntities) {
-            data.add(ProductSale.fromSaleEntity(saleEntity));
-        }
-        return data;
-    }
-
-    public Observable<List<ProductSale>> getSalesByDate(long startDate, long endDate) {
-        return dao.getSalesByDate(startDate, endDate).map(this::transformSales);
-    }
-
-    public Observable<Double> getRevenue(long startDate, long endDate) {
-        return dao.getRevenue(startDate, endDate);
-    }
-
+public interface SalesRepository {
+    Observable<List<ProductSale>> getSales();
+    Observable<ProductSale> getSale(int id);
+    Completable addSale(ProductSale sale);
+    Completable updateSale(ProductSale sale);
+    Completable deleteSale(int id);
+    Observable<List<ProductSale>> getSalesByDate(long startDate, long endDate);
+    Observable<Double> getRevenue(long startDate, long endDate);
 }

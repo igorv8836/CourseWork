@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -54,9 +55,13 @@ public class RegisterFragment extends Fragment {
 
         toolbar.setNavigationOnClickListener(v -> navController.popBackStack());
 
-        viewModel.loggedUser.observe(getViewLifecycleOwner(), user -> {
-            if (user != null) {
-                navController.navigate(R.id.mainFragment);
+        viewModel.nextScreen.observe(getViewLifecycleOwner(), t -> {
+            if (t != null) {
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setPopUpTo(R.id.mainFragment, true)
+                        .build();
+
+                navController.navigate(R.id.mainFragment, null, navOptions);
             }
         });
 
@@ -72,6 +77,12 @@ public class RegisterFragment extends Fragment {
             String text = t.getContentIfNotHandled();
             if (text != null)
                 Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show();
+        });
+
+        viewModel.isActive.observe(getViewLifecycleOwner(), t -> {
+            if (t != null) {
+                binding.buttonRegister.setEnabled(t);
+            }
         });
     }
 }

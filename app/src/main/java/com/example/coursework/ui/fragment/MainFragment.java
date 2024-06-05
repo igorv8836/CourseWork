@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentMainBinding;
+import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.viewmodel.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
 
@@ -46,7 +48,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentMainBinding.inflate(inflater, container, false);
 
@@ -56,7 +58,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
 
         toolbar = binding.toolbar;
@@ -70,69 +71,91 @@ public class MainFragment extends Fragment {
         NavController navController = navHostFragment.getNavController();
         NavController mainNavController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
 
-        viewModel.isCreator.observe(getViewLifecycleOwner(), isCreator -> {
-            Menu menu = navigationView.getMenu();
-            MenuItem menuItem = menu.findItem(R.id.nav_admin_menu);
-            Set<Integer> menuItems = new HashSet<>();
-            menuItems.add(R.id.nav_products);
-            menuItems.add(R.id.nav_cooking);
-            menuItems.add(R.id.nav_sales);
-            menuItems.add(R.id.nav_report);
-            menuItems.add(R.id.nav_settings);
-            if (isCreator) {
-                menuItems.add(R.id.nav_admin_menu);
-                if (menuItem != null) {
-                    menuItem.setVisible(true);
-                }
-            } else {
-                if (menuItem != null) {
-                    menuItem.setVisible(false);
-                }
+        viewModel.user.observe(getViewLifecycleOwner(), user -> {
+            if (user != null) {
+                Set<Integer> menuItems = getMenuItems(navigationView, user.getRole().equals(UserType.CREATOR));
+
+                AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(menuItems)
+                        .setOpenableLayout(drawerLayout).build();
+                NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
             }
 
-            AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(menuItems)
-                    .setOpenableLayout(drawerLayout).build();
-            NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
-            NavigationUI.setupWithNavController(navigationView, navController);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+            String type = sharedPreferences.getString("sync_frequency", "0");
+            switch (type) {
+                case "0":
+                    navController.navigate(R.id.nav_products);
+                    break;
+                case "1":
+                    navController.navigate(R.id.nav_cooking);
+                    break;
+                case "2":
+                    navController.navigate(R.id.nav_sales);
+                    break;
+                case "3":
+                    navController.navigate(R.id.nav_report);
+                    break;
+                case "4":
+                    navController.navigate(R.id.nav_settings);
+                    break;
+            }
+
         });
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-
-        String type = sharedPreferences.getString("sync_frequency", "0");
-        switch (type){
-            case "0":
-                navController.navigate(R.id.nav_products);
-                break;
-            case "1":
-                navController.navigate(R.id.nav_cooking);
-                break;
-            case "2":
-                navController.navigate(R.id.nav_sales);
-                break;
-            case "3":
-                navController.navigate(R.id.nav_report);
-                break;
-            case "4":
-                navController.navigate(R.id.nav_settings);
-                break;
-        }
+        NavigationUI.setupWithNavController(navigationView, navController);
 
         View headerView = navigationView.getHeaderView(0);
         TextView titleTextView = headerView.findViewById(R.id.name);
         TextView subtitleTextView = headerView.findViewById(R.id.email);
         Button logoutButton = headerView.findViewById(R.id.logout);
+        ImageView settingsButton = headerView.findViewById(R.id.settings);
 
-        viewModel.user.observe(getViewLifecycleOwner(), user -> {
-            if (user != null) {
-                titleTextView.setText(user.getUsername());
-                subtitleTextView.setText(user.getEmail());
+        settingsButton.setOnClickListener(t -> {
+            navController.navigate(R.id.nav_account);
+            drawerLayout.closeDrawer(navigationView);
+        });
+
+        viewModel.user.observe(
+                getViewLifecycleOwner(), user ->
+                {
+                    if (user != null) {
+                        titleTextView.setText(user.getUsername());
+                        subtitleTextView.setText(user.getEmail());
+                    }
+                });
+        logoutButton.setOnClickListener(v -> viewModel.logout());
+
+        viewModel.toLoginScreen.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                viewModel.resetToLoginScreen();
+                mainNavController.navigate(R.id.loginFragment);
             }
         });
 
-        logoutButton.setOnClickListener(v -> {
-            viewModel.logout();
-            mainNavController.navigate(R.id.loginFragment);
-        });
 
+
+    }
+
+    @NonNull
+    private static Set<Integer> getMenuItems(NavigationView navigationView, boolean isAdmin) {
+        Menu menu = navigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.nav_admin_menu);
+        Set<Integer> menuItems = new HashSet<>();
+        menuItems.add(R.id.nav_products);
+        menuItems.add(R.id.nav_cooking);
+        menuItems.add(R.id.nav_sales);
+        menuItems.add(R.id.nav_report);
+        menuItems.add(R.id.nav_admin_menu);
+        menuItems.add(R.id.nav_settings);
+        if (isAdmin) {
+            if (menuItem != null) {
+                menuItem.setVisible(true);
+            }
+        } else {
+            if (menuItem != null) {
+                menuItem.setVisible(false);
+            }
+        }
+        return menuItems;
     }
 }

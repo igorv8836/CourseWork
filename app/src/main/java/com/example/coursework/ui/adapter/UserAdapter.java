@@ -121,7 +121,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         RadioButton userRadioButton;
 
         MaterialButton editButton;
-        MaterialButton deleteButton;
 
         public UserViewHolder(View itemView) {
             super(itemView);
@@ -136,7 +135,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             adminRadioButton = binding.admin;
             userRadioButton = binding.user;
             editButton = binding.changeType;
-            deleteButton = binding.deleteButton;
 
         }
     }

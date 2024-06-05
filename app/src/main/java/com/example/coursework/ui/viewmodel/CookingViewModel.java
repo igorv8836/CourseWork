@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.coursework.data.repositories.ProductRepositoryImpl;
+import com.example.coursework.data.repositories.ProductionRepositoryImpl;
+import com.example.coursework.data.repositories.UserRepositoryImpl;
 import com.example.coursework.domain.repositories.ProductRepository;
 import com.example.coursework.domain.repositories.ProductionRepository;
 import com.example.coursework.domain.repositories.UserRepository;
@@ -23,9 +26,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CookingViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
-    ProductionRepository repository = new ProductionRepository();
-    ProductRepository productRepository = new ProductRepository();
-    UserRepository userRepository = new UserRepository();
+    ProductionRepository repository = new ProductionRepositoryImpl();
+    ProductRepository productRepository = new ProductRepositoryImpl();
+    UserRepository userRepository = new UserRepositoryImpl();
 
     private final MutableLiveData<List<BakeryProduct>> _products = new MutableLiveData<>();
     public LiveData<List<BakeryProduct>> products = _products;
@@ -50,7 +53,7 @@ public class CookingViewModel extends ViewModel {
     }
 
     public void getUserRole() {
-        disposables.add(userRepository.getLoggedUserRole().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> {
+        disposables.add(userRepository.getLoggedUserType().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> {
             _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue());
         }));
     }

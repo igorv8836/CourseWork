@@ -22,6 +22,7 @@
     <string name="sales">Продажи</string>
     <string name="full_report">Полный отчет</string>
     <string name="settings">Настройки</string>
+    <string name="recover_password_text">Забыли пароль?</string>
 
     <string-array name="time_periods">
         <item>За сегодня</item>

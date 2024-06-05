@@ -1,21 +1,24 @@
 package com.example.coursework.ui.fragment;
 
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentLoginBinding;
 import com.example.coursework.ui.viewmodel.AuthViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
 public class LoginFragment extends Fragment {
@@ -47,9 +50,13 @@ public class LoginFragment extends Fragment {
             viewModel.login(email, password);
         });
 
-        viewModel.loggedUser.observe(getViewLifecycleOwner(), user -> {
-            if (user != null) {
-                navController.navigate(R.id.mainFragment);
+        viewModel.nextScreen.observe(getViewLifecycleOwner(), t -> {
+            if (t != null) {
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setPopUpTo(R.id.mainFragment, true)
+                        .build();
+
+                navController.navigate(R.id.mainFragment, null, navOptions);
             }
         });
 
@@ -60,6 +67,30 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show();
         });
 
+
+        binding.recoverButton.setOnClickListener(t -> {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+            builder.setTitle("Восстановить пароль");
+
+            final EditText input = new EditText(requireContext());
+            input.setHint("Введите ваш email");
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            builder.setView(input);
+
+            builder.setPositiveButton("Восстановить", (dialog, which) -> {
+                String email = input.getText().toString();
+                viewModel.recoverPassword(email);
+            });
+            builder.setNegativeButton("Отмена", (dialog, which) -> dialog.cancel());
+
+            builder.show();
+        });
+
+        viewModel.isActive.observe(getViewLifecycleOwner(), t -> {
+            if (t != null) {
+                binding.logInButton.setEnabled(t);
+            }
+        });
 
     }
 }
