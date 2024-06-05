@@ -3,6 +3,7 @@ package com.example.coursework.ui.fragment.bakeryProductFragment;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -35,6 +36,7 @@ public class EditingBakeryProductsFragment extends Fragment {
     NavController navController;
     ProductsViewModel viewModel;
     String productId;
+    private Uri imageUri;
 
 
     @Override
@@ -50,6 +52,7 @@ public class EditingBakeryProductsFragment extends Fragment {
         pickMedia =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     if (uri != null) {
+                        imageUri = uri;
                         Glide.with(binding.getRoot()).load(uri).centerCrop().into(binding.image);
                         binding.editTextUriInputText.setText(uri.toString());
                     } else {
@@ -97,11 +100,11 @@ public class EditingBakeryProductsFragment extends Fragment {
             try{
                 price = Double.parseDouble(binding.editTextPriceInputText.getText().toString());
             } catch (Exception e){}
-            String imageUri = binding.editTextUriInputText.getText().toString();
+            String imageUrl = binding.editTextUriInputText.getText().toString();
             if (productId == null) {
-                viewModel.createProduct(name, description, price, imageUri);
+                viewModel.createProduct(name, description, price, imageUrl, imageUri);
             } else {
-                viewModel.updateProduct(productId, name, description, price, imageUri);
+                viewModel.updateProduct(productId, name, description, price, imageUrl);
             }
             navController.popBackStack();
         });

@@ -1,11 +1,18 @@
 package com.example.coursework.data.firebase.firestore;
 
+import android.net.Uri;
+import android.util.Pair;
+
+import com.example.coursework.App;
 import com.example.coursework.data.database.entities.IngredientEntity;
 import com.example.coursework.data.database.entities.ProductEntity;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +26,11 @@ public class ProductFirestore {
     private static final String INGREDIENTS_COLLECTION = "ingredients";
     private static final String PRODUCTS_COLLECTION = "products";
     private final FirebaseFirestore firestore;
+    private final FirebaseStorage storage;
 
     public ProductFirestore() {
         firestore = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     public Single<String> insertIngredient(IngredientEntity ingredient) {
@@ -82,13 +91,36 @@ public class ProductFirestore {
         );
     }
 
-    public Single<String> insertProduct(ProductEntity product) {
-        return Single.<String>create(emitter ->
-                firestore.collection(PRODUCTS_COLLECTION)
-                        .add(product)
-                        .addOnSuccessListener(documentReference -> emitter.onSuccess(documentReference.getId()))
-                        .addOnFailureListener(emitter::onError))
-                .subscribeOn(Schedulers.io())
+    public Single<Pair<String, String>> insertProduct(ProductEntity product, Uri uri) {
+        return Single.<Pair<String, String>>create(emitter -> {
+                    if (uri != null) {
+                        String imageName = product.getName() + ".jpg";
+                        StorageReference storageRef = storage.getReference().child("images/" + imageName);
+
+                        try {
+                            InputStream stream = App.getInstance().getContentResolver().openInputStream(uri);
+                            UploadTask uploadTask = storageRef.putStream(stream);
+
+                            uploadTask.addOnSuccessListener(taskSnapshot ->
+                                    storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                                        product.setImageUri(downloadUri.toString());
+                                        firestore.collection(PRODUCTS_COLLECTION)
+                                                .add(product)
+                                                .addOnSuccessListener(documentReference -> emitter.onSuccess(new Pair<>(documentReference.getId(), downloadUri.toString())))
+                                                .addOnFailureListener(emitter::onError);
+                                    }).addOnFailureListener(emitter::onError)
+                            ).addOnFailureListener(emitter::onError);
+                        } catch (Exception e) {
+                            emitter.onError(e);
+                        }
+                    } else {
+                        firestore.collection(PRODUCTS_COLLECTION)
+                                .add(product)
+                                .addOnSuccessListener(documentReference -> emitter.onSuccess(new Pair<>(documentReference.getId(), null)))
+                                .addOnFailureListener(emitter::onError);
+                    }
+
+                }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -123,8 +155,9 @@ public class ProductFirestore {
                             if (queryDocumentSnapshots != null) {
                                 List<ProductEntity> products = new ArrayList<>();
                                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                    products.add(document.toObject(ProductEntity.class));
-                                    // TODO: check if this works
+                                    ProductEntity product = document.toObject(ProductEntity.class);
+                                    product.setId(document.getId());
+                                    products.add(product);
                                 }
                                 emitter.onNext(products);
                             }

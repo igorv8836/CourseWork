@@ -1,6 +1,7 @@
 package com.example.coursework.data.repositories;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 
 import com.example.coursework.App;
 import com.example.coursework.data.database.ProductDao;
@@ -93,9 +94,8 @@ public class ProductRepositoryImpl implements ProductRepository {
                     List<ProductEntity> entities = new ArrayList<>(productEntities);
                     productDao.deleteAllProducts().andThen(productDao.insertProducts(entities))
                             .subscribe(() -> {
-                            }, throwable -> {
-                            });
-                });
+                            }, throwable -> {});
+                }, throwable -> {});
 
         return productDao.getAllProducts().map(this::transformProducts);
     }
@@ -106,10 +106,14 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Completable insertProduct(BakeryProduct product) {
-        return productFirestore.insertProduct(product.toProductEntity())
-                .flatMapCompletable(id -> productDao.insertProduct(product.toProductEntity()))
-                .subscribeOn(Schedulers.io());
+    public Completable insertProduct(BakeryProduct product, Uri uri) {
+        return productFirestore.insertProduct(product.toProductEntity(), uri)
+                .flatMapCompletable(id -> {
+                    product.setId(id.first);
+                    if (id.second != null)
+                        product.setImageUri(id.second);
+                    return productDao.insertProduct(product.toProductEntity()).subscribeOn(Schedulers.io());
+                }).subscribeOn(Schedulers.io());
     }
 
     @Override

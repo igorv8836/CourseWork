@@ -23,7 +23,7 @@ public class ChoosingIngredientsFragment extends Fragment {
     FragmentChoosingIngredientsBinding binding;
     ProductsViewModel viewModel;
     NavController navController;
-    Integer productId;
+    String productId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class ChoosingIngredientsFragment extends Fragment {
 
         if (getArguments() != null) {
             if (getArguments().containsKey("id")) {
-                productId = getArguments().getInt("id");
+                productId = getArguments().getString("id");
             }
         }
         viewModel.getChosenIngredients(productId);

@@ -1,6 +1,7 @@
 package com.example.coursework.ui.viewmodel;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.util.Pair;
 
 import androidx.lifecycle.LiveData;
@@ -71,14 +72,16 @@ public class ProductsViewModel extends ViewModel {
     }
 
     public void createIngredient(String name, String measurement, double price) {
-        if (name.isEmpty() || measurement.isEmpty()){
+        if (name.isEmpty() || measurement.isEmpty()) {
             setHelpText("Параметр не может быть пустым");
             return;
         }
         disposables.add(productRepository
                 .insertIngredient(new Ingredient("", name, measurement, price))
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {}, throwable -> {}));
+                .subscribe(() -> {
+                }, throwable -> {
+                }));
     }
 
     public void getIngredient(String id) {
@@ -90,12 +93,13 @@ public class ProductsViewModel extends ViewModel {
         removedIngredient.setValue(new Pair<>(position, ingredients.getValue().get(position)));
         disposables.add(productRepository.removeIngredient(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {}, throwable -> setHelpText(throwable.getMessage())));
+                .subscribe(() -> {
+                }, throwable -> setHelpText(throwable.getMessage())));
 
     }
 
     public void updateIngredient(String id, String name, String measurement, double price) {
-        if (name.isEmpty() || measurement.isEmpty()){
+        if (name.isEmpty() || measurement.isEmpty()) {
             setHelpText("Параметр не может быть пустым");
             return;
         }
@@ -107,7 +111,9 @@ public class ProductsViewModel extends ViewModel {
     public void cancelDeleting() {
         productRepository.insertIngredient(removedIngredient.getValue().second)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {}, throwable -> {});
+                .subscribe(() -> {
+                }, throwable -> {
+                });
 
     }
     //----------------------------------------------------------------------------------------------
@@ -120,7 +126,7 @@ public class ProductsViewModel extends ViewModel {
         _chosenIngredients.postValue(ingredients);
     }
 
-    public void getChosenIngredients(Integer productId) {
+    public void getChosenIngredients(String productId) {
         disposables.add(Completable.fromAction(() -> {
             List<ChosenIngredient> newData = new ArrayList<>();
             if (ingredients.getValue() != null)
@@ -128,7 +134,6 @@ public class ProductsViewModel extends ViewModel {
                     newData.add(new ChosenIngredient(ingredient, 0.0));
                 }
             if (productId == null) {
-                if (chosenIngredients.getValue() != null) return;
                 updateChosenIngredients(newData);
             } else {
                 List<ChosenIngredient> ingredients = bakeryProduct.getValue().getIngredients();
@@ -151,14 +156,16 @@ public class ProductsViewModel extends ViewModel {
         disposables.add(productRepository.getAllProducts().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(bakeryProducts::postValue));
     }
 
-    public void createProduct(String name, String description, double price, String imageUri) {
-        if (name.isEmpty() || description.isEmpty()){
+    public void createProduct(String name, String description, double price, String imageUrl, Uri uri) {
+        if (name.isEmpty() || description.isEmpty()) {
             setHelpText("Параметр не может быть пустым");
             return;
         }
-        disposables.add(Completable.fromAction(() -> {
-            disposables.add(productRepository.insertProduct(new BakeryProduct("", name, description, price, getShortListIngredients(), imageUri)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe());
-        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe());
+        disposables.add(productRepository.insertProduct(
+                        new BakeryProduct("", name, description, price, getShortListIngredients(), imageUrl),
+                        uri
+                ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {}, throwable -> {}));
     }
 
     private List<ChosenIngredient> getShortListIngredients() {
@@ -177,11 +184,15 @@ public class ProductsViewModel extends ViewModel {
     }
 
     public void updateProduct(String id, String name, String description, double price, String imageUrl) {
-        if (name.isEmpty() || description.isEmpty()){
+        if (name.isEmpty() || description.isEmpty()) {
             setHelpText("Параметр не может быть пустым");
             return;
         }
-        disposables.add(productRepository.updateProduct(new BakeryProduct(id, name, description, price, getShortListIngredients(), imageUrl)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe());
+        disposables.add(productRepository.updateProduct(new BakeryProduct(id, name, description, price, getShortListIngredients(), imageUrl))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                }, throwable -> setHelpText(throwable.getMessage())));
     }
 
     public void deleteProduct(String id) {
