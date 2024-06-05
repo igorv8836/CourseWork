@@ -51,11 +51,10 @@ public class IngredientsFragment extends Fragment {
             showCreatingDialog(true, null);
         });
 
-        ItemTouchHelper itemTouchHelper = getItemTouchHelper();
-        itemTouchHelper.attachToRecyclerView(binding.ingredientsRecyclerView);
-
         viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), show -> {
             if (show) {
+                ItemTouchHelper itemTouchHelper = getItemTouchHelper();
+                itemTouchHelper.attachToRecyclerView(binding.ingredientsRecyclerView);
                 binding.fab.setVisibility(View.VISIBLE);
             } else {
                 binding.fab.setVisibility(View.GONE);

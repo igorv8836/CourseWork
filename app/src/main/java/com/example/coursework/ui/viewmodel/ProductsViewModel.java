@@ -57,7 +57,7 @@ public class ProductsViewModel extends ViewModel {
 
 
     public void getUserRole() {
-        disposables.add(userRepository.getLoggedUserRole().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> {
+        disposables.add(userRepository.getLoggedUserType().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> {
             _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue());
         }));
     }

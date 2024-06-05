@@ -19,40 +19,18 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class AdminViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final UserRepository repository = new UserRepositoryImpl();
-
-    private final MutableLiveData<User> _loggedUser = new MutableLiveData<>();
-    public MutableLiveData<User> loggedUser = _loggedUser;
     private final MutableLiveData<List<User>> _users = new MutableLiveData<>();
     public MutableLiveData<List<User>> users = _users;
     private final MutableLiveData<Event<String>> _helpText = new MutableLiveData<>();
     public MutableLiveData<Event<String>> helpText = _helpText;
 
     public AdminViewModel() {
-        getLoggedUser();
         getUsers();
     }
 
     private void setHelpText(String text) {
         _helpText.postValue(null);
         _helpText.postValue(new Event<>(text));
-    }
-
-    public void getLoggedUser() {
-        disposables.add(repository.checkLoggedUser()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user -> {
-                    if (user == 0) {
-                        _loggedUser.postValue(null);
-                        return;
-                    }
-                    Disposable a = repository.getLoggedUser()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(_loggedUser::postValue);
-                    disposables.add(a);
-                })
-        );
     }
 
     public void getUsers() {
@@ -63,30 +41,21 @@ public class AdminViewModel extends ViewModel {
         );
     }
 
+    public void changeFullUser(User user) {
+        disposables.add(repository.updateUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe());
+        getUsers();
+    }
+
     public void changeType(User user, UserType role){
         user.setRole(role);
-        disposables.add(repository.updateUser(user)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe());
+        changeFullUser(user);
     }
 
     public void changeUser(User user) {
-        disposables.add(repository.getUserByEmail(user.getEmail())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user1 -> {
-                    if (user1.getEmail().equals(user.getEmail()) && user1.getId() != user.getId()) {
-                        setHelpText("Почта уже занята");
-                        return;
-                    }
-                    Disposable a = repository.updateUser(user)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe();
-                    disposables.add(a);
-                })
-        );
+        changeFullUser(user);
     }
 
 

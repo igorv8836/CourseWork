@@ -30,6 +30,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentMainBinding;
+import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.viewmodel.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
 
@@ -70,33 +71,38 @@ public class MainFragment extends Fragment {
         NavController navController = navHostFragment.getNavController();
         NavController mainNavController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
 
-        Set<Integer> menuItems = getMenuItems(navigationView);
+        viewModel.user.observe(getViewLifecycleOwner(), user -> {
+            if (user != null) {
+                Set<Integer> menuItems = getMenuItems(navigationView, user.getRole().equals(UserType.CREATOR));
 
-        AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(menuItems)
-                .setOpenableLayout(drawerLayout).build();
-        NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
+                AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(menuItems)
+                        .setOpenableLayout(drawerLayout).build();
+                NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
+            }
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+            String type = sharedPreferences.getString("sync_frequency", "0");
+            switch (type) {
+                case "0":
+                    navController.navigate(R.id.nav_products);
+                    break;
+                case "1":
+                    navController.navigate(R.id.nav_cooking);
+                    break;
+                case "2":
+                    navController.navigate(R.id.nav_sales);
+                    break;
+                case "3":
+                    navController.navigate(R.id.nav_report);
+                    break;
+                case "4":
+                    navController.navigate(R.id.nav_settings);
+                    break;
+            }
+
+        });
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-
-        String type = sharedPreferences.getString("sync_frequency", "0");
-        switch (type) {
-            case "0":
-                navController.navigate(R.id.nav_products);
-                break;
-            case "1":
-                navController.navigate(R.id.nav_cooking);
-                break;
-            case "2":
-                navController.navigate(R.id.nav_sales);
-                break;
-            case "3":
-                navController.navigate(R.id.nav_report);
-                break;
-            case "4":
-                navController.navigate(R.id.nav_settings);
-                break;
-        }
 
         View headerView = navigationView.getHeaderView(0);
         TextView titleTextView = headerView.findViewById(R.id.name);
@@ -131,7 +137,7 @@ public class MainFragment extends Fragment {
     }
 
     @NonNull
-    private static Set<Integer> getMenuItems(NavigationView navigationView) {
+    private static Set<Integer> getMenuItems(NavigationView navigationView, boolean isAdmin) {
         Menu menu = navigationView.getMenu();
         MenuItem menuItem = menu.findItem(R.id.nav_admin_menu);
         Set<Integer> menuItems = new HashSet<>();
@@ -139,9 +145,9 @@ public class MainFragment extends Fragment {
         menuItems.add(R.id.nav_cooking);
         menuItems.add(R.id.nav_sales);
         menuItems.add(R.id.nav_report);
+        menuItems.add(R.id.nav_admin_menu);
         menuItems.add(R.id.nav_settings);
-        if (true) {
-            menuItems.add(R.id.nav_admin_menu);
+        if (isAdmin) {
             if (menuItem != null) {
                 menuItem.setVisible(true);
             }

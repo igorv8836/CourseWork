@@ -31,9 +31,24 @@ public class AuthFirebase {
     public Single<User> getUser() {
         return Single.create(emitter -> {
             if (mAuth.getCurrentUser() != null) {
-                User user = new User(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail(), UserType.USER, //TODO("Указать тип аккаунта")
-                        true);
-                emitter.onSuccess(user);
+                db.collection("users")
+                        .document(mAuth.getCurrentUser().getEmail())
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                UserType role = UserType.fromInt(documentSnapshot.getLong("role").intValue());
+                                User user = new User(
+                                        mAuth.getCurrentUser().getUid(),
+                                        mAuth.getCurrentUser().getDisplayName(),
+                                        mAuth.getCurrentUser().getEmail(),
+                                        role,
+                                        true);
+                                emitter.onSuccess(user);
+                            } else {
+                                emitter.onError(new IllegalArgumentException("Документ не найден"));
+                            }
+                        })
+                        .addOnFailureListener(emitter::onError);
             } else {
                 emitter.onError(new IllegalArgumentException("Пользователь не найден"));
             }

@@ -22,6 +22,14 @@ public class UserEntity {
         this.isLogged = isLogged;
     }
 
+    public UserEntity(String username, String email, int role) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+        this.isLogged = false;
+        id = "";
+    }
+
     public UserEntity(){
 
     }
