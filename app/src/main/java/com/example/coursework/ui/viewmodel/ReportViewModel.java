@@ -90,7 +90,7 @@ public class ReportViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(productions -> {
-                    HashMap<Integer, ReportElement> data = new HashMap<>();
+                    HashMap<String, ReportElement> data = new HashMap<>();
                     for (BakeryProduction production : productions) {
                         if (data.containsKey(production.getId())) {
                             ReportElement element = data.get(production.getId());
@@ -116,7 +116,7 @@ public class ReportViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(sales -> {
-                    HashMap<Integer, ReportElement> data = new HashMap<>();
+                    HashMap<String, ReportElement> data = new HashMap<>();
                     for (ProductSale sale : sales) {
                         if (data.containsKey(sale.getId())) {
                             ReportElement element = data.get(sale.getId());

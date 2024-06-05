@@ -122,7 +122,7 @@ public class IngredientsFragment extends Fragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void showCreatingDialog(boolean isCreating, Integer id) {
+    private void showCreatingDialog(boolean isCreating, String id) {
         LayoutInflater inflater = this.getLayoutInflater();
         CreatingDialogBinding dialogBinding = CreatingDialogBinding.bind(inflater.inflate(R.layout.creating_dialog, null));
 
@@ -141,7 +141,7 @@ public class IngredientsFragment extends Fragment {
         }
 
         builder.setPositiveButton("Сохранить", (dialog, which) -> {
-            Integer ingredientId = (Integer) dialogBinding.getRoot().getTag();
+            String ingredientId = (String) dialogBinding.getRoot().getTag();
             String name = Objects.requireNonNull(dialogBinding.editName.getText()).toString();
             String measurement = Objects.requireNonNull(dialogBinding.editMeasurement.getText()).toString();
             double price;

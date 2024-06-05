@@ -26,7 +26,7 @@ public class ProductionRepositoryImpl implements ProductionRepository {
     }
 
     @Override
-    public Observable<BakeryProduction> getProduction(int id) {
+    public Observable<BakeryProduction> getProduction(String id) {
         return dao.getProduction(id).map(BakeryProduction::fromProductionEntity);
     }
 
@@ -41,7 +41,7 @@ public class ProductionRepositoryImpl implements ProductionRepository {
     }
 
     @Override
-    public Completable deleteProduction(int id) {
+    public Completable deleteProduction(String id) {
         return dao.deleteProduction(id);
     }
 

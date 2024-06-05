@@ -1,19 +1,20 @@
 package com.example.coursework.data.database.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "sales")
 public class SaleEntity {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    private @NonNull String id;
     private ProductEntity product;
-    private int productId;
+    private String productId;
     private double salePrice;
     private long saleDate;
     private int count;
 
-    public SaleEntity(int id, ProductEntity product, double salePrice, long saleDate, int count) {
+    public SaleEntity(@NonNull String id, ProductEntity product, double salePrice, long saleDate, int count) {
         this.id = id;
         this.product = product;
         this.productId = product.getId();
@@ -30,11 +31,12 @@ public class SaleEntity {
         return salePrice * count;
     }
 
-    public int getId() {
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -70,11 +72,11 @@ public class SaleEntity {
         this.count = count;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 }

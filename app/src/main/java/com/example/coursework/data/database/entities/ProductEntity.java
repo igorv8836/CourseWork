@@ -1,5 +1,6 @@
 package com.example.coursework.data.database.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -13,15 +14,15 @@ import java.util.List;
 public class ProductEntity {
 
     @ColumnInfo(name = "productId")
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    private @NonNull String id;
     private String name;
     private String description;
     private double price;
     private String imageUri;
     private List<IngredientEntity> ingredients;
 
-    public ProductEntity(int id, String name, String description, double price, String imageUri, List<IngredientEntity> ingredients) {
+    public ProductEntity(@NonNull String id, String name, String description, double price, String imageUri, List<IngredientEntity> ingredients) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -34,11 +35,12 @@ public class ProductEntity {
 
     }
 
-    public int getId() {
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 

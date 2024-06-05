@@ -20,14 +20,14 @@ import io.reactivex.rxjava3.core.Observable;
 
 public interface ProductRepository {
     Observable<List<Ingredient>> getAllIngredients();
-    Observable<Ingredient> getIngredientById(int id);
+    Observable<Ingredient> getIngredientById(String id);
     Completable updateIngredient(Ingredient ingredient);
     Completable insertIngredient(Ingredient ingredient);
-    Completable removeIngredient(int id);
+    Completable removeIngredient(String id);
 
     Observable<List<BakeryProduct>> getAllProducts();
-    Observable<BakeryProduct> getProduct(int id);
+    Observable<BakeryProduct> getProduct(String id);
     Completable insertProduct(BakeryProduct product);
     Completable updateProduct(BakeryProduct product);
-    Completable removeProduct(int id);
+    Completable removeProduct(String id);
 }

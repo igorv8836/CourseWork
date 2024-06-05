@@ -85,7 +85,7 @@ public class SalesViewModel extends ViewModel {
                     else
                         return;
                     ProductSale sale = new ProductSale(
-                            0,
+                            "",
                             product,
                             price,
                             time,
@@ -102,7 +102,7 @@ public class SalesViewModel extends ViewModel {
                 .subscribe());
     }
 
-    public void deleteSale(int id){
+    public void deleteSale(String id){
         disposables.add(
                 repository.deleteSale(id)
                         .subscribeOn(Schedulers.io())

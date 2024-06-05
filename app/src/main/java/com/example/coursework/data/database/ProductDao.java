@@ -20,7 +20,7 @@ import io.reactivex.rxjava3.core.Single;
 @Dao
 public interface ProductDao {
     @Insert
-    Single<Long> insertIngredient(IngredientEntity ingredient);
+    Completable insertIngredient(IngredientEntity ingredient);
 
     @Insert
     Completable insertIngredients(List<IngredientEntity> ingredients);
@@ -29,13 +29,13 @@ public interface ProductDao {
     Completable updateIngredient(IngredientEntity ingredient);
 
     @Query("DELETE FROM ingredients WHERE ingredientId = :id")
-    Completable deleteIngredient(int id);
+    Completable deleteIngredient(String id);
 
     @Query("DELETE FROM ingredients")
     Completable deleteAllIngredients();
 
     @Query("SELECT * FROM ingredients WHERE ingredientId = :id")
-    Observable<IngredientEntity> getIngredient(int id);
+    Observable<IngredientEntity> getIngredient(String id);
 
     @Query("SELECT * FROM ingredients")
     Observable<List<IngredientEntity>> getAllIngredients();
@@ -52,13 +52,13 @@ public interface ProductDao {
     Completable updateProduct(ProductEntity product);
 
     @Query("DELETE FROM products WHERE productId = :id")
-    Completable deleteProduct(int id);
+    Completable deleteProduct(String id);
 
     @Query("DELETE FROM products")
     Completable deleteAllProducts();
 
     @Query("SELECT * FROM products WHERE productId = :id")
-    Observable<ProductEntity> getProduct(int id);
+    Observable<ProductEntity> getProduct(String id);
 
     @Query("SELECT * FROM products")
     Observable<List<ProductEntity>> getAllProducts();

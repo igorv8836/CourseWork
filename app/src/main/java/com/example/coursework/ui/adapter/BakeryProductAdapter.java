@@ -49,7 +49,7 @@ public class BakeryProductAdapter extends RecyclerView.Adapter<BakeryProductAdap
 
         holder.binding.mainLayout.setOnClickListener(t -> {
             Bundle bundle = new Bundle();
-            bundle.putInt("id", bakeryProducts.get(position).getId());
+            bundle.putString("id", bakeryProducts.get(position).getId());
             navController.navigate(R.id.nav_editing_bakery_products, bundle);
         });
     }

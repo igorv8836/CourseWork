@@ -9,8 +9,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ProductFirestore {
     private static final String INGREDIENTS_COLLECTION = "ingredients";
@@ -21,45 +24,35 @@ public class ProductFirestore {
         firestore = FirebaseFirestore.getInstance();
     }
 
-    public Completable insertIngredient(IngredientEntity ingredient) {
-        return Completable.create(emitter ->
-                firestore.collection(INGREDIENTS_COLLECTION)
-                        .add(ingredient)
-                        .addOnSuccessListener(documentReference -> emitter.onComplete())
-                        .addOnFailureListener(emitter::onError)
-        );
+    public Single<String> insertIngredient(IngredientEntity ingredient) {
+        return Single.<String>create(emitter ->
+                        firestore.collection(INGREDIENTS_COLLECTION)
+                                .add(ingredient)
+                                .addOnSuccessListener(documentReference -> {
+                                    String newDocumentId = documentReference.getId();
+                                    emitter.onSuccess(newDocumentId);
+                                })
+                                .addOnFailureListener(emitter::onError))
+                .subscribeOn(Schedulers.io());
     }
 
-    public Completable updateIngredient(String id, IngredientEntity ingredient) {
+    public Completable updateIngredient(IngredientEntity ingredient) {
         return Completable.create(emitter ->
                 firestore.collection(INGREDIENTS_COLLECTION)
-                        .document(id)
+                        .document(ingredient.getId())
                         .set(ingredient)
                         .addOnSuccessListener(aVoid -> emitter.onComplete())
                         .addOnFailureListener(emitter::onError)
         );
     }
 
-    public Completable deleteIngredient(Integer id) {
+    public Completable deleteIngredient(String id) {
         return Completable.create(emitter ->
                 firestore.collection(INGREDIENTS_COLLECTION)
-                        .whereEqualTo("id", id)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                                for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                    firestore.collection(INGREDIENTS_COLLECTION)
-                                            .document(document.getId())
-                                            .delete()
-                                            .addOnSuccessListener(aVoid -> emitter.onComplete())
-                                            .addOnFailureListener(emitter::onError);
-                                }
-                            } else if (task.getResult().isEmpty()) {
-                                emitter.onComplete();
-                            } else if (!task.isSuccessful()) {
-                                emitter.onError(task.getException());
-                            }
-                        })
+                        .document(id)
+                        .delete()
+                        .addOnSuccessListener(aVoid -> emitter.onComplete())
+                        .addOnFailureListener(emitter::onError)
         );
     }
 
@@ -75,7 +68,12 @@ public class ProductFirestore {
                             if (queryDocumentSnapshots != null) {
                                 List<IngredientEntity> ingredients = new ArrayList<>();
                                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                    IngredientEntity ingredient = document.toObject(IngredientEntity.class);
+                                    IngredientEntity ingredient = new IngredientEntity(
+                                            document.getId(),
+                                            document.getString("name"),
+                                            document.getString("measurementText"),
+                                            document.getDouble("price")
+                                    );
                                     ingredients.add(ingredient);
                                 }
                                 emitter.onNext(ingredients);
@@ -84,19 +82,20 @@ public class ProductFirestore {
         );
     }
 
-    public Completable insertProduct(ProductEntity product) {
-        return Completable.create(emitter ->
+    public Single<String> insertProduct(ProductEntity product) {
+        return Single.<String>create(emitter ->
                 firestore.collection(PRODUCTS_COLLECTION)
                         .add(product)
-                        .addOnSuccessListener(documentReference -> emitter.onComplete())
-                        .addOnFailureListener(emitter::onError)
-        );
+                        .addOnSuccessListener(documentReference -> emitter.onSuccess(documentReference.getId()))
+                        .addOnFailureListener(emitter::onError))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Completable updateProduct(String id, ProductEntity product) {
+    public Completable updateProduct(ProductEntity product) {
         return Completable.create(emitter ->
                 firestore.collection(PRODUCTS_COLLECTION)
-                        .document(id)
+                        .document(product.getId())
                         .set(product)
                         .addOnSuccessListener(aVoid -> emitter.onComplete())
                         .addOnFailureListener(emitter::onError)
@@ -125,6 +124,7 @@ public class ProductFirestore {
                                 List<ProductEntity> products = new ArrayList<>();
                                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                     products.add(document.toObject(ProductEntity.class));
+                                    // TODO: check if this works
                                 }
                                 emitter.onNext(products);
                             }

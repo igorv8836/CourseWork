@@ -3,13 +3,13 @@ package com.example.coursework.ui.entities;
 import com.example.coursework.data.database.entities.SaleEntity;
 
 public class ProductSale {
-    private int id;
+    private String id;
     private BakeryProduct product;
     private double salePrice;
     private long saleDate;
     private int count;
 
-    public ProductSale(int id, BakeryProduct product, double salePrice, long saleDate, int count) {
+    public ProductSale(String id, BakeryProduct product, double salePrice, long saleDate, int count) {
         this.id = id;
         this.product = product;
         this.salePrice = salePrice;
@@ -34,11 +34,11 @@ public class ProductSale {
         return salePrice * count;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import com.example.coursework.ui.entities.Ingredient;
 
 import java.util.List;
+import java.util.Objects;
 
 public class IngredientDiffUtilCallback extends DiffUtil.Callback {
     private final List<Ingredient> oldList;
@@ -27,7 +28,7 @@ public class IngredientDiffUtilCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldList.get(oldItemPosition).getId() == (newList.get(newItemPosition).getId());
+        return Objects.equals(oldList.get(oldItemPosition).getId(), newList.get(newItemPosition).getId());
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.example.coursework.data.database.entities.IngredientEntity;
 public class ChosenIngredient extends Ingredient {
     Double count;
 
-    public ChosenIngredient(int id, String name, String measurementText, Double price, Double count){
+    public ChosenIngredient(String id, String name, String measurementText, Double price, Double count){
         super(id, name, measurementText, price);
         this.count = count;
     }

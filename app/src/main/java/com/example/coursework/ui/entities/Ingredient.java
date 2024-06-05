@@ -4,13 +4,13 @@ import com.example.coursework.data.database.entities.IngredientEntity;
 
 public class Ingredient {
 
-    public Ingredient(int id, String name, String measurementText, Double price){
+    public Ingredient(String id, String name, String measurementText, Double price){
         this.id = id;
         this.name = name;
         this.measurementText = measurementText;
         this.price = price;
     }
-    private int id;
+    private String id;
     private String name;
     private String measurementText;
     private Double price;
@@ -31,11 +31,11 @@ public class Ingredient {
         this.measurementText = measurementText;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

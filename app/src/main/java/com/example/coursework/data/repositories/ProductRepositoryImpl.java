@@ -45,7 +45,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Observable<Ingredient> getIngredientById(int id) {
+    public Observable<Ingredient> getIngredientById(String id) {
         return productDao.getIngredient(id).map(Ingredient::fromEntity);
     }
 
@@ -53,22 +53,22 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Completable updateIngredient(Ingredient ingredient) {
         return productDao.updateIngredient(ingredient.toEntity()).andThen(
                 productFirestore.updateIngredient(
-                        String.valueOf(ingredient.getId()),
                         ingredient.toEntity())
         );
     }
 
     @Override
     public Completable insertIngredient(Ingredient ingredient) {
-        return productDao.insertIngredient(ingredient.toEntity())
-                .flatMapCompletable(indx -> {
-                    ingredient.setId(indx.intValue());
-                    return productFirestore.insertIngredient(ingredient.toEntity());
-                });
+        return productFirestore.insertIngredient(ingredient.toEntity())
+                .flatMapCompletable(id -> {
+                    ingredient.setId(id);
+                    return productDao.insertIngredient(ingredient.toEntity());
+                })
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
-    public Completable removeIngredient(int id) {
+    public Completable removeIngredient(String id) {
         return productDao.deleteIngredient(id)
                 .andThen(productFirestore.deleteIngredient(id))
                 .subscribeOn(Schedulers.io())
@@ -101,24 +101,25 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Observable<BakeryProduct> getProduct(int id) {
+    public Observable<BakeryProduct> getProduct(String id) {
         return productDao.getProduct(id).map(BakeryProduct::fromProductEntity);
     }
 
     @Override
     public Completable insertProduct(BakeryProduct product) {
-        return productDao.insertProduct(product.toProductEntity())
-                .andThen(productFirestore.insertProduct(product.toProductEntity()));
+        return productFirestore.insertProduct(product.toProductEntity())
+                .flatMapCompletable(id -> productDao.insertProduct(product.toProductEntity()))
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
     public Completable updateProduct(BakeryProduct product) {
         return productDao.updateProduct(product.toProductEntity())
-                .andThen(productFirestore.updateProduct(String.valueOf(product.getId()), product.toProductEntity()));
+                .andThen(productFirestore.updateProduct(product.toProductEntity()));
     }
 
     @Override
-    public Completable removeProduct(int id) {
+    public Completable removeProduct(String id) {
         return productDao.deleteProduct(id)
                 .andThen(productFirestore.deleteProduct(String.valueOf(id)));
     }

@@ -26,7 +26,7 @@ public class SalesRepositoryImpl implements SalesRepository {
     }
 
     @Override
-    public Observable<ProductSale> getSale(int id) {
+    public Observable<ProductSale> getSale(String id) {
         return dao.getSale(id).map(ProductSale::fromSaleEntity);
     }
 
@@ -41,7 +41,7 @@ public class SalesRepositoryImpl implements SalesRepository {
     }
 
     @Override
-    public Completable deleteSale(int id) {
+    public Completable deleteSale(String id) {
         return dao.deleteSale(id);
     }
 

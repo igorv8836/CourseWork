@@ -18,6 +18,7 @@ import com.example.coursework.ui.entities.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
@@ -76,7 +77,7 @@ public class CookingViewModel extends ViewModel {
         );
     }
 
-    public void getProduction(int id) {
+    public void getProduction(String id) {
         disposables.add(
                 repository.getProduction(id)
                         .subscribeOn(Schedulers.io())
@@ -118,7 +119,7 @@ public class CookingViewModel extends ViewModel {
         .subscribe());
     }
 
-    public void deleteProduction(int id) {
+    public void deleteProduction(String id) {
         disposables.add(
                 repository.deleteProduction(id)
                         .subscribeOn(Schedulers.io())
@@ -127,11 +128,11 @@ public class CookingViewModel extends ViewModel {
         );
     }
 
-    private BakeryProduct findProductById(int id) {
+    private BakeryProduct findProductById(String id) {
         BakeryProduct product = null;
         if (_products.getValue() != null)
             for (BakeryProduct p : _products.getValue()) {
-                if (p.getId() == id) {
+                if (Objects.equals(p.getId(), id)) {
                     product = p;
                     break;
                 }
@@ -139,7 +140,7 @@ public class CookingViewModel extends ViewModel {
         return product;
     }
 
-    public void updateProduction(int id, int productId, int count, long startTime, long endTime) {
+    public void updateProduction(String id, String productId, int count, long startTime, long endTime) {
         if (count == 0 || startTime > endTime){
             setHelpText("Количество равно нулю или время старта больше времени окончания");
             return;

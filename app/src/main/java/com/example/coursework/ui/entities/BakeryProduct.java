@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BakeryProduct {
-    private int id;
+    private String id;
     private String name;
     private String description;
     private double price;
     private List<ChosenIngredient> ingredients;
     private String imageUri;
 
-    public BakeryProduct(int id, String name, String description, double price, List<ChosenIngredient> ingredients, String imageUri) {
+    public BakeryProduct(String id, String name, String description, double price, List<ChosenIngredient> ingredients, String imageUri) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -63,11 +63,11 @@ public class BakeryProduct {
         this.imageUri = imageUri;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

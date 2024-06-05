@@ -1,5 +1,6 @@
 package com.example.coursework.data.database.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -9,15 +10,15 @@ import androidx.room.PrimaryKey;
 public class IngredientEntity {
 
     @ColumnInfo(name = "ingredientId")
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    private @NonNull String id;
     private String name;
     private String measurementText;
     private Double price;
     private Double count;
 
     @Ignore
-    public IngredientEntity(int id, String name, String measurementText, Double price) {
+    public IngredientEntity(@NonNull String id, String name, String measurementText, Double price) {
         this.id = id;
         this.name = name;
         this.measurementText = measurementText;
@@ -30,7 +31,7 @@ public class IngredientEntity {
     }
 
 
-    public IngredientEntity(int id, String name, String measurementText, Double price, Double count) {
+    public IngredientEntity(@NonNull String id, String name, String measurementText, Double price, Double count) {
         this.id = id;
         this.name = name;
         this.measurementText = measurementText;
@@ -38,11 +39,12 @@ public class IngredientEntity {
         this.count = count;
     }
 
-    public int getId() {
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 

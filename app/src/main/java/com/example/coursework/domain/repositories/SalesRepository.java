@@ -16,10 +16,10 @@ import io.reactivex.rxjava3.core.Observable;
 
 public interface SalesRepository {
     Observable<List<ProductSale>> getSales();
-    Observable<ProductSale> getSale(int id);
+    Observable<ProductSale> getSale(String id);
     Completable addSale(ProductSale sale);
     Completable updateSale(ProductSale sale);
-    Completable deleteSale(int id);
+    Completable deleteSale(String id);
     Observable<List<ProductSale>> getSalesByDate(long startDate, long endDate);
     Observable<Double> getRevenue(long startDate, long endDate);
 }

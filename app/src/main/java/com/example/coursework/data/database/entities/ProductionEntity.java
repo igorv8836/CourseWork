@@ -1,5 +1,6 @@
 package com.example.coursework.data.database.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -7,15 +8,15 @@ import com.example.coursework.ui.entities.BakeryProduct;
 
 @Entity(tableName = "production")
 public class ProductionEntity {
-    @PrimaryKey(autoGenerate = true)
-    Integer id;
+    @PrimaryKey
+    @NonNull String id;
     ProductEntity product;
-    Integer productId;
+    String productId;
     Integer count;
     Long startTime;
     Long endTime;
 
-    public ProductionEntity(Integer id, ProductEntity product, Integer count, Long startTime, Long endTime) {
+    public ProductionEntity(@NonNull String id, ProductEntity product, Integer count, Long startTime, Long endTime) {
         this.id = id;
         this.product = product;
         this.productId = product.getId();
@@ -36,11 +37,12 @@ public class ProductionEntity {
         return sum;
     }
 
-    public Integer getId() {
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -76,11 +78,11 @@ public class ProductionEntity {
         this.product = product;
     }
 
-    public Integer getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 }

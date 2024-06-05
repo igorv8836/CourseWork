@@ -1,5 +1,6 @@
 package com.example.coursework.ui.viewmodel;
 
+import android.annotation.SuppressLint;
 import android.util.Pair;
 
 import androidx.lifecycle.LiveData;
@@ -74,15 +75,18 @@ public class ProductsViewModel extends ViewModel {
             setHelpText("Параметр не может быть пустым");
             return;
         }
-        disposables.add(productRepository.insertIngredient(new Ingredient(0, name, measurement, price)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe());
+        disposables.add(productRepository
+                .insertIngredient(new Ingredient("", name, measurement, price))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {}, throwable -> {}));
     }
 
-    public void getIngredient(int id) {
+    public void getIngredient(String id) {
         disposables.add(productRepository.getIngredientById(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(ingredient::postValue));
     }
 
     public void removeIngredient(int position) {
-        int id = ingredients.getValue().get(position).getId();
+        String id = ingredients.getValue().get(position).getId();
         removedIngredient.setValue(new Pair<>(position, ingredients.getValue().get(position)));
         disposables.add(productRepository.removeIngredient(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -90,7 +94,7 @@ public class ProductsViewModel extends ViewModel {
 
     }
 
-    public void updateIngredient(int id, String name, String measurement, double price) {
+    public void updateIngredient(String id, String name, String measurement, double price) {
         if (name.isEmpty() || measurement.isEmpty()){
             setHelpText("Параметр не может быть пустым");
             return;
@@ -99,8 +103,11 @@ public class ProductsViewModel extends ViewModel {
 
     }
 
+    @SuppressLint("CheckResult")
     public void cancelDeleting() {
-        productRepository.insertIngredient(removedIngredient.getValue().second).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        productRepository.insertIngredient(removedIngredient.getValue().second)
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {}, throwable -> {});
 
     }
     //----------------------------------------------------------------------------------------------
@@ -127,7 +134,7 @@ public class ProductsViewModel extends ViewModel {
                 List<ChosenIngredient> ingredients = bakeryProduct.getValue().getIngredients();
                 for (ChosenIngredient ingredient1 : ingredients) {
                     for (int i = 0; i < newData.size(); i++) {
-                        if (newData.get(i).getId() == ingredient1.getId()) {
+                        if (Objects.equals(newData.get(i).getId(), ingredient1.getId())) {
                             newData.get(i).setCount(ingredient1.getCount());
                         }
                     }
@@ -150,7 +157,7 @@ public class ProductsViewModel extends ViewModel {
             return;
         }
         disposables.add(Completable.fromAction(() -> {
-            disposables.add(productRepository.insertProduct(new BakeryProduct(0, name, description, price, getShortListIngredients(), imageUri)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe());
+            disposables.add(productRepository.insertProduct(new BakeryProduct("", name, description, price, getShortListIngredients(), imageUri)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe());
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe());
     }
 
@@ -169,7 +176,7 @@ public class ProductsViewModel extends ViewModel {
         return ingredients;
     }
 
-    public void updateProduct(int id, String name, String description, double price, String imageUrl) {
+    public void updateProduct(String id, String name, String description, double price, String imageUrl) {
         if (name.isEmpty() || description.isEmpty()){
             setHelpText("Параметр не может быть пустым");
             return;
@@ -177,11 +184,11 @@ public class ProductsViewModel extends ViewModel {
         disposables.add(productRepository.updateProduct(new BakeryProduct(id, name, description, price, getShortListIngredients(), imageUrl)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe());
     }
 
-    public void deleteProduct(int id) {
+    public void deleteProduct(String id) {
         disposables.add(productRepository.removeProduct(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe());
     }
 
-    public void getProduct(int id) {
+    public void getProduct(String id) {
         disposables.add(productRepository.getProduct(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(bakeryProduct::postValue));
     }
 

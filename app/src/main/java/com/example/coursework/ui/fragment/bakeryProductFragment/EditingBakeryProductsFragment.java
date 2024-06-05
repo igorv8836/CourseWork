@@ -34,7 +34,7 @@ public class EditingBakeryProductsFragment extends Fragment {
     ActivityResultLauncher<String> requestPermissionLauncher;
     NavController navController;
     ProductsViewModel viewModel;
-    Integer productId;
+    String productId;
 
 
     @Override
@@ -43,7 +43,7 @@ public class EditingBakeryProductsFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(ProductsViewModel.class);
 
         if (getArguments() != null) {
-            productId = getArguments().getInt("id");
+            productId = getArguments().getString("id");
             viewModel.getProduct(productId);
         }
 
@@ -76,7 +76,7 @@ public class EditingBakeryProductsFragment extends Fragment {
         binding.chooseIngredients.setOnClickListener(t -> {
             Bundle bundle = new Bundle();
             if (productId != null)
-                bundle.putInt("id", productId);
+                bundle.putString("id", productId);
             navController.navigate(R.id.nav_choosing_ingredients, bundle);
         });
 

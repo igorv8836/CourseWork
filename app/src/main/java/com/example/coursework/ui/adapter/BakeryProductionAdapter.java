@@ -26,7 +26,7 @@ import java.util.Locale;
 
 public class BakeryProductionAdapter extends RecyclerView.Adapter<BakeryProductionAdapter.BakeryProductionViewHolder>{
     private ArrayList<BakeryProduction> data;
-    private OnClickListener listener;
+    private final OnClickListener listener;
     private boolean isDeleteButtonVisible = true;
 
     public BakeryProductionAdapter(List<BakeryProduction> data, OnClickListener listener) {

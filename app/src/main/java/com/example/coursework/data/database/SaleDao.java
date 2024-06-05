@@ -21,10 +21,10 @@ public interface SaleDao {
     Completable updateSale(SaleEntity saleEntity);
 
     @Query("DELETE FROM sales WHERE id = :id")
-    Completable deleteSale(int id);
+    Completable deleteSale(String id);
 
     @Query("SELECT * FROM sales WHERE id = :id")
-    Observable<SaleEntity> getSale(int id);
+    Observable<SaleEntity> getSale(String id);
 
     @Query("SELECT * FROM sales")
     Observable<List<SaleEntity>> getSales();

@@ -22,10 +22,10 @@ public interface ProductionDao {
     Completable updateProduction(ProductionEntity production);
 
     @Query("DELETE FROM production WHERE id = :id")
-    Completable deleteProduction(int id);
+    Completable deleteProduction(String id);
 
     @Query("SELECT * FROM production WHERE id = :id")
-    Observable<ProductionEntity> getProduction(int id);
+    Observable<ProductionEntity> getProduction(String id);
 
     @Query("SELECT * FROM production")
     Observable<List<ProductionEntity>> getAllProductions();
