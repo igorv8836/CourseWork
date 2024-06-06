@@ -92,14 +92,14 @@ public class ReportViewModel extends ViewModel {
                 .subscribe(productions -> {
                     HashMap<String, ReportElement> data = new HashMap<>();
                     for (BakeryProduction production : productions) {
-                        if (data.containsKey(production.getId())) {
-                            ReportElement element = data.get(production.getId());
+                        if (data.containsKey(production.getProduct().getId())) {
+                            ReportElement element = data.get(production.getProduct().getId());
                             if (element != null) {
                                 element.setCount(element.getCount() + production.getCount());
                             }
                         } else {
                             data.put(
-                                    production.getId(),
+                                    production.getProduct().getId(),
                                     new ReportElement(
                                             production.getProduct().getName(),
                                             production.getCount()
@@ -118,8 +118,8 @@ public class ReportViewModel extends ViewModel {
                 .subscribe(sales -> {
                     HashMap<String, ReportElement> data = new HashMap<>();
                     for (ProductSale sale : sales) {
-                        if (data.containsKey(sale.getId())) {
-                            ReportElement element = data.get(sale.getId());
+                        if (data.containsKey(sale.getProduct().getId())) {
+                            ReportElement element = data.get(sale.getProduct().getId());
                             if (element != null) {
                                 element.setCount(element.getCount() + sale.getCount());
                                 element.setRevenue(element.getRevenue() + sale.getRevenue());
@@ -127,7 +127,7 @@ public class ReportViewModel extends ViewModel {
                             }
                         } else {
                             data.put(
-                                    sale.getId(),
+                                    sale.getProduct().getId(),
                                     new ReportElement(
                                             sale.getProduct().getName(),
                                             sale.getRevenue(),

@@ -28,5 +28,13 @@
             android:id="@+id/nav_settings"
             android:icon="@drawable/settings_icon"
             android:title="@string/settings" />
+        <item
+            android:id="@+id/nav_currency"
+            android:icon="@drawable/currency_exchange_24px"
+            android:title="Курс валют" />
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/info_24px"
+            android:title="О проекте" />
     </group>
 </menu>

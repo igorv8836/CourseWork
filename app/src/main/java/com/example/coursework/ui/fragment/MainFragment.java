@@ -71,6 +71,8 @@ public class MainFragment extends Fragment {
         menuItems.add(R.id.nav_report);
         menuItems.add(R.id.nav_admin_menu);
         menuItems.add(R.id.nav_settings);
+        menuItems.add(R.id.nav_currency);
+        menuItems.add(R.id.nav_info);
 
         AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(menuItems)
                 .setOpenableLayout(drawerLayout).build();
