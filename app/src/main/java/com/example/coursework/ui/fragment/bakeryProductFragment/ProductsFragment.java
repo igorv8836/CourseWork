@@ -13,7 +13,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.coursework.databinding.FragmentProductsBinding;
 import com.example.coursework.ui.adapter.ProductsPagerAdapter;
-import com.example.coursework.ui.fragment.bakeryProductFragment.BakeryProductsFragment;
 import com.example.coursework.ui.fragment.ingredientFragment.IngredientsFragment;
 import com.example.coursework.ui.viewmodel.ProductsViewModel;
 import com.google.android.material.tabs.TabLayout;
@@ -27,8 +26,6 @@ public class ProductsFragment extends Fragment {
     List<String> tabElements;
     FragmentProductsBinding binding;
     ProductsViewModel viewModel;
-    private ViewPager2 viewPager;
-    private TabLayout tabLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,8 +43,8 @@ public class ProductsFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(ProductsViewModel.class);
 
 
-        viewPager = binding.viewPager;
-        tabLayout = binding.tabs;
+        ViewPager2 viewPager = binding.viewPager;
+        TabLayout tabLayout = binding.tabs;
 
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new BakeryProductsFragment());

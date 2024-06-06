@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.coursework.R;
 import com.example.coursework.databinding.BakeryProductionBinding;
-import com.example.coursework.ui.entities.BakeryProduction;
 import com.example.coursework.ui.addClasses.OnClickListener;
+import com.example.coursework.ui.entities.BakeryProduction;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.text.SimpleDateFormat;
@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class BakeryProductionAdapter extends RecyclerView.Adapter<BakeryProductionAdapter.BakeryProductionViewHolder>{
+public class BakeryProductionAdapter extends RecyclerView.Adapter<BakeryProductionAdapter.BakeryProductionViewHolder> {
     private ArrayList<BakeryProduction> data;
     private final OnClickListener listener;
     private boolean isDeleteButtonVisible = true;
@@ -78,17 +78,17 @@ public class BakeryProductionAdapter extends RecyclerView.Adapter<BakeryProducti
         holder.startTime.setText(sdf.format(new Date(startTime)));
         holder.endTime.setText(sdf.format(new Date(endTime)));
 
-        holder.button.setOnClickListener(v -> {
-            listener.onClick(element.getId());
-        });
+        holder.button.setOnClickListener(v -> listener.onClick(element.getId()));
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<BakeryProduction> data) {
         this.data = new ArrayList<>(data);
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setDeleteButtonVisible(boolean visible) {
         isDeleteButtonVisible = visible;
         notifyDataSetChanged();
@@ -99,7 +99,7 @@ public class BakeryProductionAdapter extends RecyclerView.Adapter<BakeryProducti
         return data.size();
     }
 
-    class BakeryProductionViewHolder extends RecyclerView.ViewHolder {
+    static class BakeryProductionViewHolder extends RecyclerView.ViewHolder {
         BakeryProductionBinding binding;
         ImageView imageView;
         TextView name;
@@ -110,6 +110,7 @@ public class BakeryProductionAdapter extends RecyclerView.Adapter<BakeryProducti
         TextView startTime;
         TextView endTime;
         ImageButton button;
+
         public BakeryProductionViewHolder(View itemView) {
             super(itemView);
             binding = BakeryProductionBinding.bind(itemView);

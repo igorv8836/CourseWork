@@ -23,7 +23,7 @@ public class SaleEntity {
         this.count = count;
     }
 
-    public SaleEntity(){
+    public SaleEntity() {
 
     }
 

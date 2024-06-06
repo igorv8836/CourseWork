@@ -1,6 +1,10 @@
 package com.example.coursework.ui.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,16 +15,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.example.coursework.R;
-import com.example.coursework.databinding.FragmentLoginBinding;
 import com.example.coursework.databinding.FragmentRegisterBinding;
 import com.example.coursework.ui.viewmodel.AuthViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
@@ -66,9 +63,9 @@ public class RegisterFragment extends Fragment {
         });
 
         binding.buttonRegister.setOnClickListener(v -> {
-            String name = binding.editTextNameInputText.getText().toString();
-            String email = binding.editTextEmailInputText.getText().toString();
-            String password = binding.editTextPasswordInputText.getText().toString();
+            String name = Objects.requireNonNull(binding.editTextNameInputText.getText()).toString();
+            String email = Objects.requireNonNull(binding.editTextEmailInputText.getText()).toString();
+            String password = Objects.requireNonNull(binding.editTextPasswordInputText.getText()).toString();
             viewModel.createAccount(name, email, password);
         });
 

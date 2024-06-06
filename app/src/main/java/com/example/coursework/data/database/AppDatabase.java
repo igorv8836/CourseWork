@@ -22,8 +22,9 @@ import com.example.coursework.data.database.entities.UserEntity;
 )
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
-        public abstract ProductDao getProductDao();
-        public abstract ProductionDao getProductionDao();
-        public abstract SaleDao getSaleDao();
-        public abstract UserDao getUserDao();
+    public abstract ProductDao getProductDao();
+
+    public abstract ProductionDao getProductionDao();
+
+    public abstract SaleDao getSaleDao();
 }

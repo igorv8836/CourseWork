@@ -50,9 +50,7 @@ public class SalesViewModel extends ViewModel {
     }
 
     public void getUserRole() {
-        disposables.add(userRepository.getLoggedUserType().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> {
-            _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue());
-        }, t -> {}));
+        disposables.add(userRepository.getLoggedUserType().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue()), t -> {}));
     }
 
     public void getProducts() {
@@ -79,7 +77,7 @@ public class SalesViewModel extends ViewModel {
             return;
         }
         disposables.add(Completable.fromAction(() -> {
-                    BakeryProduct product = null;
+                    BakeryProduct product;
                     if (products.getValue() != null)
                         product = products.getValue().get(productPosition);
                     else

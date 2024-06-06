@@ -1,6 +1,10 @@
 package com.example.coursework.ui.fragment.SalesFragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -10,13 +14,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.example.coursework.R;
-import com.example.coursework.databinding.FragmentCookingBinding;
 import com.example.coursework.databinding.FragmentSalesBinding;
 import com.example.coursework.ui.adapter.SalesAdapter;
 import com.example.coursework.ui.viewmodel.SalesViewModel;
@@ -45,9 +43,7 @@ public class SalesFragment extends Fragment {
         viewModel.getSales();
 
 
-        adapter = new SalesAdapter(new ArrayList<>(), id -> {
-            viewModel.deleteSale(id);
-        });
+        adapter = new SalesAdapter(new ArrayList<>(), id -> viewModel.deleteSale(id));
 
         binding.salesRecyclerView.setAdapter(adapter);
         binding.salesRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -68,9 +64,7 @@ public class SalesFragment extends Fragment {
             }
         });
 
-        binding.fab.setOnClickListener(v -> {
-            navController.navigate(R.id.nav_adding_sale);
-        });
+        binding.fab.setOnClickListener(v -> navController.navigate(R.id.nav_adding_sale));
 
         viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), show -> {
             adapter.setShowDeleteButton(show);

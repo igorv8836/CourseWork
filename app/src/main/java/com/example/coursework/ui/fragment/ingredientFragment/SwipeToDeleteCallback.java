@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,21 +15,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.coursework.R;
 
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
-    private RecyclerView.Adapter adapter;
-    private Drawable icon;
+    private final Drawable icon;
     private final ColorDrawable background;
-    private OnSwipeListener onSwipeListener;
+    private final OnSwipeListener onSwipeListener;
 
-    public SwipeToDeleteCallback(RecyclerView.Adapter adapter, Context context, OnSwipeListener onSwipeListener) {
+    public SwipeToDeleteCallback(Context context, OnSwipeListener onSwipeListener) {
         super(0, ItemTouchHelper.LEFT);
-        this.adapter = adapter;
         this.onSwipeListener = onSwipeListener;
         icon = ContextCompat.getDrawable(context, R.drawable.delete_icon);
         background = new ColorDrawable(Color.RED);
     }
 
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
         return false;
     }
 
@@ -39,7 +38,7 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     }
 
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
                             float dX, float dY, int actionState, boolean isCurrentlyActive) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 

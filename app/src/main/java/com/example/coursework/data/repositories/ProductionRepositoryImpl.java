@@ -2,7 +2,6 @@ package com.example.coursework.data.repositories;
 
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.example.coursework.App;
 import com.example.coursework.data.database.ProductionDao;
@@ -33,13 +32,13 @@ public class ProductionRepositoryImpl implements ProductionRepository {
         firestore.getAllProductions()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(productionEntities -> {
-                    dao.deleteAllProductions().andThen(dao.insertProductions(productionEntities))
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {
-                            }, throwable -> {});
-                }, throwable -> {});
+                .subscribe(productionEntities -> dao.deleteAllProductions().andThen(dao.insertProductions(productionEntities))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                        }, throwable -> {
+                        }), throwable -> {
+                });
 
         return dao.getAllProductions()
                 .subscribeOn(Schedulers.io())

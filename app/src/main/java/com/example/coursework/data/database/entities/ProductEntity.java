@@ -5,9 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.coursework.ui.entities.BakeryProduct;
-import com.example.coursework.ui.entities.Ingredient;
-
 import java.util.List;
 
 @Entity(tableName = "products")
@@ -31,7 +28,7 @@ public class ProductEntity {
         this.ingredients = ingredients;
     }
 
-    public ProductEntity(){
+    public ProductEntity() {
 
     }
 

@@ -2,10 +2,10 @@ package com.example.coursework.ui.fragment.adminFragment;
 
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.example.coursework.ui.entities.Ingredient;
 import com.example.coursework.ui.entities.User;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UserDiffUtilCallback extends DiffUtil.Callback {
     private final List<User> oldList;
@@ -28,7 +28,7 @@ public class UserDiffUtilCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldList.get(oldItemPosition).getId() == (newList.get(newItemPosition).getId());
+        return Objects.equals(oldList.get(oldItemPosition).getId(), newList.get(newItemPosition).getId());
     }
 
     @Override

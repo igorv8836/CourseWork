@@ -31,6 +31,7 @@ import com.example.coursework.ui.viewmodel.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class MainFragment extends Fragment {
@@ -61,7 +62,7 @@ public class MainFragment extends Fragment {
         NavigationView navigationView = binding.navView;
 
         NavHostFragment navHostFragment = (NavHostFragment) getChildFragmentManager().findFragmentById(R.id.nav_host_home_fragment);
-        NavController navController = navHostFragment.getNavController();
+        NavController navController = Objects.requireNonNull(navHostFragment).getNavController();
         NavController mainNavController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
 
         Set<Integer> menuItems = new HashSet<>();
@@ -141,7 +142,7 @@ public class MainFragment extends Fragment {
 
         navigationView.setNavigationItemSelectedListener(item -> {
             drawerLayout.closeDrawers();
-            if (item.getItemId() != navController.getCurrentDestination().getId()) {
+            if (item.getItemId() != Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
                 navController.navigate(item.getItemId());
             }
             return true;

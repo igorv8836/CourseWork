@@ -26,7 +26,7 @@ public class IngredientEntity {
         this.count = 0.0;
     }
 
-    public IngredientEntity(){
+    public IngredientEntity() {
 
     }
 

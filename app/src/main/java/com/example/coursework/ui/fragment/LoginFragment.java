@@ -20,6 +20,8 @@ import com.example.coursework.databinding.FragmentLoginBinding;
 import com.example.coursework.ui.viewmodel.AuthViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.Objects;
+
 
 public class LoginFragment extends Fragment {
     FragmentLoginBinding binding;
@@ -40,13 +42,11 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
-        binding.registerButton.setOnClickListener(v -> {
-            navController.navigate(R.id.registerFragment);
-        });
+        binding.registerButton.setOnClickListener(v -> navController.navigate(R.id.registerFragment));
 
         binding.logInButton.setOnClickListener(v -> {
-            String email = binding.editTextEmailInputText.getText().toString();
-            String password = binding.editTextPasswordInputText.getText().toString();
+            String email = Objects.requireNonNull(binding.editTextEmailInputText.getText()).toString();
+            String password = Objects.requireNonNull(binding.editTextPasswordInputText.getText()).toString();
             viewModel.login(email, password);
         });
 

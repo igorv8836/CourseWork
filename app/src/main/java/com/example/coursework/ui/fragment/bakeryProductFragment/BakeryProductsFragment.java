@@ -69,9 +69,7 @@ public class BakeryProductsFragment extends Fragment {
             }
         });
 
-        binding.fab.setOnClickListener(t -> {
-            navController.navigate(R.id.nav_editing_bakery_products);
-        });
+        binding.fab.setOnClickListener(t -> navController.navigate(R.id.nav_editing_bakery_products));
 
     }
 

@@ -47,9 +47,7 @@ public class IngredientsFragment extends Fragment {
         );
         binding.ingredientsRecyclerView.addItemDecoration(divider);
 
-        binding.fab.setOnClickListener(t -> {
-            showCreatingDialog(true, null);
-        });
+        binding.fab.setOnClickListener(t -> showCreatingDialog(true, null));
 
         viewModel.showAdminFunctions.observe(getViewLifecycleOwner(), show -> {
             if (show) {
@@ -76,7 +74,6 @@ public class IngredientsFragment extends Fragment {
     @NonNull
     private ItemTouchHelper getItemTouchHelper() {
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(
-                adapter,
                 getContext(),
                 position -> {
                     showSnackbar(
@@ -115,16 +112,14 @@ public class IngredientsFragment extends Fragment {
                 "Ингредиент " + text + " удален",
                 Snackbar.LENGTH_LONG
         );
-        snackbar.setAction("Вернуть", t -> {
-            viewModel.cancelDeleting();
-        });
+        snackbar.setAction("Вернуть", t -> viewModel.cancelDeleting());
         snackbar.show();
     }
 
     @SuppressLint("SetTextI18n")
     private void showCreatingDialog(boolean isCreating, String id) {
         LayoutInflater inflater = this.getLayoutInflater();
-        CreatingDialogBinding dialogBinding = CreatingDialogBinding.bind(inflater.inflate(R.layout.creating_dialog, null));
+        @SuppressLint("InflateParams") CreatingDialogBinding dialogBinding = CreatingDialogBinding.bind(inflater.inflate(R.layout.creating_dialog, null));
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setView(dialogBinding.getRoot());
@@ -145,12 +140,12 @@ public class IngredientsFragment extends Fragment {
             String name = Objects.requireNonNull(dialogBinding.editName.getText()).toString();
             String measurement = Objects.requireNonNull(dialogBinding.editMeasurement.getText()).toString();
             double price;
-            if (dialogBinding.editPrice.getText().toString().isEmpty()){
+            if (Objects.requireNonNull(dialogBinding.editPrice.getText()).toString().isEmpty()) {
                 price = 0.0;
             } else {
                 try {
                     price = Double.parseDouble(dialogBinding.editPrice.getText().toString());
-                } catch (Exception e){
+                } catch (Exception e) {
                     price = 0.0;
                 }
             }

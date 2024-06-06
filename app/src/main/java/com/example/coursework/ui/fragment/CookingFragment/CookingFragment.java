@@ -1,20 +1,18 @@
 package com.example.coursework.ui.fragment.CookingFragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentCookingBinding;
@@ -43,9 +41,7 @@ public class CookingFragment extends Fragment {
         binding = FragmentCookingBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(CookingViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
-        adapter = new BakeryProductionAdapter(new ArrayList<>(), id -> {
-            viewModel.deleteProduction(id);
-        });
+        adapter = new BakeryProductionAdapter(new ArrayList<>(), id -> viewModel.deleteProduction(id));
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -55,9 +51,7 @@ public class CookingFragment extends Fragment {
         );
         binding.recyclerView.addItemDecoration(divider);
 
-        binding.fab.setOnClickListener(t -> {
-            navController.navigate(R.id.nav_editing_production);
-        });
+        binding.fab.setOnClickListener(t -> navController.navigate(R.id.nav_editing_production));
 
         viewModel.bakeryProductions.observe(getViewLifecycleOwner(), bakeryProductions -> {
             adapter.setData(bakeryProductions);

@@ -13,14 +13,14 @@ import io.reactivex.rxjava3.core.Single;
 
 public class SaleFirestore {
     private static final String SALES = "sales";
-    private FirebaseFirestore firestore;
+    private final FirebaseFirestore firestore;
 
     public SaleFirestore() {
         firestore = FirebaseFirestore.getInstance();
     }
 
     public Single<String> insertSale(SaleEntity sale) {
-        return Single.<String>create(emitter ->
+        return Single.create(emitter ->
                 firestore.collection(SALES)
                         .add(sale)
                         .addOnSuccessListener(documentReference -> emitter.onSuccess(documentReference.getId()))
@@ -57,6 +57,7 @@ public class SaleFirestore {
                                 return;
                             }
                             List<SaleEntity> sales = new ArrayList<>();
+                            assert queryDocumentSnapshots != null;
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                 SaleEntity sale = document.toObject(SaleEntity.class);
                                 sale.setId(document.getId());

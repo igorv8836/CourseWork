@@ -10,13 +10,14 @@ import com.example.coursework.data.exchange_rate.CurrencyResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ExchangeRateViewModel extends ViewModel {
-    private CbrApi api;
+    private final CbrApi api;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final MutableLiveData<CurrencyResponse> _response = new MutableLiveData<>();
     private final MutableLiveData<List<String>> _rates = new MutableLiveData<>();
@@ -47,7 +48,7 @@ public class ExchangeRateViewModel extends ViewModel {
     }
 
     public void getRate(int position) {
-        CurrencyResponse.Currency currency = new ArrayList<>(_response.getValue().getValute().values()).get(position);
+        CurrencyResponse.Currency currency = new ArrayList<>(Objects.requireNonNull(_response.getValue()).getValute().values()).get(position);
         _rate.setValue(currency);
     }
 

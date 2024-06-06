@@ -102,7 +102,7 @@ public class AuthViewModel extends ViewModel {
 
     private void updatePassword(String lastPassword, String newPassword) {
         isActive.postValue(false);
-        disposables.add(repository.changePassword(user.getValue().getEmail(), lastPassword, newPassword)
+        disposables.add(repository.changePassword(Objects.requireNonNull(user.getValue()).getEmail(), lastPassword, newPassword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {

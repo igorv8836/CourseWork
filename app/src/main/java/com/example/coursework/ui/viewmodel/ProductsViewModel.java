@@ -38,7 +38,7 @@ public class ProductsViewModel extends ViewModel {
     public MutableLiveData<Ingredient> ingredient = new MutableLiveData<>();
     private final MutableLiveData<List<ChosenIngredient>> _chosenIngredients = new MutableLiveData<>();
     public LiveData<List<ChosenIngredient>> chosenIngredients = _chosenIngredients;
-    private MutableLiveData<Pair<Integer, Ingredient>> removedIngredient = new MutableLiveData<>();
+    private final MutableLiveData<Pair<Integer, Ingredient>> removedIngredient = new MutableLiveData<>();
 
     private final MutableLiveData<Event<String>> _helpText = new MutableLiveData<>();
     public MutableLiveData<Event<String>> helpText = _helpText;
@@ -59,9 +59,7 @@ public class ProductsViewModel extends ViewModel {
 
 
     public void getUserRole() {
-        disposables.add(userRepository.getLoggedUserType().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> {
-            _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue());
-        }));
+        disposables.add(userRepository.getLoggedUserType().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue())));
     }
 
 
@@ -89,7 +87,7 @@ public class ProductsViewModel extends ViewModel {
     }
 
     public void removeIngredient(int position) {
-        String id = ingredients.getValue().get(position).getId();
+        String id = Objects.requireNonNull(ingredients.getValue()).get(position).getId();
         removedIngredient.setValue(new Pair<>(position, ingredients.getValue().get(position)));
         disposables.add(productRepository.removeIngredient(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -109,7 +107,7 @@ public class ProductsViewModel extends ViewModel {
 
     @SuppressLint("CheckResult")
     public void cancelDeleting() {
-        productRepository.insertIngredient(removedIngredient.getValue().second)
+        productRepository.insertIngredient(Objects.requireNonNull(removedIngredient.getValue()).second)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                 }, throwable -> {
@@ -136,7 +134,7 @@ public class ProductsViewModel extends ViewModel {
             if (productId == null) {
                 updateChosenIngredients(newData);
             } else {
-                List<ChosenIngredient> ingredients = bakeryProduct.getValue().getIngredients();
+                List<ChosenIngredient> ingredients = Objects.requireNonNull(bakeryProduct.getValue()).getIngredients();
                 for (ChosenIngredient ingredient1 : ingredients) {
                     for (int i = 0; i < newData.size(); i++) {
                         if (Objects.equals(newData.get(i).getId(), ingredient1.getId())) {

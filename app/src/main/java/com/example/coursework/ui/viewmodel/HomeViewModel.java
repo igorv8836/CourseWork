@@ -5,16 +5,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.coursework.data.repositories.AuthRepositoryImpl;
-import com.example.coursework.data.repositories.UserRepositoryImpl;
 import com.example.coursework.domain.repositories.AuthRepository;
-import com.example.coursework.domain.repositories.UserRepository;
-import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.entities.User;
 
-import io.reactivex.Observable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeViewModel extends ViewModel {

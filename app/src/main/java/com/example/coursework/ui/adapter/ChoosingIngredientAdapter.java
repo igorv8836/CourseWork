@@ -8,18 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.IngredientItemBinding;
 import com.example.coursework.ui.entities.ChosenIngredient;
-import com.example.coursework.ui.entities.Ingredient;
-import com.example.coursework.ui.fragment.ingredientFragment.IngredientDiffUtilCallback;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -43,7 +39,7 @@ public class ChoosingIngredientAdapter extends RecyclerView.Adapter<ChoosingIngr
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull IngridientViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull IngridientViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ChosenIngredient ingredient = ingredients.get(position);
         holder.name.setText(ingredient.getName());
         holder.measurement.setText(ingredient.getMeasurementText());
@@ -68,11 +64,11 @@ public class ChoosingIngredientAdapter extends RecyclerView.Adapter<ChoosingIngr
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    Double cnt;
-                    if (s.toString().equals(""))
+                    double cnt;
+                    if (s.toString().isEmpty())
                         cnt = 0.0;
                     else
-                        cnt = Double.valueOf(s.toString());
+                        cnt = Double.parseDouble(s.toString());
                     ingredients.get(position).setCount(Double.parseDouble(s.toString()));
                     if (cnt != 0) {
                         holder.mainLayout.setBackgroundColor(Color.LTGRAY);
@@ -111,9 +107,8 @@ public class ChoosingIngredientAdapter extends RecyclerView.Adapter<ChoosingIngr
         notifyDataSetChanged();
     }
 
-    class IngridientViewHolder extends RecyclerView.ViewHolder {
+    static class IngridientViewHolder extends RecyclerView.ViewHolder {
         IngredientItemBinding binding;
-        ImageView imageView;
         TextView name;
         TextView measurement;
         TextView price;

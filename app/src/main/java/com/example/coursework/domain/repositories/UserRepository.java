@@ -13,14 +13,4 @@ public interface UserRepository {
 
     Completable updateUser(User user);
     Single<UserType> getLoggedUserType();
-//    Single<Integer> getUserCountByEmail(String email);
-//    Single<User> getUserByEmail(String email);
-//    Single<Integer> getUserByUsernameAndPassword(String username, String password);
-//    Completable insertUser(User user);
-//    Completable deleteUserById(int id);
-//    Completable updateUser(User user);
-//    Completable logoutUser();
-//    Completable loginUser(String username, String password);
-//    Observable<Integer> checkLoggedUser();
-//    Observable<UserType> getLoggedUserRole();
 }

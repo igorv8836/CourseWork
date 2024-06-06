@@ -1,7 +1,6 @@
 package com.example.coursework.ui.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +20,9 @@ import com.example.coursework.ui.entities.BakeryProduct;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BakeryProductAdapter extends RecyclerView.Adapter<BakeryProductAdapter.BakeryProductViewHolder>{
+public class BakeryProductAdapter extends RecyclerView.Adapter<BakeryProductAdapter.BakeryProductViewHolder> {
     private ArrayList<BakeryProduct> bakeryProducts;
-    private NavController navController;
+    private final NavController navController;
 
     public BakeryProductAdapter(NavController navController) {
         this.bakeryProducts = new ArrayList<>();
@@ -54,6 +53,7 @@ public class BakeryProductAdapter extends RecyclerView.Adapter<BakeryProductAdap
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setBakeryProducts(List<BakeryProduct> bakeryProducts) {
         this.bakeryProducts = new ArrayList<>(bakeryProducts);
         notifyDataSetChanged();
@@ -64,12 +64,13 @@ public class BakeryProductAdapter extends RecyclerView.Adapter<BakeryProductAdap
         return bakeryProducts.size();
     }
 
-    class BakeryProductViewHolder extends RecyclerView.ViewHolder {
+    static class BakeryProductViewHolder extends RecyclerView.ViewHolder {
         BakeryProductBinding binding;
         ImageView imageView;
         TextView name;
         TextView description;
         TextView price;
+
         public BakeryProductViewHolder(View itemView) {
             super(itemView);
             binding = BakeryProductBinding.bind(itemView);

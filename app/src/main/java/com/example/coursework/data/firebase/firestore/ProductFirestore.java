@@ -15,6 +15,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
@@ -99,7 +100,7 @@ public class ProductFirestore {
 
                         try {
                             InputStream stream = App.getInstance().getContentResolver().openInputStream(uri);
-                            UploadTask uploadTask = storageRef.putStream(stream);
+                            UploadTask uploadTask = storageRef.putStream(Objects.requireNonNull(stream));
 
                             uploadTask.addOnSuccessListener(taskSnapshot ->
                                     storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {

@@ -3,7 +3,6 @@ package com.example.coursework.data.firebase;
 import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.entities.User;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,11 +31,11 @@ public class AuthFirebase {
         return Single.create(emitter -> {
             if (mAuth.getCurrentUser() != null) {
                 db.collection("users")
-                        .document(mAuth.getCurrentUser().getEmail())
+                        .document(Objects.requireNonNull(mAuth.getCurrentUser().getEmail()))
                         .get()
                         .addOnSuccessListener(documentSnapshot -> {
                             if (documentSnapshot.exists()) {
-                                UserType role = UserType.fromInt(documentSnapshot.getLong("role").intValue());
+                                UserType role = UserType.fromInt(Objects.requireNonNull(documentSnapshot.getLong("role")).intValue());
                                 User user = new User(
                                         mAuth.getCurrentUser().getUid(),
                                         mAuth.getCurrentUser().getDisplayName(),

@@ -28,6 +28,8 @@ import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentEditingBakeryProductsBinding;
 import com.example.coursework.ui.viewmodel.ProductsViewModel;
 
+import java.util.Objects;
+
 
 public class EditingBakeryProductsFragment extends Fragment {
     FragmentEditingBakeryProductsBinding binding;
@@ -94,13 +96,13 @@ public class EditingBakeryProductsFragment extends Fragment {
         }
 
         binding.saveButton.setOnClickListener(t -> {
-            String name = binding.editTextNameInputText.getText().toString();
-            String description = binding.editTextDescriptionInputText.getText().toString();
+            String name = Objects.requireNonNull(binding.editTextNameInputText.getText()).toString();
+            String description = Objects.requireNonNull(binding.editTextDescriptionInputText.getText()).toString();
             double price = 0.0;
             try{
-                price = Double.parseDouble(binding.editTextPriceInputText.getText().toString());
-            } catch (Exception e){}
-            String imageUrl = binding.editTextUriInputText.getText().toString();
+                price = Double.parseDouble(Objects.requireNonNull(binding.editTextPriceInputText.getText()).toString());
+            } catch (Exception ignored){}
+            String imageUrl = Objects.requireNonNull(binding.editTextUriInputText.getText()).toString();
             if (productId == null) {
                 viewModel.createProduct(name, description, price, imageUrl, imageUri);
             } else {
@@ -133,9 +135,7 @@ public class EditingBakeryProductsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.image.setOnClickListener(t -> {
-            getPermission(requireContext());
-        });
+        binding.image.setOnClickListener(t -> getPermission(requireContext()));
 
     }
 

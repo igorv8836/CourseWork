@@ -2,6 +2,10 @@ package com.example.coursework.ui.fragment.ReportFragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -9,13 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-
-import com.example.coursework.R;
-import com.example.coursework.databinding.FragmentCookingBinding;
 import com.example.coursework.databinding.FragmentReportBinding;
 import com.example.coursework.ui.adapter.ReportInfoAdapter;
 import com.example.coursework.ui.viewmodel.ReportViewModel;
@@ -72,15 +69,9 @@ public class ReportFragment extends Fragment {
             }
         });
 
-        viewModel.profit.observe(getViewLifecycleOwner(), profit -> {
-            binding.totalProfitNumber.setText(profit + " руб");
-        });
-        viewModel.revenue.observe(getViewLifecycleOwner(), revenue -> {
-            binding.totalRevenueNumber.setText(revenue + " руб");
-        });
-        viewModel.expenses.observe(getViewLifecycleOwner(), expenses -> {
-            binding.totalCostsNumber.setText(expenses + " руб");
-        });
+        viewModel.profit.observe(getViewLifecycleOwner(), profit -> binding.totalProfitNumber.setText(profit + " руб"));
+        viewModel.revenue.observe(getViewLifecycleOwner(), revenue -> binding.totalRevenueNumber.setText(revenue + " руб"));
+        viewModel.expenses.observe(getViewLifecycleOwner(), expenses -> binding.totalCostsNumber.setText(expenses + " руб"));
 
         return binding.getRoot();
     }

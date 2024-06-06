@@ -15,11 +15,6 @@ public class ChosenIngredient extends Ingredient {
         this.count = count;
     }
 
-    public ChosenIngredient(Ingredient ingredient) {
-        super(ingredient.getId(), ingredient.getName(), ingredient.getMeasurementText(), ingredient.getPrice());
-        this.count = 0.0;
-    }
-
     public Double getCount() {
         return count;
     }

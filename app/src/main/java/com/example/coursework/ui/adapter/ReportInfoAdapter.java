@@ -4,19 +4,14 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursework.R;
-import com.example.coursework.databinding.IngredientItemBinding;
 import com.example.coursework.databinding.ReportElementBinding;
-import com.example.coursework.ui.entities.Ingredient;
 import com.example.coursework.ui.entities.ReportElement;
-import com.example.coursework.ui.fragment.ingredientFragment.IngredientDiffUtilCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +56,7 @@ public class ReportInfoAdapter extends RecyclerView.Adapter<ReportInfoAdapter.Re
         return data.size();
     }
 
-    class ReportInfoViewHolder extends RecyclerView.ViewHolder {
+    static class ReportInfoViewHolder extends RecyclerView.ViewHolder {
         ReportElementBinding binding;
         TextView name;
         TextView count;

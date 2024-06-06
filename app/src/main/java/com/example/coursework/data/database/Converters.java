@@ -4,7 +4,6 @@ import androidx.room.TypeConverter;
 
 import com.example.coursework.data.database.entities.IngredientEntity;
 import com.example.coursework.data.database.entities.ProductEntity;
-import com.example.coursework.ui.entities.Ingredient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,7 +13,8 @@ import java.util.List;
 public class Converters {
     @TypeConverter
     public static List<IngredientEntity> ingredientFromString(String value) {
-        Type listType = new TypeToken<List<IngredientEntity>>() {}.getType();
+        Type listType = new TypeToken<List<IngredientEntity>>() {
+        }.getType();
         return new Gson().fromJson(value, listType);
     }
 
@@ -26,7 +26,8 @@ public class Converters {
 
     @TypeConverter
     public static ProductEntity productFromString(String value) {
-        Type listType = new TypeToken<ProductEntity>() {}.getType();
+        Type listType = new TypeToken<ProductEntity>() {
+        }.getType();
         return new Gson().fromJson(value, listType);
     }
 

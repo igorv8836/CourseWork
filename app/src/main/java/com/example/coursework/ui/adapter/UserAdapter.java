@@ -15,19 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.coursework.R;
 import com.example.coursework.databinding.UserElementBinding;
 import com.example.coursework.domain.utils.UserType;
-import com.example.coursework.ui.entities.Ingredient;
 import com.example.coursework.ui.entities.User;
 import com.example.coursework.ui.fragment.adminFragment.OnEditClickListener;
 import com.example.coursework.ui.fragment.adminFragment.UserDiffUtilCallback;
-import com.example.coursework.ui.fragment.ingredientFragment.IngredientDiffUtilCallback;
 import com.example.coursework.ui.viewmodel.AdminViewModel;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
-    private ArrayList<User> data;
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
+    private final ArrayList<User> data;
     private final AdminViewModel viewModel;
     private final OnEditClickListener listener;
 
@@ -67,21 +65,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 break;
         }
 
-        holder.adminRadioButton.setOnClickListener(v -> {
-            viewModel.changeType(element, UserType.ADMIN);
-        });
+        holder.adminRadioButton.setOnClickListener(v -> viewModel.changeType(element, UserType.ADMIN));
 
-        holder.creatorRadioButton.setOnClickListener(v -> {
-            viewModel.changeType(element, UserType.CREATOR);
-        });
+        holder.creatorRadioButton.setOnClickListener(v -> viewModel.changeType(element, UserType.CREATOR));
 
-        holder.userRadioButton.setOnClickListener(v -> {
-            viewModel.changeType(element, UserType.USER);
-        });
+        holder.userRadioButton.setOnClickListener(v -> viewModel.changeType(element, UserType.USER));
 
-        holder.editButton.setOnClickListener(v -> {
-            listener.onEditClick(element);
-        });
+        holder.editButton.setOnClickListener(v -> listener.onEditClick(element));
 
         holder.mainLayout.setOnClickListener(v -> {
             if (holder.addInfo.getVisibility() == View.GONE) {
@@ -108,7 +98,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         return data.size();
     }
 
-    class UserViewHolder extends RecyclerView.ViewHolder {
+    static class UserViewHolder extends RecyclerView.ViewHolder {
         UserElementBinding binding;
         View addInfo;
         View mainLayout;

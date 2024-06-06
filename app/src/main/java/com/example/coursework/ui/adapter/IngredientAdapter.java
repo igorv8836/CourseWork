@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.IngredientItemBinding;
-import com.example.coursework.ui.entities.Ingredient;
 import com.example.coursework.ui.addClasses.OnClickListener;
+import com.example.coursework.ui.entities.Ingredient;
 import com.example.coursework.ui.fragment.ingredientFragment.IngredientDiffUtilCallback;
 
 import java.util.ArrayList;
@@ -45,9 +44,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         holder.measurement.setText(ingredient.getMeasurementText());
         holder.price.setText(ingredient.getPrice().toString() + " р/" + ingredient.getMeasurementText());
 
-        holder.mainLayout.setOnClickListener(v -> {
-            listener.onClick(ingredient.getId());
-        });
+        holder.mainLayout.setOnClickListener(v -> listener.onClick(ingredient.getId()));
     }
 
     public void updateList(List<Ingredient> newList) {
@@ -64,9 +61,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         return ingredients.size();
     }
 
-    class IngredientViewHolder extends RecyclerView.ViewHolder {
+    static class IngredientViewHolder extends RecyclerView.ViewHolder {
         IngredientItemBinding binding;
-        ImageView imageView;
         View mainLayout;
         TextView name;
         TextView measurement;

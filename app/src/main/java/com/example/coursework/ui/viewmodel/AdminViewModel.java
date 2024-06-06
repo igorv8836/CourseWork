@@ -13,7 +13,6 @@ import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AdminViewModel extends ViewModel {
@@ -26,11 +25,6 @@ public class AdminViewModel extends ViewModel {
 
     public AdminViewModel() {
         getUsers();
-    }
-
-    private void setHelpText(String text) {
-        _helpText.postValue(null);
-        _helpText.postValue(new Event<>(text));
     }
 
     public void getUsers() {

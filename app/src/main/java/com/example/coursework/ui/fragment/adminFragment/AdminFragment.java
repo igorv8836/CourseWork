@@ -1,16 +1,17 @@
 package com.example.coursework.ui.fragment.adminFragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentAdminBinding;
@@ -20,6 +21,8 @@ import com.example.coursework.ui.entities.User;
 import com.example.coursework.ui.viewmodel.AdminViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Objects;
 
 public class AdminFragment extends Fragment {
     FragmentAdminBinding binding;
@@ -32,7 +35,7 @@ public class AdminFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAdminBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(AdminViewModel.class);
@@ -47,15 +50,13 @@ public class AdminFragment extends Fragment {
         );
         binding.recyclerView.addItemDecoration(divider);
 
-        viewModel.users.observe(getViewLifecycleOwner(), users -> {
-            adapter.updateList(users);
-        });
+        viewModel.users.observe(getViewLifecycleOwner(), users -> adapter.updateList(users));
         return binding.getRoot();
     }
 
     private void showCreatingDialog(User user) {
         LayoutInflater inflater = this.getLayoutInflater();
-        UserEditingDialogBinding dialogBinding = UserEditingDialogBinding.bind(inflater.inflate(R.layout.user_editing_dialog, null));
+        @SuppressLint("InflateParams") UserEditingDialogBinding dialogBinding = UserEditingDialogBinding.bind(inflater.inflate(R.layout.user_editing_dialog, null));
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setView(dialogBinding.getRoot());
@@ -63,7 +64,7 @@ public class AdminFragment extends Fragment {
         dialogBinding.editName.setText(user.getUsername());
 
         builder.setPositiveButton("Сохранить", (dialog, which) -> {
-            String name = dialogBinding.editName.getText().toString();
+            String name = Objects.requireNonNull(dialogBinding.editName.getText()).toString();
 
             if (name.isEmpty()) {
                 dialog.dismiss();

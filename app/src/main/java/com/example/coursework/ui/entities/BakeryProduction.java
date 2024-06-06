@@ -17,9 +17,9 @@ public class BakeryProduction {
         this.endTime = endTime;
     }
 
-    public Double getCostPrice(){
+    public Double getCostPrice() {
         double sum = 0.0;
-        for (int i = 0; i < product.getIngredients().size(); i++){
+        for (int i = 0; i < product.getIngredients().size(); i++) {
             sum += product.getIngredients().get(i).getPrice();
         }
         return sum;
@@ -65,7 +65,7 @@ public class BakeryProduction {
         this.endTime = endTime;
     }
 
-    public static BakeryProduction fromProductionEntity(ProductionEntity productionEntity){
+    public static BakeryProduction fromProductionEntity(ProductionEntity productionEntity) {
         return new BakeryProduction(
                 productionEntity.getId(),
                 BakeryProduct.fromProductEntity(productionEntity.getProduct()),
@@ -75,7 +75,7 @@ public class BakeryProduction {
         );
     }
 
-    public ProductionEntity toProductionEntity(){
+    public ProductionEntity toProductionEntity() {
         return new ProductionEntity(
                 id,
                 product.toProductEntity(),

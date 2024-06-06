@@ -5,9 +5,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
@@ -15,14 +14,14 @@ import io.reactivex.rxjava3.core.Single;
 
 public class ProductionFirestore {
     private static final String PRODUCTIONS = "productions";
-    private FirebaseFirestore firestore;
+    private final FirebaseFirestore firestore;
 
     public ProductionFirestore() {
         firestore = FirebaseFirestore.getInstance();
     }
 
     public Single<String> insertProduction(ProductionEntity production) {
-        return Single.<String>create(emitter ->
+        return Single.create(emitter ->
                 firestore.collection(PRODUCTIONS)
                         .add(production)
                         .addOnSuccessListener(documentReference -> emitter.onSuccess(documentReference.getId()))
@@ -55,7 +54,7 @@ public class ProductionFirestore {
                 firestore.collection(PRODUCTIONS)
                         .addSnapshotListener((queryDocumentSnapshots, t) -> {
                             List<ProductionEntity> productions = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(queryDocumentSnapshots)) {
                                 ProductionEntity production = document.toObject(ProductionEntity.class);
                                 production.setId(document.getId());
                                 productions.add(production);

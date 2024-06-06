@@ -32,12 +32,13 @@ public class SalesRepositoryImpl implements SalesRepository {
     public Observable<List<ProductSale>> getSales() {
         firestore.getSales().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(sales -> {
-                    dao.deleteSales().andThen(dao.insertSales(sales))
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {}, t -> {});
-                }, throwable -> {});
+                .subscribe(sales -> dao.deleteSales().andThen(dao.insertSales(sales))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                        }, t -> {
+                        }), throwable -> {
+                });
 
         return dao.getSales()
                 .subscribeOn(Schedulers.io())

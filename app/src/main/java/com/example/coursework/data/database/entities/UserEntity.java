@@ -14,14 +14,6 @@ public class UserEntity {
     private int role;
     private boolean isLogged;
 
-    @Ignore
-    public UserEntity(String username, String email, int role, boolean isLogged) {
-        this.username = username;
-        this.email = email;
-        this.role = role;
-        this.isLogged = isLogged;
-    }
-
     public UserEntity(String username, String email, int role) {
         this.username = username;
         this.email = email;
@@ -30,12 +22,12 @@ public class UserEntity {
         id = "";
     }
 
-    public UserEntity(){
+    public UserEntity() {
 
     }
 
 
-    public UserEntity(String id, String username, String email, int role, boolean isLogged) {
+    public UserEntity(@NonNull String id, String username, String email, int role, boolean isLogged) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -43,11 +35,12 @@ public class UserEntity {
         this.isLogged = isLogged;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 

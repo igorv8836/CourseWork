@@ -16,11 +16,8 @@ import com.example.coursework.domain.utils.UserType;
 import com.example.coursework.ui.addClasses.Event;
 import com.example.coursework.ui.entities.BakeryProduct;
 import com.example.coursework.ui.entities.BakeryProduction;
-import com.example.coursework.ui.entities.Ingredient;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
@@ -55,9 +52,7 @@ public class CookingViewModel extends ViewModel {
     }
 
     public void getUserRole() {
-        disposables.add(userRepository.getLoggedUserType().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> {
-            _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue());
-        }));
+        disposables.add(userRepository.getLoggedUserType().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue())));
     }
 
     public void getProducts() {
@@ -75,12 +70,8 @@ public class CookingViewModel extends ViewModel {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                data -> {
-                                    _bakeryProductions.postValue(data);
-                                },
-                                throwable -> {
-                                    Log.e("ProductionRepository", "Ошибка при подписке на getProductions", throwable);
-                                }
+                                _bakeryProductions::postValue,
+                                throwable -> Log.e("ProductionRepository", "Ошибка при подписке на getProductions", throwable)
                         )
         );
     }
@@ -95,7 +86,7 @@ public class CookingViewModel extends ViewModel {
             return;
         }
         disposables.add(Completable.fromAction(() -> {
-            BakeryProduct product = null;
+            BakeryProduct product;
             if (products.getValue() != null)
                 product = products.getValue().get(productPosition);
             else
@@ -125,18 +116,6 @@ public class CookingViewModel extends ViewModel {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(() -> {}, t -> {})
         );
-    }
-
-    private BakeryProduct findProductById(String id) {
-        BakeryProduct product = null;
-        if (_products.getValue() != null)
-            for (BakeryProduct p : _products.getValue()) {
-                if (Objects.equals(p.getId(), id)) {
-                    product = p;
-                    break;
-                }
-            }
-        return product;
     }
 
     @Override

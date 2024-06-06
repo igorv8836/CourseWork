@@ -1,6 +1,5 @@
 package com.example.coursework.domain.repositories;
 
-import com.example.coursework.data.firebase.AuthFirebase;
 import com.example.coursework.ui.entities.User;
 
 import io.reactivex.rxjava3.core.Completable;

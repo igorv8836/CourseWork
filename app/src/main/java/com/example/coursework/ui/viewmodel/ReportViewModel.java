@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
@@ -86,7 +86,7 @@ public class ReportViewModel extends ViewModel {
     }
 
     private void getProductions(int period) {
-        disposables.add(productionRepository.getProductionsByDate(periodTimes.getValue().get(period), System.currentTimeMillis())
+        disposables.add(productionRepository.getProductionsByDate(Objects.requireNonNull(periodTimes.getValue()).get(period), System.currentTimeMillis())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(productions -> {
@@ -112,7 +112,7 @@ public class ReportViewModel extends ViewModel {
     }
 
     private void getSales(int period) {
-        disposables.add(salesRepository.getSalesByDate(periodTimes.getValue().get(period), System.currentTimeMillis())
+        disposables.add(salesRepository.getSalesByDate(Objects.requireNonNull(periodTimes.getValue()).get(period), System.currentTimeMillis())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(sales -> {

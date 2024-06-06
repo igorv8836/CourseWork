@@ -4,12 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.coursework.ui.entities.BakeryProduct;
-
 @Entity(tableName = "production")
 public class ProductionEntity {
     @PrimaryKey
-    @NonNull String id;
+    @NonNull
+    String id;
     ProductEntity product;
     String productId;
     Integer count;
@@ -25,13 +24,13 @@ public class ProductionEntity {
         this.endTime = endTime;
     }
 
-    public ProductionEntity(){
+    public ProductionEntity() {
 
     }
 
-    public Double getCostPrice(){
+    public Double getCostPrice() {
         double sum = 0.0;
-        for (int i = 0; i < product.getIngredients().size(); i++){
+        for (int i = 0; i < product.getIngredients().size(); i++) {
             sum += product.getIngredients().get(i).getPrice();
         }
         return sum;

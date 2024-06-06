@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.ProductSaleBinding;
-import com.example.coursework.ui.entities.ProductSale;
 import com.example.coursework.ui.addClasses.OnClickListener;
+import com.example.coursework.ui.entities.ProductSale;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.SimpleDateFormat;
@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.SalesViewHolder>{
+public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.SalesViewHolder> {
     private ArrayList<ProductSale> data;
     private final OnClickListener listener;
     private boolean showDeleteButton = true;
@@ -93,6 +93,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.SalesViewHol
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setShowDeleteButton(boolean showDeleteButton) {
         this.showDeleteButton = showDeleteButton;
         notifyDataSetChanged();
@@ -103,7 +104,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.SalesViewHol
         return data.size();
     }
 
-    class SalesViewHolder extends RecyclerView.ViewHolder {
+    static class SalesViewHolder extends RecyclerView.ViewHolder {
         ProductSaleBinding binding;
         View mainInfo;
         TextView name;

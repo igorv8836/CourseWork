@@ -1,17 +1,17 @@
 package com.example.coursework.ui.fragment.SalesFragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
+import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import com.example.coursework.R;
 import com.example.coursework.databinding.FragmentAddingSaleBinding;
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class AddingSaleFragment extends Fragment {
     FragmentAddingSaleBinding binding;
@@ -41,7 +42,7 @@ public class AddingSaleFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAddingSaleBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(SalesViewModel.class);
@@ -72,10 +73,11 @@ public class AddingSaleFragment extends Fragment {
             int selectedProductIndex = binding.choosingProductSpinner.getSelectedItemPosition();
             int count = 0;
             double price = 0.0;
-            try{
-                count = Integer.parseInt(binding.editTextCountInputText.getText().toString());
-                price = Double.parseDouble(binding.editTextPriceInputText.getText().toString());
-            } catch (Exception ignored){}
+            try {
+                count = Integer.parseInt(Objects.requireNonNull(binding.editTextCountInputText.getText()).toString());
+                price = Double.parseDouble(Objects.requireNonNull(binding.editTextPriceInputText.getText()).toString());
+            } catch (Exception ignored) {
+            }
 
             viewModel.addSale(
                     selectedProductIndex,
@@ -87,7 +89,7 @@ public class AddingSaleFragment extends Fragment {
 
         viewModel.products.observe(getViewLifecycleOwner(), products -> {
             List<String> productNames = new ArrayList<>();
-            for (int i = 0; i < products.size(); i++){
+            for (int i = 0; i < products.size(); i++) {
                 productNames.add(products.get(i).getName());
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, productNames);
@@ -98,7 +100,7 @@ public class AddingSaleFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void selectTime(TimePickerListener listener){
+    private void selectTime(TimePickerListener listener) {
         Calendar currentTime = Calendar.getInstance();
         int hour = currentTime.get(Calendar.HOUR_OF_DAY);
         int minute = currentTime.get(Calendar.MINUTE);
@@ -111,14 +113,12 @@ public class AddingSaleFragment extends Fragment {
                 .setTitleText("Выберите время")
                 .build();
 
-        timePicker.addOnPositiveButtonClickListener(t -> {
-            listener.onTimeSelected(timePicker.getHour(), timePicker.getMinute());
-        });
+        timePicker.addOnPositiveButtonClickListener(t -> listener.onTimeSelected(timePicker.getHour(), timePicker.getMinute()));
 
         timePicker.show(getParentFragmentManager(), "fragment_tag");
     }
 
-    private void selectDate(DatePickerListener listener){
+    private void selectDate(DatePickerListener listener) {
         Calendar currentDate = Calendar.getInstance();
         long today = currentDate.getTimeInMillis();
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()

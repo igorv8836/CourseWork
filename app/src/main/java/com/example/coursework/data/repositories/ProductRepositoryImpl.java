@@ -35,13 +35,11 @@ public class ProductRepositoryImpl implements ProductRepository {
         productFirestore.getAllIngredients()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(ingredientEntities -> {
-                    productDao.deleteAllIngredients()
-                            .andThen(productDao.insertIngredients(ingredientEntities))
-                            .subscribe(() -> {
-                            }, throwable -> {
-                            });
-                });
+                .subscribe(ingredientEntities -> productDao.deleteAllIngredients()
+                        .andThen(productDao.insertIngredients(ingredientEntities))
+                        .subscribe(() -> {
+                        }, throwable -> {
+                        }));
         return productDao.getAllIngredients().map(this::transformIngredients);
     }
 
@@ -94,8 +92,10 @@ public class ProductRepositoryImpl implements ProductRepository {
                     List<ProductEntity> entities = new ArrayList<>(productEntities);
                     productDao.deleteAllProducts().andThen(productDao.insertProducts(entities))
                             .subscribe(() -> {
-                            }, throwable -> {});
-                }, throwable -> {});
+                            }, throwable -> {
+                            });
+                }, throwable -> {
+                });
 
         return productDao.getAllProducts().map(this::transformProducts);
     }

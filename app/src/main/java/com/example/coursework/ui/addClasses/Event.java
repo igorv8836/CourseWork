@@ -1,7 +1,7 @@
 package com.example.coursework.ui.addClasses;
 
 public class Event<T> {
-    private T content;
+    private final T content;
     private boolean hasBeenHandled = false;
 
     public Event(T content) {

@@ -1,7 +1,6 @@
 package com.example.coursework.data.firebase.firestore;
 
 import com.example.coursework.data.database.entities.UserEntity;
-import com.example.coursework.data.firebase.AuthFirebase;
 import com.example.coursework.domain.utils.UserType;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -9,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -24,7 +24,7 @@ public class UserFirestore {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public Single<List<UserEntity>> getUsers(){
+    public Single<List<UserEntity>> getUsers() {
         return Single.create(emitter ->
                 firestore.collection(USERS_COLLECTION)
                         .get()
@@ -35,7 +35,7 @@ public class UserFirestore {
                                 UserEntity user = new UserEntity(
                                         doc.getString("name"),
                                         doc.getId(),
-                                        doc.get("role") == null ? 2 : doc.getLong("role").intValue()
+                                        doc.get("role") == null ? 2 : Objects.requireNonNull(doc.getLong("role")).intValue()
                                 );
                                 users.add(user);
                             }
@@ -45,20 +45,20 @@ public class UserFirestore {
         );
     }
 
-    public Single<UserType> getUserType(){
+    public Single<UserType> getUserType() {
         return Single.create(emitter ->
                 firestore.collection(USERS_COLLECTION)
-                        .document(mAuth.getCurrentUser().getEmail())
+                        .document(Objects.requireNonNull(Objects.requireNonNull(mAuth.getCurrentUser()).getEmail()))
                         .get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            UserType userType = UserType.fromInt(documentSnapshot.getLong("role").intValue());
+                            UserType userType = UserType.fromInt(Objects.requireNonNull(documentSnapshot.getLong("role")).intValue());
                             emitter.onSuccess(userType);
                         })
                         .addOnFailureListener(emitter::onError)
         );
     }
 
-    public Completable updateUser(UserEntity user){
+    public Completable updateUser(UserEntity user) {
         return Completable.create(emitter ->
                 firestore.collection(USERS_COLLECTION)
                         .document(user.getEmail())
