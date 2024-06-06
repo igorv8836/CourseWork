@@ -89,7 +89,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Observable<List<BakeryProduct>> getAllProducts() {
         productFirestore.getAllProducts()
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(productEntities -> {
                     List<ProductEntity> entities = new ArrayList<>(productEntities);
                     productDao.deleteAllProducts().andThen(productDao.insertProducts(entities))

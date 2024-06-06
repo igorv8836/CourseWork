@@ -42,7 +42,6 @@ public class CookingFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentCookingBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(CookingViewModel.class);
-        viewModel.getProductions();
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_home_fragment);
         adapter = new BakeryProductionAdapter(new ArrayList<>(), id -> {
             viewModel.deleteProduction(id);
@@ -89,15 +88,5 @@ public class CookingFragment extends Fragment {
 
 
         return binding.getRoot();
-    }
-
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        viewModel.bakeryProductions.observe(getViewLifecycleOwner(), bakeryProductions -> {
-            adapter.setData(bakeryProductions);
-        });
     }
 }

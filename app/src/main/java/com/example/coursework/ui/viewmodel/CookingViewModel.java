@@ -1,5 +1,7 @@
 package com.example.coursework.ui.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -35,8 +37,6 @@ public class CookingViewModel extends ViewModel {
     public LiveData<List<BakeryProduct>> products = _products;
     private final MutableLiveData<List<BakeryProduction>> _bakeryProductions = new MutableLiveData<>();
     public LiveData<List<BakeryProduction>> bakeryProductions = _bakeryProductions;
-    private final MutableLiveData<BakeryProduction> _bakeryProduction = new MutableLiveData<>();
-    public LiveData<BakeryProduction> bakeryProduction = _bakeryProduction;
     private final MutableLiveData<Event<String>> _helpText = new MutableLiveData<>();
     public MutableLiveData<Event<String>> helpText = _helpText;
 
@@ -46,6 +46,7 @@ public class CookingViewModel extends ViewModel {
     public CookingViewModel() {
         getProducts();
         getUserRole();
+        getProductions();
     }
 
     private void setHelpText(String text) {
@@ -64,7 +65,7 @@ public class CookingViewModel extends ViewModel {
                 productRepository.getAllProducts()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(_products::postValue)
+                        .subscribe(_products::postValue, t -> {})
         );
     }
 
@@ -73,16 +74,14 @@ public class CookingViewModel extends ViewModel {
                 repository.getProductions()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(_bakeryProductions::postValue)
-        );
-    }
-
-    public void getProduction(String id) {
-        disposables.add(
-                repository.getProduction(id)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(_bakeryProduction::postValue)
+                        .subscribe(
+                                data -> {
+                                    _bakeryProductions.postValue(data);
+                                },
+                                throwable -> {
+                                    Log.e("ProductionRepository", "Ошибка при подписке на getProductions", throwable);
+                                }
+                        )
         );
     }
 
@@ -112,11 +111,11 @@ public class CookingViewModel extends ViewModel {
                     repository.addProduction(production)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe()
+                            .subscribe(() -> {}, t -> {})
             );
         }).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe());
+        .subscribe(() -> {}, t -> {}));
     }
 
     public void deleteProduction(String id) {
@@ -124,7 +123,7 @@ public class CookingViewModel extends ViewModel {
                 repository.deleteProduction(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
+                        .subscribe(() -> {}, t -> {})
         );
     }
 
@@ -138,31 +137,6 @@ public class CookingViewModel extends ViewModel {
                 }
             }
         return product;
-    }
-
-    public void updateProduction(String id, String productId, int count, long startTime, long endTime) {
-        if (count == 0 || startTime > endTime){
-            setHelpText("Количество равно нулю или время старта больше времени окончания");
-            return;
-        }
-        disposables.add(Completable.fromAction(() -> {
-                    BakeryProduct product = findProductById(productId);
-                    BakeryProduction production = new BakeryProduction(
-                            id,
-                            product,
-                            count,
-                            startTime,
-                            endTime
-                    );
-                    disposables.add(
-                            repository.updateProduction(production)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe()
-                    );
-                }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe());
     }
 
     @Override

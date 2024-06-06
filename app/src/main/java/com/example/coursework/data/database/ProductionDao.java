@@ -18,11 +18,17 @@ public interface ProductionDao {
     @Insert
     Completable insertProduction(ProductionEntity production);
 
+    @Insert
+    Completable insertProductions(List<ProductionEntity> productions);
+
     @Update
     Completable updateProduction(ProductionEntity production);
 
     @Query("DELETE FROM production WHERE id = :id")
     Completable deleteProduction(String id);
+
+    @Query("DELETE FROM production")
+    Completable deleteAllProductions();
 
     @Query("SELECT * FROM production WHERE id = :id")
     Observable<ProductionEntity> getProduction(String id);
