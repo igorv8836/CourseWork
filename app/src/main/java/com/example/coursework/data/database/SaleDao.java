@@ -17,11 +17,17 @@ public interface SaleDao {
     @Insert
     Completable insertSale(SaleEntity saleEntity);
 
+    @Insert
+    Completable insertSales(List<SaleEntity> saleEntities);
+
     @Update
     Completable updateSale(SaleEntity saleEntity);
 
     @Query("DELETE FROM sales WHERE id = :id")
     Completable deleteSale(String id);
+
+    @Query("DELETE FROM sales")
+    Completable deleteSales();
 
     @Query("SELECT * FROM sales WHERE id = :id")
     Observable<SaleEntity> getSale(String id);

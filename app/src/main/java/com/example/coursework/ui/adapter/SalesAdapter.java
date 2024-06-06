@@ -55,7 +55,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.SalesViewHol
             holder.revenue.setTextColor(holder.revenue.getContext().getResources().getColor(R.color.light_red));
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm dd.MM", Locale.getDefault());
         holder.date.setText(sdf.format(new Date(element.getSaleDate())));
-        holder.ingredientsPrice.setText("Себестоимость: " + element.getIngredientsPrice() + " руб");
+        holder.ingredientsPrice.setText("Себестоимость одного товара: " + element.getIngredientsPrice() + " руб");
         holder.profit.setText("Прибыль: " + element.getProfit() + " руб");
         holder.deleteButton.setVisibility(showDeleteButton ? View.VISIBLE : View.GONE);
 

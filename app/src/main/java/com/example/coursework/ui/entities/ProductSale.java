@@ -27,7 +27,7 @@ public class ProductSale {
     }
 
     public double getProfit() {
-        return salePrice * count - getIngredientsPrice();
+        return (salePrice - getIngredientsPrice()) * count;
     }
 
     public double getRevenue() {

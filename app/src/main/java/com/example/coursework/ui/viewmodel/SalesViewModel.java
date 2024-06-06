@@ -52,7 +52,7 @@ public class SalesViewModel extends ViewModel {
     public void getUserRole() {
         disposables.add(userRepository.getLoggedUserType().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(role -> {
             _showAdminFunctions.postValue(role.getValue() != UserType.USER.getValue());
-        }));
+        }, t -> {}));
     }
 
     public void getProducts() {
@@ -60,7 +60,7 @@ public class SalesViewModel extends ViewModel {
                 productRepository.getAllProducts()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(_products::postValue)
+                        .subscribe(_products::postValue, t -> {})
         );
     }
 
@@ -69,7 +69,7 @@ public class SalesViewModel extends ViewModel {
                 repository.getSales()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(_sales::postValue)
+                        .subscribe(_sales::postValue, t -> {})
         );
     }
 
@@ -95,11 +95,11 @@ public class SalesViewModel extends ViewModel {
                             repository.addSale(sale)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe()
+                                    .subscribe(() -> {}, t -> {})
                     );
                 }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe());
+                .subscribe(() -> {}, t -> {}));
     }
 
     public void deleteSale(String id){
@@ -107,7 +107,7 @@ public class SalesViewModel extends ViewModel {
                 repository.deleteSale(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
+                        .subscribe(() -> {}, t -> {})
         );
     }
 }
