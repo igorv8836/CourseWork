@@ -91,13 +91,18 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .subscribe(productEntities -> {
                     List<ProductEntity> entities = new ArrayList<>(productEntities);
                     productDao.deleteAllProducts().andThen(productDao.insertProducts(entities))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(() -> {
                             }, throwable -> {
                             });
                 }, throwable -> {
                 });
 
-        return productDao.getAllProducts().map(this::transformProducts);
+        return productDao.getAllProducts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(this::transformProducts);
     }
 
     @Override
