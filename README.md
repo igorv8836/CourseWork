@@ -42,7 +42,7 @@
 * Работающий сервис Firebase
 
 ## Используемые технологии
-* Java
+* Java (В курсовой работе нельзя было использовать Kotlin)
 * Material Design
 * MVVM
 * Repository
